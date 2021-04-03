@@ -1,0 +1,23 @@
+<?php
+
+$categories=$block->getCategory();
+
+if($categories){
+foreach ($categories as $_category): ?>
+	<div class="col">
+		<div class="thumbnail">
+			<a href="<?php echo $_category['url']; ?>">
+				<div class="thumbnailimg">
+			<img class="lazy swatch-option-loading" src=""  data-original="<?php echo $_category['thumb'] ?>" alt="<?php echo $_category['name']; ?>" width="225" height="225" />
+				</div>
+				<h3><?php echo $_category['name']; ?></h3>
+			</a>
+			<div class="overlay_over"><a class="btn" href="<?php echo $_category['url']; ?>">Shop Now</a></div>
+		</div>
+	</div>
+<?php	
+
+endforeach; 
+
+}
+?>

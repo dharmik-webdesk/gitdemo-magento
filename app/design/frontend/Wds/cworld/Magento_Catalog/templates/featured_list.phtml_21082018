@@ -1,0 +1,93 @@
+<?php
+$product_collection=$block->getFeatureProductList();
+if($product_collection){
+	$abstractProductBlock = $block->getLayout()->createBlock('\Magento\Catalog\Block\Product\AbstractProduct');
+	if ($product_collection->count()) : ?>
+
+<div class="cwn_products_rt_mn_home">
+<ul data-mage-init='{"slickwrapper":{
+       "dots": false,
+       "infinite": true,       
+       "mobileFirst": true,
+       "slidesToShow": 5,
+       "slidesToScroll": 1,
+       "responsive": [
+	{
+               "breakpoint": 1170,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 5
+		}
+           },           
+	{
+               "breakpoint": 1050,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 4
+		}
+           },
+		   {
+               "breakpoint": 900,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 4
+}
+           },
+           {
+               "breakpoint": 767,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 3
+               }
+           },
+           {
+               "breakpoint": 479,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 2
+               }
+           },
+           {
+               "breakpoint": 319,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 1
+               }
+           }
+       ]
+   } }'>
+  <?php $cnt=1;$i=0;$_columnCount=0; foreach ($product_collection as $_product_1):?>
+  <li>
+    <div class="thumbnail">	
+    	<?php $imageurl= $block->getImageUrlByProduct($_product_1,'small_image',204,255); ?>
+		<a href="<?php echo $_product_1->getProductUrl() ?>" title="<?php echo $this->stripTags($_product_1->getName(), null, true) ?>"><img src="<?php echo $imageurl ?>" width="100" height="100" alt="<?php echo $this->stripTags($_product_1->getName(), null, true) ?>" />
+		</a>
+
+		<!-- TrustBox widget - Product Mini MultiSource (Beta) -->
+	    <div class="ratings_category_grid pro-ratings">
+	    <div class="trustpilot-widget" data-locale="en-US" data-template-id="577258fb31f02306e4e3aaf9" data-businessunit-id="5a2ef8c90a1d740ea821aecb" data-style-height="24px" data-style-width="100%" data-theme="light" data-sku="<?php echo $_product_1->getSku() ?>">
+	    <a href="https://www.trustpilot.com/review/compressorworld.com" target="_blank">Trustpilot</a>
+	    </div>
+	    </div>
+	    <!-- End TrustBox widget -->
+    	<?php echo $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setData('_product', $_product_1)->setTemplate("Magento_Catalog::product/produt_tags.phtml")->toHtml();?>
+		<h4 class="product-name">
+			<a href="<?php echo $_product_1->getProductUrl() ?>" title="<?php echo $this->stripTags($_product_1->getName(), null, true) ?>">
+			<?php $name=  strip_tags( $_product_1->getName());
+				  echo (strlen($name)>45)?substr($name,0,45)."...":$name;?>
+			</a>
+		</h4>
+		<?php echo $abstractProductBlock->getProductPrice($_product_1) ?>
+	</div>
+  </li>
+  <?php endforeach; ?>
+</ul>
+</div>
+<?php 
+	endif;
+}
+ ?>
+
+
+
+

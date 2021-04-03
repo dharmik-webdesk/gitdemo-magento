@@ -1,0 +1,30 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+
+	<head>
+        <title>Titlename</title>
+        <!-- 
+		demo
+		<css src="Wds_Productshipping::css/css.css"/>
+		<script src="Wds_Productshipping::js/js.js"/>
+		<css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+		<script src="path/file.js" defer="defer"/>
+		<link src="http://url.com" src_type="url"/>
+		<remove src="path/remove/file.css"/>
+
+		-->
+    </head> 
+
+    <body>
+
+
+        <referenceContainer name="sidebar.main">
+            <block class="Wds\Productshipping\Block\Index\Sidebar" name="productshipping_index_sidebar" before="-" template="Wds_Productshipping::productshipping_index_sidebar.phtml"/>
+        </referenceContainer>
+
+        <referenceContainer name="content">
+            <block class="Wds\Productshipping\Block\Index\Index" name="productshipping_index_index" template="Wds_Productshipping::productshipping_index_index.phtml"/>
+        </referenceContainer>
+
+
+    </body>
+</page>

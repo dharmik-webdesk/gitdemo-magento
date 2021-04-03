@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /** @var $block \Magento\Sales\Block\Order\Info */ ?>
+<div class="order-date order_date_mn">
+
+<span class="order-status"><?php /* @escapeNotVerified */ echo $block->getOrder()->getStatusLabel() ?></span>

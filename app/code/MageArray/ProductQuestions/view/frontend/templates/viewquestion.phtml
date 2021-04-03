@@ -1,0 +1,65 @@
+<?php $qid = $this->getRequest()->getParam('id');?>
+<?php $question = $this->getQuestions();
+$product = $this->getProduct();
+$answer = $this->getAnswer();
+$que = $question->getQuestions();
+?>
+<div class="que-view">
+    <table>
+        <tr class="queview">
+            <td><?php echo __('<b>'.'Product'.'</b>')?></td>
+            <td>
+                <a href="<?php echo $product->getProductUrl(); ?>">
+                    <?php echo $product->getName();?>
+                </a>
+            </td>
+        </tr>
+        <tr class="queview">
+            <td><?php echo __('<b>'.'Question'.'</b>')?></td>
+            <td>
+                <div class='que-view-ans'>
+                    <?php echo $this->makeClickableLinks($que);?>
+                </div>
+            </td>
+        </tr>
+        <tr class="queview">
+            <td>
+                <?php echo __('<b>'.'Answer'.'</b>')?>
+            </td>
+            <td>
+                <?php if (count($answer) > 0) :?>
+                    <?php foreach ($answer as $ans) :?>
+                        <?php $answ = $ans->getAnswers();?>
+                        <p class='que-view-ans'>
+                            <?php echo  $this->makeClickableLinks($answ);?>
+                        </p>
+                        <hr class="view" />
+                    <?php endforeach;?>
+                <?php else :?>
+                    <p class='que-view-ans'>
+                        <?php echo __('No answers yet');?>
+                    </p>
+                <?php endif;?>
+            </td>
+        </tr>
+        <tr class="queview">
+            <td><?php echo __('<b>'.'Status'.'</b>')?></td>
+            <td>
+                <div>
+                    <?php if ($question->getStatus() == 2) :?>
+                        <?php echo __('Approved');?>
+                    <?php else :?>
+                        <?php echo __('Pending'); ?>
+                    <?php endif;?>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="buttons-set">
+    <p class="back-link">
+        <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>">
+            <small>&laquo; </small><?php echo __('Back to Product Q & A') ?>
+        </a>
+    </p>
+</div>

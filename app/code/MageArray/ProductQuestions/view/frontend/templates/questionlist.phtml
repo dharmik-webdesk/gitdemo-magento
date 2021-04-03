@@ -1,0 +1,81 @@
+<?php $link = $this->getQuestionLink()?>
+<h3><?php echo __('Your Questions');?></h3>
+<?php if (count($this->getQuestions())>0) : ?>
+    <div class="table-wrapper">
+        <table class="data table " id="my-question-table">
+            <caption class="table-caption">
+                <?php  echo __('Product Question') ?>
+            </caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col item proname">
+                        <?php echo __('Product') ?>
+                    </th>
+                    <th scope="col" class="col ">
+                        <?php  echo __('Questions') ?>
+                    </th>
+                    <th scope="col" class="col lastrow">
+                        <?php  echo __('Status') ?>
+                    </th>
+                    <th scope="col" class="col isans">
+                        <?php  echo __('Is Answered?') ?>
+                    </th>
+                    <th scope="col" class="col actions lastrow">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->getQuestions() as $question): ?>
+                    <?php $qid = $question->getProductQuestionsId();
+                    $product = $this->getProduct($question->getProductId());
+                    $answer = $this->getAnswers($qid);
+                    $que = $question->getQuestions() ?>
+                <tr>
+                    <td data-th="<?php echo __('Product') ?>" class="col item">
+                        <strong class="product-name">
+                            <a href="<?php echo $product->getProductUrl(); ?>">
+                                <?php echo $product->getName() ?>
+                            </a>
+                        </strong>
+                    </td>
+                    <td data-th="<?php echo __('Questions') ?>" class="col">
+                        <?php echo $this->makeClickableLinks($que); ?>
+                    </td>
+                    
+                    <td data-th="<?php echo __('Status') ?>" 
+                        class="col lastrow">
+                        <?php if ($question->getStatus() == 2) :?>
+                            <?php echo __('Approved');?>
+                        <?php else :?>
+                            <?php echo __('Pending'); ?>
+                        <?php endif;?>
+                    </td>
+                    <td data-th="<?php echo __('Is Answered?') ?>"
+                        class="col isans">
+                        <?php if (count($answer)) :?>
+                            <?php echo __("Yes (") . count($answer) . __(" answer)");?>
+                        <?php else :?>
+                            <?php echo __("Not yet");?>
+                        <?php endif;?>
+                    </td>
+                    <td data-th="<?php echo __('Actions') ?>"
+                        class="col actions lastrow">
+                        <a href="<?php echo $link?>id/<?php echo $qid ?>"
+                           class="action more">
+                            <span><?php   echo __('See Details') ?></span>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($this->getToolbarHtml()) : ?>
+        <div class="toolbar products-reviews-toolbar bottom">
+            <?php echo $this->getToolbarHtml() ?>
+        </div>
+    <?php endif; ?>
+<?php else :?>
+    <div class="message info empty">
+        <span><?php echo __('There is no question.') ?></span>
+    </div>
+<?php endif;?>

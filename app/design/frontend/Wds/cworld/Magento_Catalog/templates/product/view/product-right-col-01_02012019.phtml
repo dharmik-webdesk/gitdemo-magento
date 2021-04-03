@@ -1,0 +1,158 @@
+
+
+<?php 
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$baseUrl = $_masterHelper->getStoreBaseUrl();
+$_product = $block->getProduct();
+$buttonTitle = __('Add to Cart'); 
+
+?>
+<div class="actions">
+            <button type="submit"
+                    title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button">
+                <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+            </button>
+            <?php echo $block->getChildHtml('', true) ?>
+        </div>
+	<div class="product-shop">
+        <div class="make_an_offer">
+          <?php if($_product->getShippingCosts()==""): ?>  
+          <?php if (($_product->getTaxClassId() != 0 && $_product->getFreeFreight() ) || ($_product->getFinalPrice()>50)) {?>
+          <div class="m-left"><a href="#"><img src="<?php echo $this->getViewFileUrl('Magento_Catalog::images/pp-free-shipping.png'); ?>" alt="" width="127" height="46"></a></div>
+          <?php  } ?>
+        <?php endif; ?>
+          <div class="m-right">
+            <div class="haggleit_button">
+				<!--<script src='https://haggleit.com/haggleit/button/v1/8OFIKYBFQ7V/button-998f759198aa63eee44c8cc3877056c2.js'></script>
+				<script>HaggleIt.write_button(<?php echo $_product->getId() ?>)</script> -->
+				<img style="cursor: pointer;width:124px" src="//haggleit.com/buttons/button-1.png" onclick='window.open("http://haggleit.com/buyer/offer/new?seller=8OFIKYBFQ7V&product=<?php echo $_product->getId() ?>","sizedWindow","toolbar=no,location=yes,directories=no,status=no,menubar=no,resizable=yes,width=600,height=750,top=100,left=100")'>
+			</div>
+          </div>
+        </div>
+		</div>
+    <!-- leasing-option start -->
+        <div class="leasing-option">
+            <?php
+    $pdf_filepath = $_product->getResource()->getAttribute('pdf_filepath')->getFrontend()->getValue($_product);
+    $item_is_eligible = $_product->getResource()->getAttribute('item_is_eligible')->getFrontend()->getValue($_product);
+    $shipping_timeline = $_product->getResource()->getAttribute('shipping_timeline')->getFrontend()->getValue($_product);
+            
+            if($item_is_eligible){
+            
+            ?>
+            <div class="item-eligible">
+                <div class="iteam-eligible-heding">Item is eligible:</div>
+                <div class="iteam-eligible-text">
+                    <?php echo $item_is_eligible;?>
+                    <?php
+                    if($pdf_filepath){
+                        ?>
+                        <a href="<?php echo $pdf_filepath;?>" target="_blank">Download the Application</a> </span>
+                        <?php
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <?php
+            }
+            
+            if($shipping_timeline){
+            ?>
+            <div class="shipping-timeline">
+                <div class="shipping-timline-heading">Shipping Timeline</div>
+                <div class="shiping-timeline-text"><?php echo $shipping_timeline;?></div>
+            </div>
+            <?php
+            }
+            ?>
+            
+            <?php
+            if ($block->displayProductStockStatus()): ?>
+            <?php if ($_product->isAvailable()):
+                $lable=null;
+                if($_product->getStockAvailabilityStatus()){
+                    $lable=$_product->getAttributeText('stock_availability_status');
+                    if(is_array($lable))
+                        $lable=implode($lable,', ');
+                }
+                if(empty($lable))
+                    $lable='In stock';  
+                ?>
+                <div class="stock available" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                    <span class="wds_stock_label ss"><?php /* @escapeNotVerified */ echo __($lable) ?></span>
+                </div>
+            
+                <?php 
+                else: 
+                ?>
+                <div class="stock unavailable" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                    <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+                </div>
+                <?php endif; ?>
+                
+            <?php endif; ?>
+            
+            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
+            <ul class="product_details_right">
+                
+                <li>
+                    <span><img src="<?php echo $this->getViewFileUrl('Magento_Catalog::images/quote-ic.png'); ?>" /></span> 
+                    <a class='cboxElement' id="iframe3" href="<?php echo $baseUrl ?>requestaquote/index/index?prodId=<?php echo $_product->getId().'&sku='.$_product->getSku(); ?>" onclick="return false;" >Request a Quote</a> 
+                </li>
+                <li>
+                    <input type="checkbox" name="compare" id="compare_me_toadd" >
+                    <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
+                    <a href="#" data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_product);?>' data-role="add-to-links" class="action tocompare" id="compare_me_toadd_a"></a>
+                </li>
+
+            </ul>
+            
+            <?php
+            $expertblock= $block->getLayout()->createBlock('\Wds\Experts\Block\Expertinfo');
+            $expertid = $_product->getExpertId();
+
+            $expert_data = $expertblock->getExpertinfo($expertid);
+            ?>
+            
+            <?php
+            if($expert_data && ($expert_data['name'])){ ?>
+            <div class="leasing-expert_info">
+                <?php if($expert_data['name']) { ?>
+                <div class="image_box <?php echo(empty($expert_data['imageurl']))?'noimage_withbox':'' ?>">
+                <?php if($expert_data['imageurl']){?>
+                        <img src="<?php echo $expert_data['imageurl'] ?>" />  
+                <?php } ?>
+                </div>
+                <div class="expert-bottom">
+                    <div class="expert-bottom-1">
+                        <?php 
+                        if(!empty($expert_data['phone']) && !is_null($expert_data['phone']))  : 
+                            $phonenumber=strtolower($expert_data['phone']);
+                            $phonenumber=@explode('x',$phonenumber);
+                            $ph=trim($phonenumber[0]);
+
+                        ?>
+                        <div class="expert-phone-number"><a href="tel:<?php echo $ph; ?>"><?php echo $expert_data['phone']; ?></a></div>
+                        <?php endif; ?>
+                        <div class="expert-livechat"><a style="cursor:pointer" onclick="SnapEngage.startLink();"><i class="fa fa-commenting"></i> Live Chat</a></div>
+                        
+                        <?php if(!empty($expert_data['email']) && !is_null($expert_data['email'])) : ?>
+                            <div class="expert-email"><a href="mailto:<?php echo $expert_data['email']; ?>"><i class="fa fa-envelope"></i> Email</a></div>
+                        <?php endif; ?>
+                        <div class="expert-text"><a class="text_popup" href="sms:+1 (508) 444-0655"><i class="fa fa-commenting"></i> Text</a></div>
+                        
+                        </div>
+                        
+                </div>
+                <?php } ?>
+            </div>
+            <?php
+            }
+            ?>
+            
+        </div>
+        <!-- leasing-option end -->
+	

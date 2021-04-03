@@ -1,0 +1,79 @@
+<?php
+
+$_product = $block->getProduct();
+
+$expertblock= $block->getLayout()->createBlock('\Wds\Experts\Block\Expertinfo');
+$expertid = $_product->getExpertId();
+
+$expert_data = $expertblock->getExpertinfo($expertid);
+
+if($expert_data && ($expert_data['name'])){ ?>
+	 <div class="expert_reivew_tab">
+		<div class="cols-left expert_info">
+			<?php if($expert_data['name']) { ?>
+			<div class="image_box <?php echo(empty($expert_data['imageurl']))?'noimage_withbox':'' ?>">
+				<?php if($expert_data['imageurl']){?>
+					<img src="<?php echo $expert_data['imageurl'] ?>" />	
+				<?php } ?>
+			<span>EXPERTS REVIEW | <em><?php echo $expert_data['name'] ?></em></span>
+			</div>
+			<div class="expert-bottom">
+				<div class="expert-bottom-1">
+					<?php if(!empty($expert_data['phone']) && !is_null($expert_data['phone']))  : 
+						$phonenumber=strtolower($expert_data['phone']);
+						$phonenumber=@explode('x',$phonenumber);
+						$ph=trim($phonenumber[0]);
+
+					?>
+						<div class="expert-phone-number"><a href="tel:<?php echo $ph; ?>"><?php echo $expert_data['phone']; ?></a></div>
+					<?php endif; ?>
+					<div class="expert-livechat"><a style="cursor:pointer" onclick="SnapEngage.startLink();"><i class="fa fa-commenting"></i> Live Chat</a></div>
+					<?php if(!empty($expert_data['email']) && !is_null($expert_data['email'])) : ?>
+					<div class="expert-email"><a href="mailto:<?php echo $expert_data['email']; ?>"><i class="fa fa-envelope"></i> Email</a></div>
+					<?php endif; ?>
+				</div>
+				<div class="expert-bottom-2">
+					<span>Our experts can help</span>
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+		<div class="cols-right expert_reviews">
+			<div class="extra_information">
+				<?php 
+				if($_product->getExpertReviews()){
+					$desc= $_product->getExpertReviews();
+					//$om = \Magento\Framework\App\ObjectManager::getInstance();
+					//$desc = $om->get('Magento\Cms\Model\Template\FilterProvider')->getPageFilter()->filter($desc);
+echo $desc;
+}?>
+			</div>
+			
+			<div class="expert_features">
+			<?php if($_product->getExpertFeatures()) {?>
+					<div class="cols-4 expert_features_cos">
+							<h3>Features</h3>
+							<ul><?php echo preg_replace('/^(.+)(\s*)$/m', '<li>$1</li>', $_product->getExpertFeatures()); ?></ul>
+							</p>
+					</div>
+			<?php } ?>		
+			<?php if($_product->getExpertAdvantages()) {?>
+					<div class="cols-4 expert_advantages_cos">
+							<h3>Advantages</h3>
+							<ul><?php echo preg_replace('/^(.+)(\s*)$/m', '<li>$1</li>', $_product->getExpertAdvantages()); ?></ul>
+					</div>
+			<?php } ?>		
+			<?php if($_product->getExpertBenefits()) {?>
+					<div class="cols-4 expert_cenefits_cos">
+							<h3>Benefits</h3>
+							<ul><?php echo preg_replace('/^(.+)(\s*)$/m', '<li>$1</li>', $_product->getExpertBenefits()); ?></ul>
+					</div>
+			<?php } ?>		
+					
+			</div>
+		</div>	
+		<div class="clear_float"></div>
+	 </div>
+<?php }else{ ?>
+	
+<?php }

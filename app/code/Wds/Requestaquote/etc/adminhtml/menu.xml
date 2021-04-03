@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Wds_Requestaquote::parent" title="Quotes" module="Wds_Requestaquote" sortOrder="100" resource="Wds_Requestaquote::parent"/>
+		<add id="Wds_Requestaquote::quotes" title="Request A Quotes" module="Wds_Requestaquote" sortOrder="20" parent="Wds_Requestaquote::parent" action="requestaquote/quotes" resource="Wds_Requestaquote::quotes"/>
+
+    </menu>
+</config>

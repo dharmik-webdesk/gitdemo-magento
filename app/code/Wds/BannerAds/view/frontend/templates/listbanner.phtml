@@ -1,0 +1,9 @@
+<?php
+$data=$block->getBanners();
+if($data){
+	$main_image=$block->getBannerHtml('banner_image_main','banner_main_url');	
+	if($main_image)	
+		echo '<div class="main_banner_ads">'.$main_image.'</div>';
+	
+}
+?>

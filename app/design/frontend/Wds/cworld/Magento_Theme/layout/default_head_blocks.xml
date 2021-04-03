@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+    	<css src="css/bootstrap.css"/>
+		<css src="css/custom.css"/>
+		<css src="css/mg_custom.css"/>
+		<remove src="WeltPixel_Quickview::css/magnific-popup.css"/>
+		<remove src='mage/calendar.css'/>
+		<css src="css/calendar.css"/>
+		<css src="css/magnific-popup.css"/>
+		
+		<script src="css/classie.js"/> 
+		
+		<script src="requirejs/require.js"/>
+
+		<css src="css/netreviews.css"/>
+        <script src="js/netreviewsjs.js"/>
+
+		 <remove src="css/styles-m.css"/>
+		<remove src="css/styles-l.css"/>
+
+    </head>
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template" name="header_tags" template="Magento_Theme::html/header/head_tags.phtml"/>
+        </referenceBlock>
+    </body> 
+ </page>

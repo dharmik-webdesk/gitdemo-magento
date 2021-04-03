@@ -1,0 +1,35 @@
+<div class="cwn-header-section-menu sharkskin-header-widget last sharkskin-header-user-links sharkskin-collapse sharkskin-collapse-fixed sharkskin-collapse-left" id="sharkskin-header-user-links-collapse">
+<?php
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+//$baseurl = $_masterHelper->getStoreBaseUrl();
+$baseurl = $this->getBaseUrl();
+$customerName = $_masterHelper->getLoggedInCustomerName();
+?>
+<a href="<?php echo $block->getUrl('customer/account'); ?>" class="widget-header">
+	<!-- <i class="fa fa-user"></i> -->
+	<?php 
+	if(!empty($customerName)){
+		echo '<span class="login_txt">My Account</span>';//ucfirst($customerName);
+	}
+	else
+		echo '<span class="login_txt">Log In</span>';
+ ?>
+</a>
+<div class="widget-content">
+   <ul class="sharkskin-links">
+  
+	<?php if(!empty($customerName)) { ?>
+		<li class="logout_button"><a href="<?php echo $this->getUrl('customer/account/logout'); ?>">LogOut</a></li>
+	<?php
+	} else{ ?>
+		<li class="login_button"><a href="<?php echo $this->getUrl('customer/account/login'); ?>">Login In</a></li>
+		<li class="register_button"><a href="<?php echo $this->getUrl('customer/account/create'); ?>">Register Now</a></li>
+		
+<?php } ?>
+		<li class="first"><a href="<?php echo $this->getUrl('customer/account/login'); ?>" id="account_info" title="Account Info">Account Info</a></li>
+		<li class=" last"><a href="<?php echo $this->getUrl('customer/account/login'); ?>" title="My Wishlist">My Wishlist</a></li>
+        <li><a href="<?php echo $this->getUrl('sales/order/history');?>">My Orders</a></li>
+	
+</ul>
+</div>
+</div>

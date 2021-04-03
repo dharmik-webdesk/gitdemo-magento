@@ -1,0 +1,238 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($detailedInfoGroup = $block->getGroupChildNames('detailed_info', 'getChildHtml')): ?>
+<?php /* KM customize for Tab order */
+/*$newOrderTab = array('expertreview.tab','product.info.description','technical.tab','3dviewing.tab','amfile.attachment','reviews.tab','productquestion.tab'); */
+
+$newOrderTab = array('expertreview.tab','product.info.description','technical.tab','reviews.tab','threeDviewing.tab','amfile.attachment','productquestion.tab');
+?>
+
+<?php $layout = $block->getLayout();
+$i = 1;
+
+ ?>
+
+
+    <div class="container pp-tabs">
+    <ul class="tabs">
+
+
+      <?php $i = 1; 
+                foreach ($newOrderTab as $name):?>
+                <?php
+
+				$custom_360='no';
+                    $html = $layout->renderElement($name);
+                    if (!trim($html)) {
+                        continue;
+                    }
+                    $alias = $layout->getElementAlias($name);
+                    $label = $block->getChildData($alias, 'title');
+                    
+		   $custom_class='';
+                    if($label=='Expert Review')
+			$custom_class='pp-ic-1';
+                    else if($label=='DESCRIPTION')
+			$custom_class='pp-ic-2';
+		    else if($label=='TECH DATA')
+			$custom_class='pp-ic-3';
+		    else if($label=='3D VIEWING/VIDEOS'){
+			$custom_class='pp-ic-4';
+			$custom_360='yes';
+			}
+		   else if($label=='Drawings & Manuals')
+			$custom_class='pp-ic-5';
+		    else if($label=='PRODUCT REVIEWS'){
+				$label='PRODUCT REVIEWS';
+				$custom_class='pp-ic-6';
+			}
+        else if($label=='Product Q & A')
+      $custom_class='pp-ic-7';
+                ?>
+                 <li rel="tab<?php echo $i ; ?>" onclick="showtab(this,'tab<?php echo $i ; ?>','<?php echo $custom_360 ?>')" class="<?php echo (($i==1)?'active':'') ; ?>"><i class="<?php echo $custom_class ; ?>"></i><?php /* @escapeNotVerified */ 
+				 if($label=='Drawings & Manuals'){
+				 	echo 'Documents';
+				 }else if($label=='3D VIEWING/VIDEOS'){
+				 	echo 'VIDEOS';
+				 }else{
+				 	echo $label;
+				 } ?></li>
+                 <?php $i++; ?>
+
+            <?php endforeach;?>
+     
+    </ul>
+  <div class="tab_container">
+
+    <?php $i = 1; 
+                foreach ($newOrderTab as $name):?>
+                <?php
+                    $html = $layout->renderElement($name);
+                    if (!trim($html)) {
+                        continue;
+                    }
+                    $alias = $layout->getElementAlias($name);
+                    $label = $block->getChildData($alias, 'title');
+
+$custom_class='';
+$custom_360='no';
+                    if($label=='Expert Review')
+			$custom_class='pp-ic-1';
+                    else if($label=='DESCRIPTION')
+			$custom_class='pp-ic-2';
+		    else if($label=='TECH DATA')
+			$custom_class='pp-ic-3';
+		    else if($label=='3D VIEWING/VIDEOS'){
+			$custom_class='pp-ic-4';
+			$custom_360='yes';
+			}
+		   else if($label=='Drawings & Manuals')
+			$custom_class='pp-ic-5';
+		   else if(strtoupper($label)=='PRODUCT REVIEWS'){
+				$label='PRODUCT REVIEWS';
+				$custom_class='pp-ic-6';
+			}
+    else if($label=='Product Q & A')
+      $custom_class='pp-ic-7';
+                ?>
+    <h3 class="tab_drawer_heading  <?php echo (($i==1)?'active':'') ?>"  onclick="showtab(this,'tab<?php echo $i ; ?>','<?php echo $custom_360 ?>')" rel="tab<?php echo $i ; ?>">
+<i class="<?php echo $custom_class ; ?>"></i>
+<?php /* @escapeNotVerified */ echo $label; ?></h3>
+    <div id="tab<?php echo $i; ?>" class="tab_content">
+        <div class="container">
+            <?php /* @escapeNotVerified */ echo $html; ?>
+        </div>
+    </div>
+     <?php $i++; ?>
+    <?php endforeach;?>
+ </div>
+</div>
+
+
+<?php endif; ?>
+
+<script language="javascript">
+  var mng_360_view_loaded=0;
+function showtab(obj,tab,custom_360){
+  jQuery('.pp-tabs ul.tabs li').removeClass('active');
+  jQuery('.pp-tabs h3.tab_drawer_heading').removeClass('active');
+  jQuery('.pp-tabs ul.tabs li[rel='+tab+']').addClass('active');
+  jQuery('.pp-tabs h3.tab_drawer_heading[rel='+tab+']').addClass('active');
+  jQuery('.pp-tabs .tab_content').hide(); 
+  jQuery('#'+tab).show();
+  jQuery('#'+tab).prev().addClass('active')
+  //jQuery('window').trigger('resize');
+  if(custom_360=='yes'){
+	
+	if(mng_360_view_loaded==0){
+	  mng_360_view_loaded=1;
+	  loadLibraray()
+	 }
+	 //jQuery('window').trigger('resize');
+  }
+}
+
+
+
+
+// Configure/customize these variables.
+    var showChar = 4000;  // How many characters are shown by default
+    var ellipsestext = "...";
+    var moretext = "Show More Information >>";
+    var lesstext = "Show less";
+  
+    var c = '';
+	var h = '';
+	
+	
+		if(jQuery('.product.attribute.description').html().length>4000){
+			jQuery('.product.attribute.description').each(function() {
+		
+        var content = jQuery(this).html();
+        if(content.length > showChar) {
+            c = content.substr(0, showChar)+'...';
+            h = content.substr(content);
+            jQuery(this).html(c);
+        }
+		jQuery('.product.attribute.description').append('<a href="javascript:void(0);" id="morelink" style="margin-top:15px;" class="more_less_info">' + moretext + '</a>');
+ 
+    });
+	
+		if(jQuery('.price-box.price-final_price .old-price').hasClass('old-price')){
+			jQuery('.price-box.price-final_price .old-price .price-container .price-label').html('Regular Price:');
+			jQuery('.price-box.price-final_price .special-price .price-container .price-label').html('Special Price:');
+			
+			
+		}
+		
+		jQuery('.description_section_mn_title').prepend('<a name="desc"></a>');
+			jQuery(document).on('click', '.more_less_info', function(){
+				if(jQuery(this).attr("id")=="morelink"){
+					 jQuery('.product.attribute.description').html('');
+					 jQuery('.product.attribute.description').html(h);
+					 jQuery('#morelink').remove();
+					 jQuery('.product.attribute.description').append('<a href="#desc" style="margin-top:15px;" id="lesslink" class="more_less_info">' + lesstext + '</a>');
+				}
+				if(jQuery(this).attr("id")=="lesslink"){
+					jQuery('.product.attribute.description').html('');
+					 jQuery('.product.attribute.description').html(c);
+					 jQuery('#lesslink').remove();
+					 jQuery('.product.attribute.description').append('<a href="javascript:void(0);" style="margin-top:15px;" id="morelink"  class="more_less_info">' + moretext + '</a>');
+				}
+		});
+	}
+	
+	
+	var hashValue = location.hash;  
+hashValue = hashValue.replace(/^#/, ''); 
+if(hashValue=='write_review'){
+	jQuery(document).ready(function(){
+		id=jQuery('.custom_review_block').parent().parent().attr('id');
+		jQuery('.tabs li[rel="'+id+'"]').trigger('click');
+
+		setTimeout(function(){ 
+			jQuery('html, body').animate({scrollTop:eval(jQuery('#review-form').position().top)}, 'slow');	
+		 }, 1000);
+	
+	})
+	
+
+}else if(hashValue=='view-review' || hashValue=='review' || hashValue=='reviews'){
+	
+	jQuery(document).ready(function(){
+		id=jQuery('.custom_review_block').parent().parent().attr('id');
+			jQuery('.tabs li[rel="'+id+'"]').trigger('click');
+			jQuery('html, body').animate({scrollTop:eval(jQuery('.product-reviews-summary .rating-summary').position().top)+500}, 'slow');
+	})
+
+
+}	
+else
+	showtab(jQuery('.pp-tabs ul.tabs li.active'),'tab1')
+
+
+jQuery('#write-review').click(function(event){
+	id=jQuery('.custom_review_block').parent().parent().attr('id');
+	jQuery('.tabs li[rel="'+id+'"]').trigger('click');
+	jQuery('html, body').animate({scrollTop:eval(jQuery('#review-form').position().top)}, 'slow');
+	event.preventDefault();
+});
+
+jQuery('.product-reviews-summary .rating-summary, .product-reviews-summary .action.view, .product-reviews-summary .action.add ').click(function(event){
+
+			id=jQuery('.custom_review_block').parent().parent().attr('id');
+			jQuery('.tabs li[rel="'+id+'"]').trigger('click');
+			jQuery('html, body').animate({scrollTop:eval(jQuery('.product-reviews-summary .rating-summary').position().top)+500}, 'slow');
+			 //$('html,body').animate({scrollTop: $('#reviews.tab').offset().top}, 500);
+			event.preventDefault();
+	   	});
+
+
+</script>

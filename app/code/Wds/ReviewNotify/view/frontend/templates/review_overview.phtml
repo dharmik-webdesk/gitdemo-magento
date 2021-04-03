@@ -1,0 +1,86 @@
+<div class="row">
+<div class="col-lg-12">
+<div class="overall_rating_container">
+    <lable class="overall_rating">Overall Rating</lable>
+<?php 
+        $_ratingSummary = $block->getRatingSummary();
+    ?>
+    <?php if($_ratingSummary){ ?>
+    <div class="product-reviews-summary short">
+        <div class="rating-summary">
+            <div title="<?php echo (int)$_ratingSummary; ?>%" class="rating-result">
+                <span style="width:<?php echo (int)$_ratingSummary; ?>%"><span><?php echo (int)$_ratingSummary; ?>%</span></span>
+            </div>
+        </div>
+        <div class="reviews-actions">
+            <span itemprop="reviewCount"><?php echo $block->getReviewsCount() ?></span>&nbsp;
+            <span>Reviews</span>
+        </div>
+    </div>
+    <?php } ?>
+    </div>
+    </div>    
+</div>    
+
+<div class="row">
+<div class="col-lg-6">
+    <h3>Customer Reviews By Star Rating</h3>
+    <ul>
+<?php 
+$count_wise_start=$block->advanceReview();
+$_votesArray=$block->getVotesd_result();
+foreach ($count_wise_start as $key => $value) {?>
+    <li>
+            <div class="start_block">
+                <div class="rating-summary">
+                    <div title="<?php echo $key*100/5   ?>" class="rating-result">
+                        <span style="width:<?php echo $key*100/5   ?>%"><span><?php echo $key*100/5   ?>%</span></span>
+                    </div>
+                </div>
+            </div>
+            <i><?php echo $key ?> Star (<?php echo  ($value>1)? $value.' Reviews':$value.' Review' ?>)</i>
+    </li>
+<?php } ?>
+    </ul>
+</div>
+<div class="col-lg-6">
+    <h3>Overall Product Rating</h3>
+<?php if(count($_votesArray)>0){ ?>
+    <ul>
+        <?php foreach ($_votesArray as $key => $value) { ?>
+            <li><lable><?php echo $key ?></lable> 
+                <div class="custom_rating">
+                    <i>
+                        <?php 
+                                        if($value['value']==0 && $value['count']==0)
+                                            $persentage=0;
+                                        else
+                                            $persentage=ceil($value['value']/$value['count']);
+
+                                        echo  $persentage;
+                                    ?></i>
+                        <div class="start_block">   
+                           <?php 
+                                        if($value['count']==0 && $value['rating']==0)
+                                            $persentage=0;
+                                        else
+                                            $persentage=ceil($value['rating']/$value['count']);
+                                    ?>
+
+                            <div class="rating-summary">
+                    <div title="<?php echo $persentage   ?>" class="rating-result">
+                        <span style="width:<?php echo $persentage   ?>%"><span><?php echo $persentage   ?>%</span></span>
+                    </div>
+                </div>
+
+
+
+                </div>        
+                </div>
+            </li>
+        <?php } ?>
+    </ul>
+<?php } ?>
+    
+</div>
+</div>

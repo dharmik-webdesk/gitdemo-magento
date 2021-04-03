@@ -1,0 +1,141 @@
+<?php 
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$baseUrl = $_masterHelper->getStoreBaseUrl();
+?>
+<script src="//ws.sharethis.com/button/buttons.js" type="text/javascript"></script>
+<div class="product-right-container">
+	<div class="product-sharing-tool">
+		<script src="//ws.sharethis.com/button/buttons.js" type="text/javascript"></script>
+          <label> Share </label>
+          <span class='st_facebook_large' displayText='Facebook'></span> 
+		  <span class='st_twitter_large' displayText='Tweet'></span> 
+		  <span class='st_pinterest_large' displayText='Pinterest'></span> 
+		  <span class='st_email_large' displayText='Email'></span> 
+		</div>
+      
+	
+	<ul class="product_details_right product_details_right_t">
+        <li><span><img src="<?php echo $this->getViewFileUrl('Magento_Catalog::images/p_icon6.png'); ?>" alt="" width="32" height="16"></span>
+          <p class="local-service">Local Service Available.</p>
+        </li>
+    </ul>
+	
+</div>
+
+<div id="popup-modal" style="display:none;">
+</div>
+<div id="popup-modal1" style="display:none;">
+	<div class="loader">
+            <img src="<?php echo $this->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading...">
+        </div>
+</div>
+
+<!-- KM custom code for change product -->
+
+<script>
+	require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function($,modal){
+			var options = {
+					type: 'popup',
+					responsive: true,
+					innerScroll: true,
+					click: function () {
+							this.clearModal();
+				},
+            };
+		$('#compare_me_toadd').click(function(){
+                   $('#compare_me_toadd_a').trigger('click');
+		})
+		$('#iframe3').click(function(){
+				$('.loader').show();
+				requestQuotePopup($('#iframe3').attr('href'));
+				
+		});
+			
+		$('#iframe2').click(function(){
+				
+				getShippingDetails($('#iframe2').attr('href'));
+				var popup = modal(options, $('#popup-modal'));
+				$('#popup-modal').modal('openModal');
+		});
+
+		function requestQuotePopup(url){
+		    var loader=jQuery('.loader');
+
+			jQuery.ajax({
+			  method: "POST",
+			  url: url
+			})
+		  .done(function(response){
+				 formdata=jQuery(response).find('#container .column.main').html()
+				jQuery('#popup-modal1').html(formdata);
+				jQuery(loader).hide();  
+				var popup = modal(options, $('#popup-modal1'));
+				$('#popup-modal1').modal('openModal');
+
+			});
+		}
+			
+        }
+    );
+	
+	function getShippingDetails(url){
+		    jQuery.ajax({
+			  method: "POST",
+			  url: url
+			})
+		  .done(function(response){
+				jQuery('#popup-modal').html(jQuery(response).find('#container').html());
+			});
+	}
+	
+	
+	
+	function submitrequestaquote(){
+		if(jQuery('#quote-form-validate #name').val()==''){
+			alert('Please enter name');
+		}else if(jQuery('#quote-form-validate #email').val()==''){
+			alert('Please enter email');
+		}else if(jQuery('#quote-form-validate #state').val()<0){
+			alert('Please select state');
+		}else if(jQuery('#quote-form-validate #subject').val()==''){
+			alert('Please enter subject');
+		}else if(jQuery('#quote-form-validate .g-recaptcha-response').val()==''){
+			alert('Please veryfy captcha.');
+		}else{	
+			jQuery('#loader').css('display','block');
+			jQuery.ajax({
+			  method: "POST",
+			  url: "<?php echo $baseUrl ?>requestaquote/index/saveQuote",
+			  data: jQuery('#quote-form-validate').serialize()
+			}).done(function( response ) {
+		 		
+		 		if(response=="true"){
+		 			jQuery("#request-success-msg").css({"color": "red", "font-size": "15px", "font-weight": "bold"});
+		 			jQuery("#request-success-msg").html("Captcha is not valid, Please try again.");
+		 			//grecaptcha.reset();
+				}else{	
+					jQuery("#request-success-msg").css({"color": "green", "font-size": "15px", "font-weight": "bold"});
+		 			jQuery("#request-success-msg").html(response);
+					jQuery('#quote-form-validate').hide();
+				}
+				jQuery('#loader').css('display','none');
+			//alert( "Data Saved: " + response );
+		 	 });
+			return false;
+		}
+		return false;
+	}
+	
+	
+	
+
+</script>
+</div>
+
+</form>
+

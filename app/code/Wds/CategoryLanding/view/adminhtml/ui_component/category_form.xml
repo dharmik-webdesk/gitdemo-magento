@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="category-landing-page-information">
+		<argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Category Landing Page Information</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">100</item>
+            </item>
+        </argument>
+		
+        <field name="category_heading">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">110</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Heading</item>
+                    <item name="notice" xsi:type="string" translate="true"></item>
+                    <item name="additionalClasses" xsi:type="string"></item>
+					
+                </item>
+            </argument>
+        </field>
+				  
+        <field name="left_box_image">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="label" xsi:type="string" translate="true">Left Box Image</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="sortOrder" xsi:type="number">120</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="categorylanding/category_imageuploader_leftboximage/leftboximage"/>
+                    </item>
+					<item name="notice" xsi:type="string" translate="true"></item>
+                     <item name="additionalClasses" xsi:type="string"></item>
+					
+                </item>
+            </argument>
+        </field>
+				  
+        <field name="left_box_description">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">130</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Left Box Description</item>
+                    <item name="notice" xsi:type="string" translate="true"></item>
+                    <item name="additionalClasses" xsi:type="string"></item>
+					
+                </item>
+            </argument>
+        </field>
+				  
+        <field name="right_box_image">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="label" xsi:type="string" translate="true">Right Box Image</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                    <item name="sortOrder" xsi:type="number">140</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="categorylanding/category_imageuploader_rightboximage/rightboximage"/>
+                    </item>
+					<item name="notice" xsi:type="string" translate="true"></item>
+                     <item name="additionalClasses" xsi:type="string"></item>
+					
+                </item>
+            </argument>
+        </field>
+				  
+        <field name="right_box_description">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">150</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Right Box Description</item>
+                    <item name="notice" xsi:type="string" translate="true"></item>
+                    <item name="additionalClasses" xsi:type="string"></item>
+					
+                </item>
+            </argument>
+        </field>
+				  
+    </fieldset>
+</form>

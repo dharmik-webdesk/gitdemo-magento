@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Customer My Account (All Pages)" design_abstraction="custom">
+    <body>
+        <move element="div.sidebar.additional" destination="sidebar.main" after="customer_account_navigation"/>
+         <move element="div.sidebar.main" destination="columns" before="-"/>
+         <referenceBlock name="customer-account-navigation-account-link">
+            <arguments>
+                <argument name="label" xsi:type="string" translate="true">Account Dashboard</argument>
+                <argument name="path" xsi:type="string">customer/account</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true"/>
+        
+    </body>
+</page>

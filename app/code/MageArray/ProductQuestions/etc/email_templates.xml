@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="productquestions_general_que_email_template" label="New Question" file="questions.html" type="html" module="MageArray_ProductQuestions" area="frontend"/>
+	 <template id="productquestions_general_ans_email_template" label="New Answer" file="answers.html" type="html" module="MageArray_ProductQuestions" area="frontend"/>
+</config>

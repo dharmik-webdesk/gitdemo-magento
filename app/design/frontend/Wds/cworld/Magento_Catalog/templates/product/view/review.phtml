@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+//$sku = $block->getProduct()->getSku();
+?><div class="ratings pro-ratings netreviews-stars">
+   <?php $html= $block->getReviewsSummaryHtml($block->getProduct(), false, true);
+		if(trim($html)){
+			echo $html;
+		}else{
+			echo '<div class="ratings">
+					<div class="rating-box"><div style="width:0%" class="rating"></div></div>
+    				<p class="rating-link"><a id="AV_button" href="javascript:void(0)">0 Review</a></p>
+		        </div>';
+		}
+		echo "<div class='pp-write_review'><a id='write-review'>Write a Review</a></div>";
+		?>
+</div>

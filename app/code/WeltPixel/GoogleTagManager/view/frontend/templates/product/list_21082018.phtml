@@ -1,0 +1,489 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+use Mageplaza\Shopbybrand\Model\BrandFactory;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Visitor;
+use Magento\Customer\Helper\Session\CurrentCustomer;
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+
+<?php
+        $_imageHelper = $this->helper('Magento\Catalog\Helper\Image');
+        $_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+        $baseUrl = $_masterHelper->getStoreBaseUrl();
+        $mediaUrl = $_masterHelper->getStoreMediaUrl();
+        $_brand_data = $_masterHelper->getMageplazaBrandList();
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+
+
+<?php if (!$_productCollection->count()): ?>
+    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></div></div>
+<?php else: ?>
+
+<div class="catalogCategoryProductList">
+<div id="categoryProducts" class="category-products">
+ 
+    <?php echo $block->getToolbarHtml() ?>
+    <?php echo $block->getAdditionalHtml() ?>
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+<?php if ($block->getMode() == 'grid') { ?>
+    <div class="products wrapper <?php /* @escap$_product_1eNotVerified */ echo $viewMode; ?> products-<?php /* @escapeNotVerified */ echo $viewMode; ?>">
+        <?php $iterator = 1; ?>
+        <ol class="products list items product-items grid">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product): ?>
+                <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+
+<?php
+$compareClass='';
+/*if(is_array($compare_product_ids) && isset($compare_product_ids[$_product->getId()])){
+$compareClass='compare_is_active';
+}*/
+?>
+                <div id="productlist_id_<?php echo $_product->getId() ?>"  class="product-item-info <?php echo $compareClass ?>" data-container="product-grid">
+                    
+                    <?php
+                    $productImage = $block->getImage($_product, $image);
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    ?>
+                    <?php // Product Image ?>
+                    
+                    <a style="cursor:pointer" <?php echo $this->helper('WeltPixel\GoogleTagManager\Helper\Data')->addProductClick($_product, $iterator-1); ?>  class="product photo product-item-photo" tabindex="-1">
+                        <?php //echo $productImage->toHtml(); ?>
+                        <img src="<?php echo $_imageHelper->init($_product, 'small_image', ['type'=>'small_image'])->keepAspectRatio(true)->resize('189','189')->getUrl(); ?>" alt="<?php echo $_product->getName(); ?>" />
+                    </a>
+                        <!-- TrustBox widget - Product Mini MultiSource (Beta) -->
+    <div class="ratings_category_grid pro-ratings">
+    <div class="trustpilot-widget" data-locale="en-US" data-template-id="577258fb31f02306e4e3aaf9" data-businessunit-id="5a2ef8c90a1d740ea821aecb" data-style-height="24px" data-style-width="100%" data-theme="light" data-sku="<?php echo $_product->getSku() ?>">
+    <a href="https://www.trustpilot.com/review/compressorworld.com" target="_blank">Trustpilot</a>
+    </div>
+    </div>
+    <!-- End TrustBox widget -->
+                     <!-- Rating -->
+                   <?php //echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
+
+                    <?php  echo $this->getLayout()->createBlock("Magento\Catalog\Block\Product\ListProduct")
+                        ->setData('_product', $_product)
+                        ->setTemplate("Magento_Catalog::product/produt_tags.phtml")->toHtml(); ?>
+                    <div class="model"><strong>Model:</strong> <?php echo $_product->getSku() ?></div>
+                   
+                    <div class="brand_img_mn">
+                    <?php $optionId = $_product->getData('brand');
+
+                        $brand_label = "".$_product->getResource()->getAttribute('brand')->getFrontend()->getValue($_product); 
+                                
+                            if (array_key_exists($optionId,$_brand_data)):
+                                if($_brand_data[$optionId]!=""): ?>
+                                    <img src="<?php echo $mediaUrl.$_brand_data[$optionId]; ?>" class="brand_img" height="100" width="110" alt="<?php echo $brand_label ?>" />
+                                <?php else:
+                                       // echo $brand_label;
+                                endif;
+                            else: 
+                                //echo $brand_label;
+                            endif;
+                        ?>
+                    </div>
+                    <div class="product details product-item-details <?php echo ($_product->getFactoryModelNumber())?'loaded_factory_model':'' ?>">
+                        
+
+                                <?php
+                            $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                        ?>
+                        
+                        
+                        <strong class="product name product-item-name">
+                            <a class="product-item-link"
+                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
+                                <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                            </a>
+                        </strong>
+                        
+                        
+                         
+                         <?php if($_product->getFactoryModelNumber()){ ?>
+                            <div class="model"><strong>Vendor Item Number: </strong> <?php echo $_product->getFactoryModelNumber() ?></div>
+                          <?php } ?>
+                            
+                        
+                        <?php // MG Add Leasing tag start ?>
+                        
+                         <?php if ($showDescription):?>
+                                <div class="product description product-item-description">
+                                    <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" title="<?php /* @escapeNotVerified */ echo $_productNameStripped ?>"
+                                       class="action more"><?php /* @escapeNotVerified */ echo __('Learn More') ?></a>
+                                </div>
+                            <?php endif;
+                                $discountval='';
+                                $originalPrice = $_product->getPrice();
+                                $finalPrice = $_product->getPriceInfo()->getPrice('final_price')->getValue();
+
+                                if ($originalPrice > $finalPrice) {
+                                    $savevalue = $originalPrice - $finalPrice;
+                                    $savevalue=number_format((float)$savevalue, 2);
+                                    //  $discountval = $priceHelper->currency($savevalue, true, false);
+                                    $discountval=$savevalue;
+                                }
+                            ?>
+                         
+                        <div class="product-price <?php echo(!empty($discountval))?'discound_price_box':'no_price_box'?> ">
+                        <div class="custom_pricing">
+                            <?php /* @escapeNotVerified */ echo $block->getProductPrice($_product) ?>
+                        </div>
+                        </div>
+                        <?php // MG Add Leasing tag End ?>
+                        
+                        
+                        <?php echo $block->getProductDetailsHtml($_product); ?>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
+                                <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
+                                    <?php if ($_product->isSaleable()): ?>
+                                            <?php 
+                                            $lable=null;
+                                                if($_product->getStockAvailabilityStatus()){
+                                                    $lable=$_product->getAttributeText('stock_availability_status');
+                                                    if(is_array($lable))
+                                                        $lable=implode($lable,', ');
+                                                }
+                                                if(empty($lable))
+                                                    $lable='In stock';  
+                                            ?>
+                                            <p class="availability in-stock"><span><?php echo $lable; ?></span></p>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                        <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                        <input type="hidden" id="checkouturl" value="<?php echo $block->getUrl('checkout', ['_secure' => true]);?>">
+                                            <?php echo $block->getBlockHtml('formkey')?>
+                    <?php //$hasoptions = "";  $hasoptions = $_product->getData('has_options'); ?>
+                    
+                    <?php if($_product->getHasOptions() || $_product->getShippingCosts()>0) : ?>
+                        <input type="hidden" name="weltcheckouturl" id="weltcheckouturl_<?php echo $_product->getId() ?>" value="<?php echo $block->getUrl('checkout', ['_secure' => true]);?>">
+                        
+                        <a href="javascript:void(0);" style="display:block"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary weltpixel-quickview weltpixel_quickview_button_v2 btn"
+                            data-quickview-url="<?php echo $baseUrl; ?>weltpixel_quickview/catalog_product/view/id/<?php echo $_product->getId();?>/">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                        </a>  
+                    <?php else: ?>
+                        <button type="submit"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary btn">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                        </button> 
+                    <?php endif; ?>
+                                
+                                        </form>
+                                    <?php else: ?> 
+                                        <?php if ($_product->getIsSalable()): ?>
+                                            
+                                            <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                        <?php else: ?>
+                                            <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                                
+                
+                            </div>
+                           
+                        </div>
+    
+                    </div>
+                </div>
+                <div class="extra-info">
+                             
+                                <span class="extra-info-item">
+                                    <?php echo 'Sku'; ?>: <?php echo $_product->getSku(); ?>
+                                </span> 
+                                
+                                    <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
+                                        <?php echo $addToBlock->setProduct($_product)->getChildHtml(); ?>
+                                    <?php endif; ?>
+                                    
+                                    <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                        <input type="hidden" id="checkouturl" value="<?php echo $block->getUrl('checkout', ['_secure' => true]);?>">
+                                            <?php echo $block->getBlockHtml('formkey')?>
+                    <?php //$hasoptions = "";  $hasoptions = $_product->getData('has_options'); ?>
+                    
+                    <?php if($_product->getHasOptions() || $_product->getShippingCosts()>0): ?>
+                        <input type="hidden" name="weltcheckouturl" id="weltcheckouturl_<?php echo  $_product->getId() ?>" value="<?php echo $block->getUrl('checkout', ['_secure' => true]);?>">
+                        
+                        <a href="javascript:void(0);" style="display:block"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary weltpixel-quickview weltpixel_quickview_button_v2 btn"
+                            data-quickview-url="<?php echo $baseUrl; ?>weltpixel_quickview/catalog_product/view/id/<?php echo $_product->getId();?>/">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                        </a>  
+                    <?php else: ?>
+                        <button type="submit"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary btn">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                        </button> 
+                    <?php endif; ?>
+                                
+                                        </form>
+                                
+                         </div>
+                <?php echo($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+<?php } if ($block->getMode() == 'list') { ?>
+     <div class="products wrapper <?php /* @escap$_product_1eNotVerified */ echo $viewMode; ?> products-<?php /* @escapeNotVerified */ echo $viewMode; ?>">
+        <?php $iterator = 1; ?>
+        <ol class="products list items product-items list">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product): ?>
+                <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+
+<?php
+$compareClass='';
+/*if(is_array($compare_product_ids) && isset($compare_product_ids[$_product->getId()])){
+$compareClass='compare_is_active';
+}*/
+?>
+                <div id="productlist_id_<?php echo $_product->getId() ?>"  class="product-item-info row <?php echo $compareClass ?>" data-container="product-grid">
+                    <?php
+                            $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                        ?>
+                        
+                        
+                        <strong class="product name product-item-name">
+                            <a class="product-item-link"
+                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
+                                <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                            </a>
+                        </strong>
+                    <?php
+                    $productImage = $block->getImage($_product, $image);
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    ?>
+                    <?php // Product Image ?>
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+						<a style="cursor:pointer" <?php echo $this->helper('WeltPixel\GoogleTagManager\Helper\Data')->addProductClick($_product, $iterator-1); ?> class="product photo product-item-photo" tabindex="-1">
+							<?php //echo $productImage->toHtml(); ?>
+							<img src="<?php echo $_imageHelper->init($_product, 'small_image', ['type'=>'small_image'])->keepAspectRatio(true)->resize('189','189')->getUrl(); ?>" alt="<?php echo $_product->getName(); ?>" />
+						</a>
+                    </div>
+                    <div class="product details product-item-details col-xs-12 col-sm-8 col-md-9 <?php echo ($_product->getFactoryModelNumber())?'loaded_factory_model':'' ?>">
+                        
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                
+                        
+                        <div class="extra-info">
+                              
+                              
+                                <span class="extra-info-item">
+                                    <?php echo 'Sku'; ?>: <?php echo $_product->getSku(); ?>
+                                </span> |
+                                
+                                    <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
+                                        <?php echo $addToBlock->setProduct($_product)->getChildHtml(); ?>
+                                    <?php endif; ?>
+                                
+                         </div>
+                         <!-- <div class="model"><strong>Model:</strong> <?php echo $_product->getSku() ?></div> -->
+                         <?php if($_product->getFactoryModelNumber()){ ?>
+                            <div class="model"><strong>Vendor Item Number: </strong> <?php echo $_product->getFactoryModelNumber() ?></div>
+                          <?php } ?>
+                         
+
+                        <?php $optionId = $_product->getData('brand');
+                        $brand_label = "".$_product->getResource()->getAttribute('brand')->getFrontend()->getValue($_product); ?>
+                             <div class="brand_logo">   
+                             <?php if (array_key_exists($optionId,$_brand_data)):
+                                if($_brand_data[$optionId]!=""): ?>
+                
+                                    <img src="<?php echo $mediaUrl.$_brand_data[$optionId]; ?>" class="brand_img" height="100" width="110" alt="<?php echo $brand_label ?>" />
+                
+                                <?php else:
+                                      //  echo $brand_label;
+                                endif;
+                            else: 
+                                //echo $brand_label;
+                            endif;
+                        ?>
+</div>
+                       
+                        <?php 
+                           
+                        if(($_product->getWweFreeShipping() || $_product->getFinalPrice()>50) && ($_product->getShippingCosts()=="")): ?>
+                            <span class="wwe_shipping">Free Shipping</span>
+                        <?php endif; ?>
+                        <?php // MG Add Leasing tag start ?>
+                        
+                         <?php if ($showDescription):?>
+                                <div class="product description product-item-description">
+                                    <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" title="<?php /* @escapeNotVerified */ echo $_productNameStripped ?>"
+                                       class="action more"><?php /* @escapeNotVerified */ echo __('Learn More') ?></a>
+                                </div>
+                            <?php endif; ?>
+                        <!-- Rating -->
+                        <?php //echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
+                        <!-- TrustBox widget - Product Mini MultiSource (Beta) -->
+    <div class="ratings_category_list pro-ratings">
+    <div class="trustpilot-widget" data-locale="en-US" data-template-id="577258fb31f02306e4e3aaf9" data-businessunit-id="5a2ef8c90a1d740ea821aecb" data-style-height="24px" data-style-width="190px" data-theme="light" data-sku="<?php echo $_product->getSku() ?>">
+    <a href="https://www.trustpilot.com/review/compressorworld.com" target="_blank">Trustpilot</a>
+    </div>
+    </div>
+    <!-- End TrustBox widget -->
+                            </div>
+                            <div class="col-sm-12 col-md-4 ">
+                                <?php
+                                $discountval='';
+                                $originalPrice = $_product->getPrice();
+                                $finalPrice = $_product->getPriceInfo()->getPrice('final_price')->getValue();
+
+                                if ($originalPrice > $finalPrice) {
+                                    $savevalue = $originalPrice - $finalPrice;
+                                    $savevalue=number_format((float)$savevalue, 2);
+                                    //  $discountval = $priceHelper->currency($savevalue, true, false);
+                                    $discountval=$savevalue;
+                                }
+                            ?>
+                         
+                        <div class="product-price <?php echo(!empty($discountval))?'discound_price_box':'no_price_box'?> ">
+                        <div class="custom_pricing">
+                            <?php /* @escapeNotVerified */ echo $block->getProductPrice($_product) ?>
+                        </div>
+                        </div>
+
+                        <?php // MG Add Leasing tag End ?>
+                        
+                        
+                        <?php echo $block->getProductDetailsHtml($_product); ?>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
+                                <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
+                                    <?php if ($_product->isSaleable()): ?>
+                                            <?php 
+                                            $lable=null;
+                                                if($_product->getStockAvailabilityStatus()){
+                                                    $lable=$_product->getAttributeText('stock_availability_status');
+                                                    if(is_array($lable))
+                                                        $lable=implode($lable,', ');
+                                                }
+                                                if(empty($lable))
+                                                    $lable='In stock';  
+                                            ?>
+                                            <p class="availability in-stock"><span><?php echo $lable; ?></span></p>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+                                        <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
+                                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                        <input type="hidden" id="checkouturl" value="<?php echo $block->getUrl('checkout', ['_secure' => true]);?>">
+                                            <?php echo $block->getBlockHtml('formkey')?>
+                    <?php //$hasoptions = "";  $hasoptions = $_product->getData('has_options'); ?>
+                    
+                    <?php if($_product->getHasOptions() || $_product->getShippingCosts()>0): ?>
+                        <input type="hidden" name="weltcheckouturl" id="weltcheckouturl_<?php $_product->getId() ?>" value="<?php echo $block->getUrl('checkout', ['_secure' => true]);?>">
+                        
+                        <a href="javascript:void(0);" style="display:block"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary weltpixel-quickview weltpixel_quickview_button_v2 btn"
+                            data-quickview-url="<?php echo $baseUrl; ?>weltpixel_quickview/catalog_product/view/id/<?php echo $_product->getId();?>/">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                        </a>  
+                    <?php else: ?>
+                        <button type="submit"
+                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    class="action tocart primary btn">
+                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                        </button> 
+                    <?php endif; ?>
+                                
+                                        </form>
+                                    <?php else: ?> 
+                                        <?php if ($_product->getIsSalable()): ?>
+                                            
+                                            <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                        <?php else: ?>
+                                            <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                                
+                <?php  echo $this->getLayout()->createBlock("Magento\Catalog\Block\Product\ListProduct")
+                        ->setData('_product', $_product)
+                        ->setTemplate("Magento_Catalog::product/produt_tags.phtml")->toHtml(); ?>
+                            </div>
+                           
+                        </div>
+                        
+                            </div>
+                        </div>
+                        
+                                                
+                        
+                    </div>
+                </div>
+                <?php echo($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+<?php } ?>
+    
+    <?php echo $block->getToolbarHtml() ?>
+    
+    <?php if (!$block->isRedirectToCartEnabled()) : ?>
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {
+
+        } 
+            }
+        }
+        </script>
+    <?php endif; ?>
+</div></div>
+<?php endif; ?>

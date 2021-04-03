@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Wds_Experts::parent" title="Experts" module="Wds_Experts" sortOrder="100" resource="Wds_Experts::parent"/>
+		<add id="Wds_Experts::experts" title="Manage Experts" module="Wds_Experts" sortOrder="20" parent="Wds_Experts::parent" action="experts/experts" resource="Wds_Experts::experts"/>
+    </menu>
+</config>

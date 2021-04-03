@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+		<css src="MageArray_ProductQuestions::css/productquestion.css"/>
+    </head>
+	<body>
+		<referenceBlock name="product.info.details">
+			<block class="MageArray\ProductQuestions\Block\QuestionAnswer" ifconfig="productquestions/general/active" name="productquestion.tab" template="MageArray_ProductQuestions::form.phtml" group="detailed_info" after="productquestion.tab" cacheable="false">
+				<arguments>
+					<argument translate="true" name="title" xsi:type="string">Product Q &amp; A</argument>
+				</arguments>
+			</block>
+		</referenceBlock>
+	</body>
+</page> 

@@ -1,0 +1,233 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Magento\Review\Block\Form
+ */
+$show_form_review=0;
+if($show_form_review==1){
+?>
+
+<div class="block review-add" id="product-review-custom">
+    <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Write Your Own Review') ?></strong><a href="wrie-a-review" name="wrie-a-review"></a></div>
+<div class="block-content">
+<?php if ($block->getAllowWriteReviewFlag()): ?>
+<form action="<?php /* @escapeNotVerified */ echo $block->getAction() ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
+    <?php echo $block->getBlockHtml('formkey'); ?>
+    <?php echo $block->getChildHtml('form_fields_before')?>
+    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
+       
+        <?php  if ($block->getRatings() && $block->getRatings()->getSize()): ?>
+        <span id="input-message-box"></span>
+        <fieldset class="field required review-field-ratings">
+            <legend class="label"><span><?php /* @escapeNotVerified */ echo __('How do you rate this product?') ?><span></legend><br/>
+            <div class="control">
+                <div class="nested" id="product-review-table">
+                    <?php foreach ($block->getRatings() as $_rating): ?>
+                        <div class="field choice review-field-rating">
+                            <label class="label" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
+                            <div class="control review-control-vote">
+                            <?php $options = $_rating->getOptions();?>
+                            <?php $iterator = 1; foreach ($options as $_option): ?>
+                                <input
+                                    type="radio"
+                                    name="ratings[<?php /* @escapeNotVerified */ echo $_rating->getId() ?>]"
+                                    id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
+                                    value="<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
+                                    class="radio"
+                                    data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}"
+                                    aria-labelledby="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label" />
+                            	<label
+                                    class="rating-<?php /* @escapeNotVerified */ echo $iterator; ?>"
+                                    for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
+                                    title="<?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>"
+                                    id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label">
+                                    <span><?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?></span>
+                                </label>
+								<?php $iterator++; ?>
+                            <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <input type="hidden" name="validate_rating" class="validate-rating" value="" />
+            </div>
+        </fieldset>
+    <?php endif ?>
+        <div class="field review-field-nickname required">
+            <label for="nickname_field" class="label"><span><?php /* @escapeNotVerified */ echo __('Nickname') ?></span></label>
+            <div class="control">
+                <input type="text" name="nickname" id="nickname_field" class="input-text" data-validate="{required:true}" data-bind="value: nickname()" />
+            </div>
+        </div>
+        <div class="field review-field-summary required">
+            <label for="summary_field" class="label"><span><?php /* @escapeNotVerified */ echo __('Summary of Your Review') ?></span></label>
+            <div class="control">
+                <input type="text" name="title" id="summary_field" class="input-text" data-validate="{required:true}" data-bind="value: review().title" />
+            </div>
+        </div>
+        <div class="field review-field-text required">
+            <label for="review_field" class="label"><span><?php /* @escapeNotVerified */ echo __('Review') ?></span></label>
+            <div class="control">
+                <textarea name="detail" id="review_field" cols="5" rows="3" data-validate="{required:true}" data-bind="value: review().detail"></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar review-form-actions">
+        <div class="primary actions-primary">
+            <button type="submit" class="action submit primary btn"><?php /* @escapeNotVerified */ echo __('Submit Review') ?></button>
+        </div>
+    </div>
+</form>
+<script type="text/x-magento-init">
+{
+    "[data-role=product-review-form]": {
+        "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+    },
+    "#review-form": {
+        "Magento_Review/js/error-placement": {}
+    }
+}
+</script>
+
+ <script type="text/javascript">
+               
+require(['jquery'], function($){
+   jQuery.noConflict();
+
+
+                //animate rating table
+                /*
+                    $('#product-review-table .control.review-control-vote').hover(
+                            function () {
+                                var tr = $(this).parent();
+                                tr.find('.rating-radio').removeClass('active');
+                                tr.find('.rating-radio:lt(' + $('.rating-radio', this).attr('data-index') + ')').addClass('active');
+                            },
+                            function () {
+                                var tr = $(this).parent();
+                                tr.find('.rating-radio').removeClass('active');
+                                tr.find('.rating-radio:lt(' + tr.find('.selected-value').attr('data-index') + ')').addClass('active');
+                            }
+                    );
+
+                    $('#product-review-table .rating-radio').click(function () {
+                        $('#' + $(this).attr('data-id')).attr('checked', true);
+                        $(this).parent().parent().find('.selected-value').attr('data-index', $(this).attr('data-index'));
+                    });
+            */
+                //]]>
+    
+
+/*
+(function($){
+    $.fn.makeItStar=function(){
+        this.each(function(){
+        var str='';
+         
+            $(this).find("input[type=radio]").each(function(){
+            $(this).hide();
+                str+='<a rel="'+$(this).attr("id")+'" href="javascript:;" rel="nofollow"></a>';
+            });
+            str="<div class='rating-box makeItStar'>"+str+"</div>";
+            $(this).append(str);
+ 
+            $(this).find(".rating-box").children("a").hover(function(){
+ 
+                $(this).closest(".rating-box").find("a").removeClass("active");
+                var idx=$(this).index();
+alert(idx);                
+for(i=0;i<=idx;i++){
+                    $(this).closest(".rating-box").find("a:eq("+i+")").addClass("active");
+ 
+                }
+            });
+            $(this).find(".rating-box").children("a").click(function(){
+                var cix=$(this).index();
+ 
+                $(this).closest(".rating-box").parent().find("input[type=radio]").removeAttr("checked");
+                $(this).closest(".rating-box").parent().find("input:eq("+cix+")").attr('checked', "checked");
+            });
+            $(this).find(".rating-box").mouseenter(function(){
+            }).mouseleave(function(){
+            $(this).find("a").removeClass("active");
+                var cidx=-1;
+ 
+                $(this).parent("div").find("input").each(function(i){
+ 
+                    if($(this).attr('checked')=="checked"){
+                        cidx=i;
+                    }
+                });
+ 
+                if(cidx>=0){
+                    for(i=0;i<=cidx;i++){
+                        $(this).closest(".rating-box").find("a:eq("+i+")").addClass("active");
+                    }
+                }
+            })
+        });
+    }
+})(jQuery)
+
+$("#product-review-table").makeItStar();    
+*/
+ $( "#write-review, .product_left_mn .ratings,#AV_button" ).click(function() {
+    var tab=jQuery('#product-review-custom').parent().parent().attr('id');
+    jQuery('.pp-tabs ul.tabs li[rel='+tab+']').trigger('click');
+    jQuery('html, body').animate({scrollTop:eval(jQuery('#product-review-custom').parent().parent().position().top)}, 'slow');
+ 	
+ });
+}); 
+
+
+
+</script>
+
+ 
+
+<?php else: ?>
+    <div class="message info notlogged" id="review-form">
+        <div>
+            <?php /* @escapeNotVerified */ echo __('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()) ?>
+        </div>
+    </div>
+<?php endif ?>
+</div>
+</div>
+
+<?php } ?>
+
+        
+ 
+<?php 
+        $_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+        $product = $_masterHelper->getStoreCurrentProduct();
+        $sku=$product->getSku();
+?>
+<div class="review-code" id="trustpilot-review-listing">
+<div class="trustpilot-widget" data-locale="en-US" data-template-id="5763bccae0a06d08e809ecbb" data-businessunit-id="5a2ef8c90a1d740ea821aecb" data-style-height="700px" data-style-width="100%" data-theme="light" data-sku="<?php echo $sku ?>" data-name="KT,SWITCHES,TEST-OFF-AUTO">
+<a href="https://www.trustpilot.com/review/compressorworld.com" target="_blank">Trustpilot</a>
+</div>
+</div>
+
+<script type="text/javascript">
+               
+require(['jquery'], function($){
+   jQuery.noConflict();
+   $( "#write-review, .product_left_mn .ratings,#AV_button,#numberOfReviews" ).click(function() {
+    var tab=jQuery('#trustpilot-review-listing').parent().parent().attr('id');
+    jQuery('.pp-tabs ul.tabs li[rel='+tab+']').trigger('click');
+    jQuery('html, body').animate({scrollTop:eval(jQuery('#trustpilot-review-listing').parent().parent().position().top)}, 'slow');
+    
+ });
+}); 
+
+
+
+</script>

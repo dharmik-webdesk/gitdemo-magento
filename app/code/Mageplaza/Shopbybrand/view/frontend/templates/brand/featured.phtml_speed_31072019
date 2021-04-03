@@ -1,0 +1,116 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<?php
+	$timeId = time();
+	$featureBrands = $block->getFeaturedBrand();
+	if(sizeof($featureBrands) > 1):
+?>
+
+<?php echo $block->includeCssLib(); ?>
+<div class="block block-brand-feature widget wds_brandling">
+	<?php //if($block->showTitle()): ?>
+		<div class="block-title">
+			<strong id="block-feature-brand-heading" role="heading" aria-level="2"><?php echo $block->helper()->getFeatureConfig('title') ?></strong>
+		</div>
+	<?php //endif; ?>
+	<div class="block-content">
+		<div class="" id="feature-brand-carousel-<?= $timeId ?>" >
+			<!-- <div class="owl-carousel owl-theme brand-carousel" id="feature-brand-carousel-<?= $timeId ?>" data-mage-init='{"brandSlider": {}}'> -->
+			<div class="brand_sliders" data-mage-init='{"slickwrapper":{
+       "dots": false,
+       "infinite": true,       
+       "mobileFirst": true,
+       "slidesToShow": 6,
+       "slidesToScroll": 1,
+       "responsive": [
+	{
+               "breakpoint": 1170,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 6
+		}
+           },           
+	{
+               "breakpoint": 1050,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 5
+		}
+           },
+		   {
+               "breakpoint": 900,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 4
+}
+           },
+           {
+               "breakpoint": 767,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 3
+               }
+           },
+           {
+               "breakpoint": 479,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 2
+               }
+           },
+           {
+               "breakpoint": 319,
+               "settings": {
+                   "slidesToScroll": 1,
+                   "slidesToShow": 1
+               }
+           }
+       ]
+   } }'>
+
+
+			<?php foreach($featureBrands as $brand):?>
+				<div class="brand-item relate-content">
+					<a href="<?php echo $block->helper()->getBrandUrl($brand) ?>">
+					<table cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+    	<td valign="middle" height="100">
+						<img class="img-responsive brand-image" src="<?php echo $block->helper()->getBrandImageUrl($brand) ?>" width="95" height="58">
+						<?php if($block->showLabel()): ?>
+							<span>
+								<?php echo $brand->getValue() ?>
+							</span>
+						<?php endif; ?>
+						</td>
+    </tr>
+</table>
+					</a>
+					<div class="overlay_over">
+						<a href="<?php echo $block->helper()->getBrandUrl($brand) ?>"><i class="fa fa-link" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			<?php endforeach;?>
+		</div>
+		</div>
+	</div>
+</div>
+<?php endif; ?>

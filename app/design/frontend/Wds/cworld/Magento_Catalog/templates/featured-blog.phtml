@@ -1,0 +1,55 @@
+<h2 class="home_special">
+<span style="color: #3366ff;">Featured Blog Posts</span>
+</h2>
+<div class="featured_blogpost_mn">
+    <ul id="blog_posts_list">
+    </ul>   
+    <a href="/blog" target='_blank'>Visit The Compressorworld Blog</a>
+</div>
+
+<script type="text/javascript">
+require(['jquery','jquery/ui'], function($){
+    jQuery.ajax({
+        url: "https://www.compressorworld.com/blog/feed/",
+        dataType: "xml",
+        success: function(xml){
+
+            var html_string = "";
+            jQuery(xml).find('item').each(function(){
+                var Title = jQuery(this).find('title').text();
+                var blogLink = jQuery(this).find('link').text();
+                var Publisher = $(this).find('pubDate').text();
+
+              //  var media = jQuery(this).find('thumbnail').attr('url');
+              
+              var media = jQuery(this).find("thumbnail").attr('url');
+              if(!media){
+                    media = jQuery(this).find("media\\:thumbnail").attr('url');
+              }
+
+                var date_format = new Date(Publisher);
+                var m_names = new Array("January", "February", "March","April", "May", "June", "July", "August", "September", "October", "November", "December");
+                var curr_date = date_format.getDate();
+                var curr_month = date_format.getMonth();
+                var curr_year = date_format.getFullYear();
+                var Publisher_date =  m_names[curr_month] +" "+curr_date + ", "+ curr_year;
+                currnt_blog = "<li>";
+
+                currnt_blog += "<div class='blog-img'>";
+                if(media){
+                    currnt_blog += "<a href='"+blogLink+"' target='_blank'><img src="+ media +" /></a>";
+                }
+                currnt_blog += "</div>";
+                currnt_blog +=  "<div class='blog-txt'><p>"+ Publisher_date +"</p><h2><a style='color:#444444;font-size:18px' target='_blank' href='"+blogLink+"'>"+ Title +"</a></h2></div></li>";
+                
+                
+
+                html_string += currnt_blog;
+                
+                
+            });
+            jQuery("#blog_posts_list").html(html_string);
+        }
+    });
+});
+</script>

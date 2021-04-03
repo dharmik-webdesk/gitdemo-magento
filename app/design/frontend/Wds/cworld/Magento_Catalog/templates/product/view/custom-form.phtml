@@ -1,0 +1,14 @@
+ 
+ <?php $_helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
+<?php $_product = $block->getProduct(); ?>
+ <form action="<?php /* @escapeNotVerified */ echo $block->getSubmitUrl($_product) ?>" method="post"
+          id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $_product->getId() ?>" />
+        <input type="hidden" name="selected_configurable_option" value="" />
+        <input type="hidden" name="related_product" id="related-products-field" value="" /> 
+        <?php if($_product->getShippingCosts()): ?>
+        	<input type="hidden" name="additional_options" id="custom_additional_options" value="1" /> 
+    	<?php endif; ?>
+        <?php echo $block->getBlockHtml('formkey')?>
+		<?php //<div class="custom_product_info" itemscope="" itemtype="http://schema.org/Product"> ?>
+        <div class="custom_product_info" itemscope="" itemtype="http://schema.org/Product">

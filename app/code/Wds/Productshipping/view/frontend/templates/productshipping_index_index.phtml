@@ -1,0 +1,67 @@
+<?php  
+//if($this->isEnabled()){  
+?>
+<div class="shipping_estimator">
+<div class="wds_zip_main_continer">
+	<div class="wds_zip_code_locator" id="wds_zip_code_locator">
+		<h3 class="title">Shipping Estimator</h3>
+		<div class="label_zip" style="text-align: left; padding-left: 48px;color:gray">Enter Zip Code</div>
+		<input type="text" name="wds_zipcode" class="" id="wds_zipcode" value="" placeholder="<?php echo $this->__('Enter Zip Code') ?>" style="padding-left:6px" />
+		<button type="button" title="<?php echo $this->__('Update') ?>" class="button btn btn-primary btn-continue" onclick="getWdsShipping()"><span>
+		<span><?php echo $this->__('Update') ?></span></span></button>
+		
+		<div class="wds_avalible_shipping_method" id="wds_avalible_shipping_method"></div>
+	</div>
+	
+	<div id="loadingmask" style="display: none;" >
+		<div class="loader" id="loading-mask-loader"><img src="<?php echo str_replace("index.php/","",$this->getUrl()) ?>skin/adminhtml/default/default/images/ajax-loader-tr.gif" alt="<?php echo $this->__('Loading...') ?>"/><?php echo $this->__('Loading...') ?></div>
+	<div id="loading-mask"></div>
+	</div>
+</div>
+</div>
+
+<script language="javascript">
+jQuery('#wds_zipcode').keypress(function(e) {
+    if(e.which == 13) {
+        getWdsShipping();
+		e.preventDefault();
+    }
+	
+});
+		
+function getWdsShipping(){
+	//Validation.validate($('wds_zipcode'));
+	if(!$('wds_zipcode').value){
+		alert('<?php echo $this->__('Please enter Zip Code') ?>');
+		return true;
+	}
+	Element.show('loadingmask');
+	document.getElementById("wds_zip_code_locator").style.opacity='0.5';
+	
+	setTimeout(function(){ 
+	var url;
+	url = '<?php echo $this->getUrl('postcodefinder/index/ajaxfind/'); ?>zip/'+$('wds_zipcode').value+'/product_id/'+'<?php echo $this->getCurrentProduct() ?>';
+	new Ajax.Request(url, {
+        method: 'get',
+        asynchronous: false,
+        onSuccess: function(transport) {
+			Element.hide('loadingmask');
+			document.getElementById("wds_zip_code_locator").style.opacity='1';
+			$('wds_avalible_shipping_method').innerHTML=transport.responseText;
+            /*var obj = response = eval('(' + transport.responseText + ')');
+            validateTrueEmailMsg = obj.status_desc;
+			if (obj.ok === false) {
+                Validation.get('validate-email').error = validateTrueEmailMsg;
+                ok = false;
+            } else {
+                ok = true; 
+            }*/
+        },
+        onComplete: function() {
+ 
+        }
+    });
+	}, 100);
+}
+</script>
+<?php //} ?>

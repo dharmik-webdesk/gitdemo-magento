@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    		<referenceBlock name="product.info.details">
+	            <block class="Magento\Review\Block\Product\Review" name="reviews.tab" as="reviews" template="Wds_ReviewNotify::review.phtml" group="detailed_info">
+					<block class="Wds\ReviewNotify\Block\ListRating" name="reviews.tab2" as="reviews2" template="Wds_ReviewNotify::review_overview.phtml" before="-" />
+					            		
+	                <block class="Wds\ReviewNotify\Block\Form" name="product.review.form" as="review_form">
+	                    <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
+	                </block>
+	            </block>
+        	</referenceBlock>
+
+			
+	    	
+	</body>
+</page>

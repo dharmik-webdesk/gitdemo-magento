@@ -1,0 +1,67 @@
+<div class="cwn-cp-list">
+	<?php $categoryId = $this->getData("categoryId");
+			$categoryName = $this->getData("categoryName"); ?>
+	
+	<?php 
+	
+			$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	
+						/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+							$productCollection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
+							$productCollection->addCategoriesFilter(['in' => [$categoryId]]);
+							$productCollection->addAttributeToFilter('popular_category_product', true);
+$productCollection->addAttributeToSelect('*');
+							$productCollection->addAttributeToFilter('visibility', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
+    						$productCollection->addAttributeToFilter('status',\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+							$productCollection->setPageSize(6);
+$abstractProductBlock = $block->getLayout()->createBlock('\Magento\Catalog\Block\Product\AbstractProduct');
+	
+	if ($productCollection->count()) : ?>
+		<h2>Popular Products in <?php echo $categoryName; ?> Category</h2>
+		<div class="products_list_special">
+		<ol class="products_list_mn">
+			<?php foreach ($productCollection as $_product):
+				$_product_info=$_product;
+				//$_product_info = $objectManager->get('Magento\Catalog\Model\Product')->load($_product->getId());
+				$productImage = $block->getImage($_product_info, 'category_page_grid');
+                   
+			?>
+			
+				<li>
+					<div class="cwn-cp-list-img">
+						<a href="<?php echo $_product_info->getProductUrl() ?>" title="<?php echo $_product_info->getName(); ?>">
+							<?php echo $productImage->toHtml(); ?></a>
+					</div>
+				<?php $html= $block->getReviewsSummaryHtml($_product_info, "\Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW"); ?>
+					<?php 
+					
+					//$html= $this->getReviewsSummaryHtml($_product_info, 'list', true);
+					if(trim($html)){
+						echo $html;
+					}else{
+						echo '<div class="ratings">
+								<div class="rating-box"><div style="width:0%" class="rating"></div></div>
+								<p class="rating-link"><a id="AV_button" href="javascript:void(0)">0 Review</a></p>
+							  </div>';
+					}
+					?>
+				
+					<h4>
+						<a href="<?php echo $_product_info->getProductUrl() ?>" title="<?php echo $this->stripTags($_product_info->getName(), null, true) ?>">
+						<?php 
+						$name=  strip_tags( $_product_info->getName());
+						echo (strlen($name)>45)?substr($name,0,45)."...":$name;
+						?>
+						</a>
+					</h4>
+					<?php echo $abstractProductBlock->getProductPrice($_product_info) ?>
+					
+
+				</li>
+			<?php endforeach; ?>
+			</ol>
+		</div>
+		<?php endif ?>
+	
+	
+	</div>

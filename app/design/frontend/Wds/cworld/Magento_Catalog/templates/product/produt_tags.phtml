@@ -1,0 +1,75 @@
+<?php
+
+$_product=$this->getData("_product");
+
+
+	
+if(!function_exists('generateOptionLabel')){
+	
+function filter_class_element($class_name){
+	
+			$class_name=str_replace(' ','_',strtolower($class_name));
+			$class_name=str_replace("'",'',strtolower($class_name));
+			$class_name=str_replace('"','',strtolower($class_name));
+			$words=$class_name;
+			$words = preg_replace('/0/', 'zero', $words ); // remove numbers
+			$words = preg_replace('/1/', 'one', $words ); // remove numbers
+			$words = preg_replace('/2/', 'two', $words ); // remove numbers
+			$words = preg_replace('/3/', 'three', $words ); // remove numbers
+			$words = preg_replace('/4/', 'four', $words ); // remove numbers
+			$words = preg_replace('/5/', 'five', $words ); // remove numbers
+			$words = preg_replace('/6/', 'six', $words ); // remove numbers
+			$words = preg_replace('/7/', 'seven', $words ); // remove numbers
+			$words = preg_replace('/8/', 'eight', $words ); // remove numbers
+			$words = preg_replace('/9/', 'nani', $words ); // remove numbers
+	return $words;
+}
+
+function generateOptionLabel($lable){
+	global $newoption_array;
+	$lastemlent=array();
+	$text_lastemlent=array('1 Year Warranty','2 Year Warranty','3 Year Warranty','5 Year Warranty','10 Year Warranty','Lifetime Warranty','Free Factory start up');
+	$lable_array=explode(',',$lable);
+	echo '<div class="wds-product-labels load_product_tag_v1">';
+	if(count($lable_array)>0){
+		
+		
+		
+		foreach($lable_array as $key){
+			if(in_array($newoption_array[$key],$text_lastemlent)){
+				$words=filter_class_element($newoption_array[$key]);
+				echo '<span class="'.$words.'">'.$newoption_array[$key].'</span>';
+				unset($lable_array[$key]);
+			}else{
+				$lastemlent[]=$key;
+			}
+		}
+		if(count($lastemlent)>0){
+			foreach($lastemlent as $key){
+				$words=filter_class_element($newoption_array[$key]);
+				if($words!='price_match_guarantee')
+					echo '<span class="'.$words.'">'.$newoption_array[$key].'</span>';
+			}
+		}
+		
+	}
+	echo '<span class="price_match_guarantee">Price Match Guarantee</span>';
+	//echo '<span class="cws_top_pick"></span>';
+	echo '</div>';
+}
+}
+	global $newoption_array;
+	if(empty($newoption_array)){
+		$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+        $allOptions = $_masterHelper->getProductTagList();
+		
+		foreach ($allOptions as $instance) {
+			$newoption_array[$instance['value']]=$instance['label'];
+		}
+	}
+	
+	/*MNG Start: CW: Product Tags */
+	echo generateOptionLabel($_product->getProductTags());
+	/*MNG End: CW: Product Tags */
+?>
+							

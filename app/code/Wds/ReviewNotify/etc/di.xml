@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Review\Block\Adminhtml\Edit\Form">
+        <plugin name="modify_review_edit_form_2" type="Wds\ReviewNotify\Plugin\Magento\Review\Block\Adminhtml\Edit\Form" />
+    </type>   
+	<preference for="Magento\Review\Model\ResourceModel\Review\Collection" type="Wds\ReviewNotify\Model\ResourceModel\Review\Collection" />
+</config>

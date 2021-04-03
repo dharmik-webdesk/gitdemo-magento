@@ -1,0 +1,182 @@
+<?php 
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$baseUrl = $_masterHelper->getStoreBaseUrl();
+$_product = $block->getProduct();
+?>
+
+<div class="product-right-container">
+	<ul class="product_details_right product_details_right_t">
+       <li class="freeshipping"><i class="icon"></i>Free Shipping</li>
+       <?php if($_product->getDelivered()) {?>
+       <li class="deliverd"><i class="icon"></i>Delivered <strong><?php echo $_product->getDelivered() ?></strong></li>
+   	   <?php } ?>
+   	   <li class="share_media">
+	       	<i class="icon"></i><a href="javascript:void(0);">Share</a>
+	       	<div class="product-sharing-tool">	
+				<?php $name= urlencode($_product->getName()); $url= urlencode($_product->getProductUrl()); ?>
+				<a class="st_facebook_large shareme" href="http://www.facebook.com/sharer.php?u=<?php echo $url ?>[title]=<?php echo $name ?>">FB</a>
+				<a class="st_twitter_large shareme"  href="https://twitter.com/share?text=<?php echo $name ?>&url=<?php echo $url ?>">TW</a>
+				<a class="share-pinterest st_pinterest_large shareme" href="http://pinterest.com/pin/create/button/?url=<?php echo $url ?>&description=<?php echo $name ?>">Pint</a>
+				<a class="share-pinterest email_large shareme" href="mailto:?subject=<?php echo $name ?>&amp;body=<?php echo $url ?>">email</a>
+			</div>
+	   </li>
+   	   <?php if($_product->getItemLocation()) {?>
+       <li class="item_location"><i class="icon"></i>Factory Location: <?php echo $_product->getItemLocation() ?></li>
+       <?php } ?>
+    </ul>
+    <div class="video_button">
+    	<a href="#" class="gruveo-call-button" onclick="popupwindowvideo('https://www.gruveo.com/embed/?code=%40compressorworld&startcall=video&aftercallscreen=1','Live Video Chat',400,530)" data-button-size="xlarge" data-video>Live Video Chat</a>
+    </div>
+</div>
+<div class="leasing-option">
+<?php
+            $expertblock= $block->getLayout()->createBlock('\Wds\Experts\Block\Expertinfo');
+            $expertid = $_product->getExpertId();
+
+            $expert_data = $expertblock->getExpertinfo($expertid);
+            ?>
+            
+            <?php
+            if($expert_data && ($expert_data['name'])){ ?>
+            <div class="leasing-expert_info">
+                <?php if($expert_data['name']) { ?>
+                <div class="image_box <?php echo(empty($expert_data['imageurl']))?'noimage_withbox':'' ?>">
+                <?php if($expert_data['imageurl']){?>
+                        <img src="<?php echo $expert_data['imageurl'] ?>" />  
+                <?php } ?>
+                </div>
+                <div class="expert-bottom">
+                    <div class="expert-bottom-1">
+                        <?php 
+                        if(!empty($expert_data['phone']) && !is_null($expert_data['phone']))  : 
+                            $phonenumber=strtolower($expert_data['phone']);
+                            $phonenumber=@explode('x',$phonenumber);
+                            $ph=trim($phonenumber[0]);
+
+                        ?>
+                        <div class="expert-phone-number"><a href="tel:<?php echo $ph; ?>"><?php echo $expert_data['phone']; ?></a></div>
+                        <?php endif; ?>
+                        <div class="expert-livechat"><a style="cursor:pointer" onclick="popupwindow('https://www.pumpworld.com/chat.php','Chat with Us',400,530)"><i class="fa fa-commenting"></i> Live Chat</a></div>
+                        
+                        <?php if(!empty($expert_data['email']) && !is_null($expert_data['email'])) : ?>
+                            <div class="expert-email"><a href="mailto:<?php echo $expert_data['email']; ?>"><i class="fa fa-envelope"></i> Email</a></div>
+                        <?php endif; ?>
+                        <div class="expert-text"><a class="text_popup" href="sms:+1 (508) 444-0655"><i class="fa fa-commenting"></i> Text</a></div>
+                        
+                        </div>
+                        
+                </div>
+                <?php } ?>
+            </div>
+            <?php
+            }
+            ?>
+</div>
+<div id="popup-modal" style="display:none;"></div>
+<div id="popup-modal1" style="display:none;">
+	<div class="loader"><img src="<?php echo $this->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading..."></div>
+</div>
+<script>
+	require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function($,modal){
+			var options = {
+					type: 'popup',
+					responsive: true,
+					innerScroll: true,
+					click: function () {
+							this.clearModal();
+				},
+            };
+		$('#compare_me_toadd').click(function(){
+                   $('#compare_me_toadd_a').trigger('click');
+		})
+		$('#iframe3').click(function(){
+				$('.loader').show();
+				requestQuotePopup($('#iframe3').attr('href'));
+				
+		});
+			
+		$('#iframe2').click(function(){
+				
+				getShippingDetails($('#iframe2').attr('href'));
+				var popup = modal(options, $('#popup-modal'));
+				$('#popup-modal').modal('openModal');
+		});
+
+		function requestQuotePopup(url){
+		    var loader=jQuery('.loader');
+
+			jQuery.ajax({
+			  method: "POST",
+			  url: url
+			})
+		  .done(function(response){
+				 formdata=jQuery(response).find('#container .column.main').html()
+				jQuery('#popup-modal1').html(formdata);
+				jQuery(loader).hide();  
+				var popup = modal(options, $('#popup-modal1'));
+				$('#popup-modal1').modal('openModal');
+
+			});
+		}
+			
+			$('.shareme').click(function(e) {
+    			e.preventDefault();
+    			var href = $(this).attr('href');
+    			window.open(href, "Twitter", "height=285,width=550,resizable=1");
+  			});
+        }
+    );
+	
+	function getShippingDetails(url){
+		    jQuery.ajax({
+			  method: "POST",
+			  url: url
+			})
+		  .done(function(response){
+				jQuery('#popup-modal').html(jQuery(response).find('#container').html());
+			});
+	}
+	function submitrequestaquote(){
+		if(jQuery('#quote-form-validate #name').val()==''){
+			alert('Please enter name');
+		}else if(jQuery('#quote-form-validate #email').val()==''){
+			alert('Please enter email');
+		}else if(jQuery('#quote-form-validate #state').val()<0){
+			alert('Please select state');
+		}else if(jQuery('#quote-form-validate #subject').val()==''){
+			alert('Please enter subject');
+		}else if(jQuery('#quote-form-validate .g-recaptcha-response').val()==''){
+			alert('Please veryfy captcha.');
+		}else{	
+			jQuery('#loader').css('display','block');
+			jQuery.ajax({
+			  method: "POST",
+			  url: "<?php echo $baseUrl ?>requestaquote/index/saveQuote",
+			  data: jQuery('#quote-form-validate').serialize()
+			}).done(function( response ) {
+		 		
+		 		if(response=="true"){
+		 			jQuery("#request-success-msg").css({"color": "red", "font-size": "15px", "font-weight": "bold"});
+		 			jQuery("#request-success-msg").html("Captcha is not valid, Please try again.");
+		 			//grecaptcha.reset();
+				}else{	
+					jQuery("#request-success-msg").css({"color": "green", "font-size": "15px", "font-weight": "bold"});
+		 			jQuery("#request-success-msg").html(response);
+					jQuery('#quote-form-validate').hide();
+				}
+				jQuery('#loader').css('display','none');
+			//alert( "Data Saved: " + response );
+		 	 });
+			return false;
+		}
+		return false;
+	}
+</script>
+</div>
+</form>
+

@@ -1,0 +1,39 @@
+<?php
+/**
+ *
+ * Copyright � 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace MageArray\ProductQuestions\Controller\Adminhtml\Questions;
+
+class Productgrid extends \Magento\Catalog\Controller\Adminhtml\Product
+{
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+    ) {
+        parent::__construct($context, $productBuilder);
+        $this->resultLayoutFactory = $resultLayoutFactory;
+    }
+
+    /**
+     * Get upsell products grid and serializer block
+     *
+     * @return \Magento\Framework\View\Result\Layout
+     */
+    public function execute()
+    {
+        $this->productBuilder->build($this->getRequest());
+        $resultLayout = $this->resultLayoutFactory->create();
+        $resultLayout->getLayout()
+            ->getBlock('productquestions.questions.edit.tab.productgrid')
+            ->setProducts($this->getRequest()->getPost('products', null));
+        return $resultLayout;
+    }
+}

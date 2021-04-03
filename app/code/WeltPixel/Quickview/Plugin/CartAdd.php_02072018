@@ -1,0 +1,60 @@
+<?php
+
+namespace WeltPixel\Quickview\Plugin;
+
+class CartAdd
+{
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+    protected $_storeManager;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $url;
+
+    /**
+     * Data constructor.
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\UrlInterface $url
+     */
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Store\Model\StoreManagerInterface $_storeManager,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\UrlInterface $url
+    ) {
+        $this->objectManager = $objectManager;
+        $this->_storeManager = $_storeManager;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->url = $url;
+    }
+
+    public function aroundExecute(
+        \Magento\Checkout\Controller\Cart\Add $subject,
+        \Closure $proceed
+    ) {
+        $base_url = $this->_storeManager->getStore()->getBaseUrl();
+        $checkoutUrl = $base_url.'onestepcheckout/';
+        $result = [];
+        $result['backUrl'] = $checkoutUrl;
+
+        $subject->getResponse()->representJson(
+            $this->objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+        );
+        
+        return;
+    }
+
+
+}

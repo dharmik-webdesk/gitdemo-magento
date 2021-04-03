@@ -1,0 +1,129 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<?php
+	$helper = $this->helper('Mageplaza\Shopbybrand\Helper\Data');
+	$allChars = $block->getAlphabet();
+	$brandCollection = $block->getCollection();
+?>
+<div class="block block-brand-list">
+	<div class="block-title">
+        <ul class="nav brand-options navbar-nav controls">
+			<?php foreach ($allChars as $_char): ?>
+				<li class="<?php echo $_char['active'] ? 'control' : 'disabled'; ?>">
+					<a class="<?php echo $_char['active'] ? 'filter' : 'disabled'; ?> mp-option-item" <?php echo $_char['active'] ? 'data-filter="'.$_char["char"].'"' : ''; ?>><?php echo __(isset($_char['label']) ? $_char['label'] : $_char['char']); ?></a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+    </div>
+
+    <?php 
+	foreach ($brandCollection as $brand):  
+
+
+		if($brand->getIsFeatured()):
+		
+		
+		?>
+	
+		<?php
+		
+		$brandCollection2[$block->getFilterClass($brand)][] = array( 'brandname'=> $brand->getValue(),
+														'brandurl'=> $helper->getBrandUrl($brand),
+														'alpha'=> $block->getFilterClass($brand),
+														'page_title'=> $brand->getPageTitle()
+														
+																									);
+        ?>
+	<?php endif; endforeach;  ksort($brandCollection2);
+
+
+
+	 ?>
+
+	
+
+    <div class="block-content brand-mix-container products wrapper grid products-grid">
+		<?php if(sizeof($brandCollection2)): ?>
+			<div id="m-option-page-list"><div>
+			<?php $iterator = 1; ?>
+				<?php
+				foreach ($brandCollection2 as $kay=>$brand_list):
+
+					echo '<div class="m-alpha-list"><div data-alpha="'.$kay.'">'.$kay.'</div><ul class="products list items product-items">';
+					
+				foreach ($brand_list as $kay=>$brand):
+					
+					echo '<li class="item product product-item mix ' . $brand['alpha'] . '">';
+				?>
+					
+						<div class="product-item-info" data-container="product-grid" >
+							<div class="product details product-item-details">
+								
+									<a class="product-item-link" 
+									   href="<?php /* @escapeNotVerified */ echo $brand['brandurl'] ?>">
+										<?php echo $brand['page_title'] ?>
+									</a>
+								
+								</div>
+						</div>
+					<?php echo '</li>'?>
+				<?php endforeach; ?>
+			</ul></div>
+				<?php endforeach; ?><div style="clera:both"></div>
+			</div><div style="clera:both"></div>
+</div>
+		<?php else: ?>
+			<?php echo __('There is no brand available.') ?>
+		<?php endif; ?>
+	</div>
+
+<div style="clera:both"></div>
+</div>
+<script type="text/javascript">
+	require([
+		'jquery'
+	], function ($) {
+		jQuery('.filter.mp-option-item').click(function(){
+			jQuery('.filter.mp-option-item').parent().removeClass('tab_active');
+			jQuery(this).parent().addClass('tab_active');
+
+			alpha=jQuery(this).attr('data-filter');
+			duration=400;
+			
+			var $container = $('#m-option-page-list');
+            var $content = $container.children().first();
+            var $alphaList = $container.find("div[data-alpha='" + alpha + "']").parent();
+            var containerTop = $container.offset().top;
+            var contentTop = $content.offset().top;
+            var alphaListTop = $alphaList.offset().top;
+            if (duration) {
+                $content.animate({top: contentTop - alphaListTop}, duration);
+                $container.animate({height: $content.outerHeight() + (contentTop - alphaListTop)}, duration);
+            }
+            else {
+                $content.css({top: contentTop - alphaListTop});
+                $container.css({height: $content.outerHeight() + (contentTop - alphaListTop)});
+            }
+			})
+	});
+</script>

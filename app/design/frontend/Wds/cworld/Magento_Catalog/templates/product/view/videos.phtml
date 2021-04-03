@@ -1,0 +1,119 @@
+<?php
+/*-------MParmar------*/
+/*-------360 product Image Viewer------*/
+/*-------Product Video------*/
+?>
+<?php
+		$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+        $base_url = $_masterHelper->getStoreBaseUrl();
+?>
+<?php $_product = $block->getProduct(); ?>
+
+<?php
+    $_rootPathMode    = false;
+    $_fullScreenClick = false;
+    $_360ViewWidth    = str_ireplace("px", "", "90%");
+    $_360ViewHeight   = str_ireplace("px", "", 450);
+    $_360BaseWidth    = str_ireplace("px", "", 0);
+    $_licensePath     = '';
+    $_360root         = '';
+    $_360path         = $base_url.$_product->getWebrotatePath();
+    $_viewerSkin      = "basic";
+    $_graphicsPath    = $base_url."pub/media/webrotate360/basic/";
+    $_placeholder     = ".product360-image-view";
+    $_embedded        = 1;
+    $_prettyTheme     = 'default';
+    $_360icon         = '';
+	$_360IsSet = true;
+?>
+<?php if($_product->getWebrotatePath()!=""):?>
+<?php if ($_360IsSet): ?>
+    <?php if ($_embedded):?>
+        <style type="text/css">
+            <?php echo $_placeholder?>{visibility: hidden;}
+            .zoom-notice{display: none !important;}
+            .zoom{display: none !important;}
+        </style>
+		<script type="text/javascript" xml="space">
+			
+			function loadLibraray(){
+				
+				    WR360AdhocEmbedInitialize(
+						"<?php echo $_placeholder?>",
+						"<?php echo $_360ViewWidth?>",
+						"<?php echo $_360ViewHeight?>",
+						"<?php echo $_360BaseWidth?>",
+						"<?php echo $_graphicsPath?>",
+						"<?php echo $_360path?>",
+						"<?php echo $_360root?>",
+						"<?php echo $_licensePath?>"
+					);
+				    }
+        </script>
+		
+		
+		
+    <?php endif; ?>
+<?php endif; ?>
+<?php endif; ?>
+
+			<?php if($_product->getWebrotatePath()!=""):?>
+			
+			<div class="description_section_mn_title"><a name="desc"></a>
+			<div class="container">
+				<h2>3D Viewing</h2>
+			</div>	
+		</div>
+			<div class="Viewing_3d">
+				<div class="product360-image-view"></div>
+			</div>
+			<?php endif ?>
+			
+			<?php if( $_product->getHwVideoUrl()) { ?>
+			<div class="description_section_mn_title"><a name="desc"></a>
+			<div class="container">
+				<h2>Videos</h2>
+			</div>	
+		</div>
+			
+			<div class="video_section_mn_cols">
+				<ul class="video_slider_removed" >
+					<?php 
+
+							if( $_product->getHwVideoUrl()) { ?>
+							<li>
+                        	<div><iframe width="185" height="300" src="<?php echo  $_product->getHwVideoUrl() ?>" frameborder="0" allowfullscreen></iframe></div>
+							</li>
+							<?php } ?>	
+					
+					<?php 
+							if( $_product->getData('hw_video_url2')) { ?>
+							<li>
+                        	<div><iframe width="185" height="300" src="<?php echo  $_product->getData('hw_video_url2') ?>" frameborder="0" allowfullscreen></iframe></div>
+							</li>
+							<?php } ?>
+
+							
+
+							<?php 
+
+							if( $_product->getData('hw_video_url3')) { ?>
+							<li>
+                        	<div><iframe width="185" height="300" src="<?php echo  $_product->getData('hw_video_url3') ?>" frameborder="0" allowfullscreen></iframe></div>
+							</li>
+							<?php } ?>	
+
+
+
+							<?php 
+
+							if( $_product->getData('hw_video_url4')) { ?>
+							<li>
+                        	<div><iframe width="185" height="300" src="<?php echo  $_product->getData('hw_video_url4') ?>" frameborder="0" allowfullscreen></iframe></div>
+							</li>
+							<?php } ?>	
+					
+				</ul> 
+			</div>
+			<?php } ?>
+		

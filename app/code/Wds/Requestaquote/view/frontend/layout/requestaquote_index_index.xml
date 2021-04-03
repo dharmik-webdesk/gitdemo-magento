@@ -1,0 +1,12 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="empty" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+
+    <body>
+
+        <referenceContainer name="content">
+            <block class="Wds\Requestaquote\Block\Index\Index" name="requestaquote_index_index" template="Wds_Requestaquote::requestaquote_index_index.phtml"/>
+        </referenceContainer>
+		
+		
+
+    </body>
+</page>

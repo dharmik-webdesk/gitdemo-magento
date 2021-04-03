@@ -1,0 +1,269 @@
+<?php
+/**
+* Copyright © 2013-2017 Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
+$resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+$connection = $resource->getConnection();
+$tableName = $resource->getTableName('technicaldata');
+
+$product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+$product_id = $product->getId();
+$result = array();
+if(!empty($product_id)){
+    $sql = "Select * FROM " . $tableName." where product_id =".$product_id;
+    $result = $connection->fetchAll($sql);
+
+    $sql = "Select attribute, attributegroup FROM " . $tableName . " GROUP by attribute, attributegroup";
+    $result3 = $connection->fetchAll($sql);
+       
+    $newresult=array();
+    if(count($result3)>0){
+        foreach ($result3 as $key_first => $value_first) {  
+            $found=0;
+            foreach ($result as $key => $value) {
+                if($value['attribute']==$value_first['attribute'] && $value['attributegroup']==$value_first['attributegroup']){
+                    $newresult[]=$value;
+                    $found=1;
+                    break;
+                }
+            }
+            if($found==0)
+                $newresult[]=array('attribute'=>$value_first['attribute'],'attributegroup'=>$value_first['attributegroup'],'attributevalue'=>'');
+
+        }
+    }
+    $result=$newresult;
+}else{
+    $sql = "Select * FROM " . $tableName . " group by attribute, attributegroup";
+    $result = $connection->fetchAll($sql);
+
+    if(count($result)>0){
+        foreach ($result as $key => $value) {
+            $result[$key]['attributevalue'] = '';
+            $result[$key]['product_id'] = ''; 
+            //$result[$key]['attributegroup'] = ''; 
+        }
+    }
+}
+
+if(empty($result) && count($result) == 0){
+   $sql = "Select * FROM " . $tableName." GROUP by attribute ";
+   $result = $connection->fetchAll($sql);
+   if(count($result)>0){
+       foreach ($result as $key => $value) {
+           $result[$key]['attributevalue'] = '';
+           $result[$key]['product_id'] = ''; 
+           
+       }
+   }
+}
+
+
+
+?>
+<script>
+var indexNumber = 0;
+
+require([
+    'jquery',
+    'uiRegistry',
+    'mage/template',
+    'Magento_Ui/js/modal/alert',
+    'mage/mage',
+    'prototype'
+], function (jQuery, registry, mageTemplate, alert) {
+
+ var fieldSet = $('[data-block=product-technicaldatas]');
+            fieldSet.customDescription(<?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
+                [
+                    'fieldId' => $block->getFieldId(),
+                    'formKey' => $block->getFormKey(),
+                    'itemCount' => $block->getItemCount()
+                ]
+            )?>);
+
+});
+</script>
+
+
+<div data-tab-type="tab_content_technicaldatas" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
+    <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
+>
+
+    <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
+
+
+    <div class="admin__field admin__field-option admin__field-is-technicaldatas ">
+        <div class="admin__fieldset-wrapper-content"> 
+        <fieldset class="admin__fieldset">
+            <table id="wds_product_option_1" class="form-list" cellspacing="0" cellpadding="0" style="padding-left: 126px;clear: both;display: inline-block;float: left;">
+                <tbody>
+                    
+                    <?php 
+                    $index = 0;
+					if(count($result)>0){
+
+						foreach ($result as $key => $value) {
+							?>
+							<tr class="admin__field">
+		                        <td class="label" style="width: 230px">
+		                        	<label for=""><?php echo stripslashes($value['attribute']); ?></label>
+		                        	<textarea style="display:none"  data-form-part="product_form" name="tech_input_data_name[<?php echo $index; ?>]"><?php echo (stripslashes($value['attribute'])); ?></textarea> 
+		                        </td>
+		                        <td class="value" style="width: 380px;">
+			                        <input type="text" data-form-part="product_form" class="input-text custom_element" name="tech_input_data_value[<?php echo $index; ?>]" value="<?php echo stripslashes($value['attributevalue']); ?>">
+			                        
+			                        <label for="">Group Name:<b><?php echo ucfirst($value['attributegroup']); ?></b></label>
+		                        	<input type="hidden" data-form-part="product_form" name="tech_input_group_name[<?php echo $index; ?>]" value="<?php echo $value['attributegroup']; ?>"> 
+		                        
+		                        </td>
+		                        <td>
+		                        	<button id="custom_field_group_option" title="Add New Option" type="button" class="scalable add" onclick="deleteRow(this)" style=""><span><span><span>Delete</span></span></span></button>
+		                        </td>
+		                    </tr>
+							<?php 
+							$index++;
+						}
+					}
+                    
+                    ?>
+                    
+                    <tr class="admin__field">
+                        <td class="label"></td>
+                        <td class="value">
+                                
+                                	<button id="custom_field_group_option" title="Add New Option" type="button" class="button scalable add" onclick="insRow(this)" style=""><span><span><span>New Attribute </span></span></span></button>
+                                
+                            </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                
+
+            </table> 
+            <table id="tmp_coandaat" style="display:none">
+            
+                <tbody>
+                    <tr class="admin__field">
+                        <td class="label" style="width: 230px"><input type="text" name="" class="input-text custom_element"></td>
+                        <td class="value" style="width: 380px;"><input type="text" name="" class="input-text custom_element">
+                            <select name="" class="admin__control-select">
+                            <option value="" selected="selected">Select Group</option>
+                                <option value="technical">Technical Details</option>
+                                <option value="voltage">Voltage Details</option>
+                                <option value="dimensional">Dimensional Data</option>
+                                <option value="warranty">Warranty</option>
+                                <option value="weight">Weight</option>
+                            </select>
+                        </td>
+                        <td class="value"><button id="custom_field_group_option" title="Add New Option" type="button" class="scalable add" onclick="deleteRow(this)" style=""><span><span><span>Delete</span></span></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+        </fieldset>       
+        </div>
+
+    </div>
+
+    <div class="entry-edit" id="product_info_tabs_technicaldata_items">
+        <?php echo $block->getChildHtml() ?>
+    </div>
+
+
+</div>
+<style type="text/css">
+.input-text.custom_element{
+	width: 100%;
+    border-color: #878787;
+    min-width: 4rem;
+    -webkit-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #adadad;
+    border-radius: 1px;
+    box-shadow: none;
+    color: #303030;
+    font-size: 1.4rem;
+    font-weight: 400;
+    height: auto;
+    line-height: 1.36;
+    padding: 0.6rem 1rem 0.6rem;
+    transition: border-color 0.1s linear;
+    vertical-align: baseline;
+    
+}
+#custom_field_group_option{
+	margin-top: 10px;
+    margin-bottom: 10px;
+}
+#wds_product_option_1 input{width:auto !important;}
+
+
+
+</style>
+<script type="text/javascript">
+var indexNumber = <?php echo $index; ?>;
+
+function deleteRow(row)
+{
+    var i=row.parentNode.parentNode.rowIndex;
+    document.getElementById('wds_product_option_1').deleteRow(i);
+
+}
+
+
+function insRow()
+{
+
+	
+
+    var x=document.getElementById('tmp_coandaat');
+    var new_row = x.rows[0].cloneNode(true);
+    
+    var x=document.getElementById('wds_product_option_1');
+       // deep clone the targeted row
+    
+       // get the total number of rows
+    var len = x.rows.length;
+       // set the innerHTML of the first row 
+   // new_row.cells[0].innerHTML = len;
+
+    // grab the input from the first cell and update its ID and value
+    var inp1 = new_row.cells[0].getElementsByTagName('input')[0];
+    inp1.id = "produinput_data_name"+len;
+    inp1.name = 'tech_input_data_name['+ indexNumber +']';
+    inp1.className ='required-entry input-text custom_element ';
+    inp1.placeholder ='Enter Label';
+    inp1.value = '';
+    //inp1.data-form-part = 'product_form';
+    inp1.setAttribute('data-form-part', 'product_form');
+
+
+
+    // grab the input from the first cell and update its ID and value
+    var inp2 = new_row.cells[1].getElementsByTagName('input')[0];
+    inp2.id = "input_data_value"+len;
+    inp2.name = 'tech_input_data_value['+ indexNumber +']';
+    inp2.className ='required-entry input-text custom_element';
+    inp2.placeholder ='Value';
+    inp2.value = '';
+    inp2.setAttribute('data-form-part', 'product_form');
+
+    // grab the input from the first cell and update its ID and value
+    var inp3 = new_row.cells[1].getElementsByTagName('select')[0];
+    inp3.id = "input_group_name"+len;
+    inp3.name = 'tech_input_group_name['+ indexNumber +']';
+    inp3.className ='required-entry admin__control-select';
+    inp3.value = '';
+    inp3.setAttribute('data-form-part', 'product_form');
+
+    indexNumber = parseInt(indexNumber) + 1;
+
+    // append the new row to the table
+    x.appendChild( new_row );
+}
+
+</script>

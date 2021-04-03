@@ -1,0 +1,341 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
+ */
+?>
+  
+<?php
+	
+	$flag = 1;
+	$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+	$current_category = $_masterHelper->getStoreCurrentCategory();
+	
+	if($current_category):
+		if($current_category->getPageLayout()=="1column"):
+			$flag = 0;
+		endif;
+	endif;
+
+
+	
+	/* echo '<pre>';
+	print_r($current_brand);exit; */
+	//echo $this->getRequest()->getModuleName();exit;
+?>
+<?php  
+
+$module_name = $this->getRequest()->getModuleName();
+// MParmar: set search box for category and brand page at left-side
+if($module_name!="catalogsearch"): ?>
+<?php echo $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setTemplate("Magento_LayeredNavigation::layer/category_search.phtml")->toHtml();?>
+<?php endif; ?>
+
+
+<?php if($flag): ?>
+<?php if ($block->canShowBlock()): ?>
+<?php $filtered = count($block->getLayer()->getState()->getFilters());?>
+	<?php if ($block->getLayer()->getState()->getFilters()): ?>
+		<div class="block_filter_status_mn">
+			<div class="block-title filter-title" data-count="<?php /* @escapeNotVerified */ echo $filtered; ?>">
+	            <strong data-role="title"><?php /* @escapeNotVerified */ echo __("You've Selected") ?></strong>
+	                <div class="block-actions filter-actions">
+	                    <a href="<?php /* @escapeNotVerified */ echo $block->getClearUrl() ?>" class="action clear filter-clear"><span><?php /* @escapeNotVerified */ echo __('Clear All') ?></span></a>
+	                </div>
+						<p class="toggle_btn">+</p>
+	        </div>
+	        <div class="block-content filter-content">
+	         	<?php echo $block->getChildHtml('state') ?>
+	            		
+	        </div>
+       </div>
+       <?php endif; ?>
+
+    <div class="block filter" id="layered-filter-block" data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false, "collateral": { "openedState": "filter-active", "element": "body" } }}'>
+        
+        <div class="block-title filter-title" data-count="<?php /* @escapeNotVerified */ echo $filtered; ?>">
+            <strong data-role="title"><?php /* @escapeNotVerified */ echo __('Shop By') ?></strong>
+				<p class="toggle_btn">+</p>
+        </div>
+        <div class="block-content filter-content">
+            
+            <?php $wrapOptions = false; ?>
+            <?php foreach ($block->getFilters() as $filter): ?>
+                <?php if ($filter->getItemsCount()): ?>
+					
+                    <?php if (!$wrapOptions):
+                     ?>
+                        <!-- <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?php /* @escapeNotVerified */ echo __('Shopping Options') ?></strong> -->
+                        <div class="filter-options" id="narrow-by-list" data-role="content">
+                    	<?php  $wrapOptions = true; endif; ?>
+                    	<?php if($filter->getName() == 'Rating' ){ 
+
+$starArrayValues2 = array(
+            '1'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="20%">
+                                            <span style="width:20%"><span>1</span></span>
+                                        </div>
+                                    </div>',
+            '2'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="40%">
+                                            <span style="width:40%"><span>2</span></span>
+                                        </div>
+                                    </div>',
+            '3'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="60%">
+                                            <span style="width:60%"><span>3</span></span>
+                                        </div>
+                                    </div>',
+            '4'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="80%">
+                                            <span style="width:80%"><span>4</span></span>
+                                        </div>
+                                    </div>',
+            '5'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="100%">
+                                            <span style="width:100%"><span>5</span></span>
+                                        </div>
+                                    </div>',
+        );
+
+
+                    		?>
+
+                    		<div data-role="collapsible" class="filter-options-item">
+                       		 <div data-role="title" class="filter-options-title"><?php /* @escapeNotVerified */ echo __($filter->getName()) ?></div>
+                        	<div data-role="content" class="filter-options-content">
+
+
+
+<ol class="items">
+    <?php foreach ($filter->getItems() as $filterItem): ?>
+        <li class="item">
+            <?php if ($filterItem->getCount() > 0): ?>
+                <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>">
+                    <?php
+                    if(is_numeric($filterItem->getLabel())){
+                    	if(isset($starArrayValues2[$filterItem->getLabel()]))
+                    		echo $starArrayValues2[$filterItem->getLabel()];
+                    	else
+                    		echo $filterItem->getLabel();	
+                    }else{
+                    	echo $filterItem->getLabel();
+                    }
+                    //$lable=$starArrayValues2[$filterItem->getLabel()];
+                    //echo $lable;
+                    //exit;
+                    /*if($lable){
+                    	echo $starArrayValues2[$filterItem->getLabel()];
+                    }else{
+						echo $filterItem->getLabel();
+                 	}*/
+                      ?>
+                        <span class="count">(<?php /* @escapeNotVerified */ echo $filterItem->getCount()?>)
+                            <!--<span class="filter-count-label">
+                            <?php if ($filterItem->getCount() == 1):?> <?php /* @escapeNotVerified */ echo __('item')?><?php else:?> <?php /* @escapeNotVerified */ echo __('items') ?><?php endif;?></span>--></span>
+                </a>
+            <?php endif; ?>
+        </li>
+    <?php endforeach ?>
+</ol>
+
+
+
+
+
+                        	</div>
+                    	</div>
+
+						<?php }else if($filter->getName() != 'Price' ): ?>
+						<?php //if(true): ?>
+                    	<div data-role="collapsible" class="filter-options-item">
+                       		 <div data-role="title" class="filter-options-title"><?php /* @escapeNotVerified */ echo __($filter->getName()) ?></div>
+                        	<div data-role="content" class="filter-options-content"><?php /* @escapeNotVerified */ echo $block->getChildBlock('renderer')->render($filter); ?></div>
+                    	</div>
+					<?php else: ?>
+						<?php
+							
+							 $blockObj= $block->getLayout()->createBlock('Magento\LayeredNavigation\Block\Navigation\FilterRenderer');
+							 $range =  $blockObj->getPriceRange($filter);
+							 
+							 if($module_name=="catalogsearch" || $module_name=="mpbrand"){
+								$query_url = $blockObj->getFilterUrl($filter);
+								$url_temp = explode("?",$query_url);
+								$url = $url_temp[0]."?price=";
+								
+							}else		
+								$url = $blockObj->getFilterUrl($filter)."/air/price:";
+							
+							
+							$helper = $this->helper('MageWorx\SeoAll\Helper\Layer');
+							$filtered_values = $helper->getLayeredNavigationFiltersData();
+							$left_slider_counter = "";
+							$right_slider_counter = "";
+							  if($filtered_values){
+								  $flog = 0;
+								foreach($filtered_values as $values){
+										if($values['attribute_id']==75 && $values['code']=="price"){
+											$status = (array)$values['label'];
+											
+											foreach($status as $s){
+												if(is_array($s)){	
+													$left_slider_counter = floatval(str_replace(',', '',trim(strip_tags($s[0]),"$")));
+													$right_slider_counter =  ceil(str_replace(',', '',trim(strip_tags($s[1]),"$")));
+													
+												}
+												
+											}
+											
+											
+											
+										}
+									
+								}
+							} 
+							
+							if($left_slider_counter!=""){ $left_point = $left_slider_counter;}else{$left_point = 0;}
+							if($right_slider_counter!=""){ $right_point = $right_slider_counter;}else{$right_point = 100000;}
+							 
+						?>	
+						<div data-role="collapsible" class="filter-options-item">
+                        <div data-role="title" class="filter-options-title"><?php /* @escapeNotVerified */ echo __($filter->getName()) ?></div>
+							<div data-role="content" class="filter-options-content priceslider">
+								<div id="price-slider"></div>
+							<div class="m-slider-values">
+								<span id="left_price-range-from" class="m-slider-min-value"><?php echo '$0'; ?></span>
+								<span id="left_price-range-to" class="m-slider-max-value"><?php echo '$100000'; ?></span>
+								<span id="amount1" class="m-slider-selected-value"></span>
+								<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+							</div>
+							</div>
+						</div>
+						<script>
+								var price_url = "<?=$url;?>";
+								require([
+									'jquery',
+									"jquery/ui",
+									'domReady!'
+								], function($){
+								//     `use strict`;
+									console.log("Price Slider..!");
+									console.log('<?=$left_point;?>');
+									console.log('<?=$right_point;?>');
+								//require(["jquery" , "jquery/jquery-ui"], function($){
+									// ...
+									$("div#price-slider").slider({
+											range: true,
+											min: 0,
+											max: 100000,
+											values: [ <?=$left_point;?>, <?=$right_point;?> ],
+											slide: function( event, ui ) {
+												$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+											},
+											change: function( event, ui ) {
+												//alert(ui.values[0]+"~"+ui.values[1]);
+												window.location.href = price_url+ui.values[0]+"-"+ui.values[1];
+											}
+										});
+										$( "#amount" ).val( "$" + $( "#price-slider" ).slider( "values", 0 ) +
+											" - $" + $( "#price-slider" ).slider( "values", 1 ) );
+								});
+								
+						</script>
+					<?php endif; ?> 
+                <?php endif; ?>
+            <?php endforeach; ?>
+			
+			 
+			
+            <?php if ($wrapOptions): ?>
+                </div>
+            <?php else: ?>
+                <script>
+                    require([
+                        'jquery'
+                    ], function ($) {
+                        $('#layered-filter-block').addClass('filter-no-options');
+                    });
+                </script>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>
+<?php endif; ?>
+					<script>
+
+
+require([
+    'jquery',
+    'accordion'
+], function ($) {
+    'use strict';
+        jQuery( "#narrow-by-list" ).accordion({
+            "openedState": "active",
+            "collapsible": true,
+            "active": [0,0], /** Integrat Dynamic open tab  */
+            "multipleCollapsible": false,
+        });
+	jQuery('#narrow-by-list .filter-options-item.active .filter-options-content').show();
+});
+							require([
+									'jquery',
+									"jquery/ui",
+									'domReady!'
+								], function($){
+								//    
+
+								$( document ).on( "click", ".toggle_btn",function(){
+
+										    $(this).parent('.block-title').next('.block-content').toggle();
+										    if($(this).text()=="+"){
+										    	$(this).text("-");
+											$(this).parent().addClass("minus_active");
+											$(this).parent().removeClass("plus_active");
+										    }else{
+										    	$(this).text("+");
+											$(this).parent().addClass("plus_active");
+											$(this).parent().removeClass("minus_active");
+										    }	
+
+										});
+									$( document ).on( "click", ".filter-current .action.remove",function(){
+										window.location.href=$(this).attr('href');
+									});
+									//$("#category-search").attr("placeholder", "Search Within");
+									var search_placeholder = $("#category-search").val();
+									if(search_placeholder=="")
+											$("#category-search").val("Search Within");
+
+									$( "#category-search" ).focus(function() {
+  										$("#category-search").val("");
+									});
+									$( "#category-search" ).blur(function() {
+										if($("#category-search").val()=="")
+											$("#category-search").val("Search Within");
+									});
+
+
+									var search_placeholder = $("#newsletter").val();
+									if(search_placeholder=="")
+											$("#newsletter").val("Email");
+
+									$( "#newsletter" ).focus(function() {
+  										$("#newsletter").val("");
+									});
+									$( "#newsletter" ).blur(function() {
+										if($("#newsletter").val()=="")
+											$("#newsletter").val("Email");
+									});
+
+								});
+								
+						</script>						

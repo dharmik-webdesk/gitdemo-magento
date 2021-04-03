@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	 <preference for="Magento\Catalog\Plugin\Block\Topmenu" type="Wds\Coreoverride\Plugin\Block\Topmenu" />
+	 <preference for="Magento\Theme\Block\Html\Topmenu" type="Wds\Coreoverride\Block\Html\Topmenu" /> 
+	
+	<preference for="Magento\Checkout\Controller\Cart\Add" type="Wds\Coreoverride\Controller\Cart\Add" />
+	
+	<preference for="Magento\Catalog\Model\Category" type="Wds\Coreoverride\Model\Category" /> 
+	<preference for="Magento\Catalog\Model\Category\Attribute\Backend\Image" type="Wds\Coreoverride\Model\Category\Attribute\Backend\Image" />
+	<preference for="Magento\Catalog\Model\Category\DataProvider" type="Wds\Coreoverride\Model\Category\DataProvider" />
+	<preference for="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload" type="Wds\Coreoverride\Controller\Adminhtml\Category\Image\Upload" />
+	<!-- <preference for="Magento\Catalog\Controller\Adminhtml\Category\Save" type="Wds\Coreoverride\Controller\Adminhtml\Category\Save" /> -->
+
+	
+	<preference for="Magento\Catalog\Model\Indexer\Category\Product\Action\Full" type="Wds\Coreoverride\Model\Indexer\Category\Product\Action\Full" />
+
+	<preference for="Magento\Contact\Controller\Index\Post" type="Wds\Coreoverride\Controller\Index\Post" />
+</config>

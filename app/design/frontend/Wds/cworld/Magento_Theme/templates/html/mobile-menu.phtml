@@ -1,0 +1,37 @@
+<?php
+
+$categoryId = 2; // YOUR CATEGORY ID
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$topCategories = $_masterHelper->getStoreMobileMenu($categoryId);
+?>
+
+<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="push-menu">
+<ul>
+	
+<?php 
+if(count($topCategories)>0): 
+foreach ($topCategories as $category): ?>
+	<li> <a href=<?php echo $category['url'];?>> <?php echo $category['name']; ?></a>
+	<?php  $middleCategories = $_masterHelper->getStoreMobileMenu($category['category_id']); ?>
+	<?php if(count($middleCategories)>0): ?>
+	<ul>
+		<?php foreach($middleCategories as $childcat): ?>
+			<li><a href=<?php echo $childcat['url'];?>> <?php echo $childcat['name']; ?></a>
+			<?php  $lowCategories = $_masterHelper->getStoreMobileMenu($childcat['category_id']); ?>
+					<?php if(count($lowCategories)>0): ?>
+					<ul>
+						<?php foreach($lowCategories as $lowcat): ?>
+							<li><a href=<?php echo $lowcat['url'];?>> <?php echo $lowcat['name']; ?></a></li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+			</li>
+		<?php endforeach; ?>
+	</ul>	
+	<?php endif; ?>
+	
+	</li>
+<?php endforeach; ?>
+<?php endif; ?>
+</ul>
+</nav>

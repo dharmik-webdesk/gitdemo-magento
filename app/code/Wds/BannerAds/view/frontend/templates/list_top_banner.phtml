@@ -1,0 +1,22 @@
+<?php
+$data=$block->getBanners();
+if($data){
+	$left_html=$right_html='';
+
+	$left_image=$block->getBannerHtml('banner_image','banner_url');
+	if($left_image)	
+		$left_html='<div class="left_banner_ads">'.$left_image.'</div>';
+	
+	$right_image=$block->getBannerHtml('banner_image2','banner_url2');
+	if($right_image)	
+		$right_html= '<div class="right_banner_ads">'.$right_image.'</div>';
+	if($left_html && $right_html){
+		echo '<div class="banner_ads"><div class="container"><div class="row"><div class="col-sm-6">'.$left_html.'</div><div class="col-sm-6">'.$right_html.'</div></div></div></div>';
+	}else if($left_html){
+		echo '<div class="banner_ads"><div class="container"><div class="row"><div class="col-sm-12">'.$left_html.'</div></div></div></div>';
+	}else if($right_html){
+		echo '<div class="banner_ads"><div class="container"><div class="row"><div class="col-sm-12">'.$right_html.'</div></div></div></div>';
+	}
+
+}
+?>

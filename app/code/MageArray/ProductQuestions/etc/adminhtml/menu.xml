@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+		<update id="MageArray_Core::core" title="MageArray Extensions" module="MageArray_ProductQuestions" sortOrder="80"
+		resource="MageArray_ProductQuestions::productquestions"/>
+
+		<add id="MageArray_ProductQuestions::productquestions" title="Product Q &amp; A" module="MageArray_ProductQuestions" sortOrder="40" parent="MageArray_Core::core" dependsOnModule="MageArray_ProductQuestions" resource="MageArray_ProductQuestions::productquestions"/>
+			
+		<add id="MageArray_ProductQuestions::questions" title="Questions" module="MageArray_ProductQuestions" sortOrder="50" resource="MageArray_ProductQuestions::questions" action="productquestions/questions/" parent="MageArray_ProductQuestions::productquestions"/>
+		
+		<add id="MageArray_ProductQuestions::answers" title="Answers" module="MageArray_ProductQuestions" sortOrder="60" resource="MageArray_ProductQuestions::answers" action="productquestions/answers/" parent="MageArray_ProductQuestions::productquestions"/>
+		
+		<add id="MageArray_ProductQuestions::settings" title="Settings" module="MageArray_ProductQuestions" sortOrder="70" resource="MageArray_ProductQuestions::settings" action="adminhtml/system_config/edit/section/productquestions" parent="MageArray_ProductQuestions::productquestions"/>
+				
+    </menu>
+</config>

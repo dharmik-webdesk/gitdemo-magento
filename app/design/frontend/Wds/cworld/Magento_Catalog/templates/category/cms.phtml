@@ -1,0 +1,137 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+
+<?php
+    $_category = $block->getCurrentCategory();
+
+     /*---MParmar------List subcategory of current category for category Landing page */ 
+
+    if($block->isContentMode()):
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $subcategory = $objectManager->create('Magento\Catalog\Model\Category')->load($_category->getId());           
+        $subcats = $subcategory->getChildrenCategories();
+		$catcount = 1;
+		$tmpClass = "evencat";
+        if(count($subcats)):
+  ?>      
+				<div class="row cwn-sub-categories">
+					<?php
+            			foreach ($subcats as $subcat) {
+								if($tmpClass!="oddcat")
+									$tmpClass = "oddcat";
+								else
+									$tmpClass = "evencat";
+							
+							
+                			if ($subcat->getIsActive()) {	
+								$subcategory = $objectManager->get('Magento\Catalog\Model\Category')->load($subcat->getId());
+								
+					
+					?>
+							<div class="col-md-6 col-md-12 col-xs-12">
+					<div class="thumbnail <?php echo $tmpClass; ?>" data-val="<?php echo $catcount++; ?>">
+						<div class="cwn-cp-text">
+							<h3><?php echo $subcat->getName(); ?></h3>
+							<p><?php if($subcategory->getDescription() != ''){ echo substr(strip_tags($subcategory->getDescription()),0,200)."..."; }?></p>
+							
+							<a href="<?php echo $subcat->getUrl(); ?>" class="cwn-cp-btn">shop now</a>
+							
+						</div>
+						<div class="cwn-cp-img">
+								<a href="<?php echo $subcat->getUrl(); ?>" title="<?php echo $subcat->getName(); ?>">
+										<img src="<?php echo $subcategory->getImageUrl(); ?>" alt="" width="220" height="220"></a>
+						</div>
+						</div>	 
+					</div>
+					<?php }} ?>			
+				</div>
+   
+<?php endif; ?>
+
+<?php /*---MParmar-------Popular product on category landing page--*/ ?> 
+<?php echo $this->getLayout()->createBlock("Magento\Catalog\Block\Product\ListProduct")
+        ->setData("categoryId",$_category->getId())
+		->setData("categoryName",$_category->getName())
+        ->setTemplate("Magento_Catalog::product/category_special_product.phtml")->toHtml(); ?>
+
+
+  <?php /*---MParmar------Left and right box description for category landing pages*/ ?>
+  
+  <?php
+	$left_box_image = '';
+	if ($image = $_category->getLeftBoxImage()) {
+		$left_box_image = $image;
+	}
+	$right_box_image = '';
+	if ($image = $_category->getRightBoxImage()) {
+		$right_box_image = $image;
+	}
+ ?>
+  <?php $left_box_description = $_category->getLeftBoxDescription();
+        $right_box_description = $_category->getRightBoxDescription();
+	
+	  if($left_box_image != '' || $right_box_image != '' || $left_box_description != '' || $right_box_description != ''): 
+
+		$_objectManager = \Magento\Framework\App\ObjectManager::getInstance(); //instance of\Magento\Framework\App\ObjectManager
+		$storeManager = $_objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+		$mediaUrl = $storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+		?>
+
+        <div class="cwn-cp-col-two">
+                <div class="row">
+					<?php if($left_box_image != '' || $left_box_description != ''): ?>
+                           <div class="col-md-6 col-md-12 col-xs-12">
+                            <div class="thumbnail">
+                              	<?php if($left_box_image != ''): ?>
+									<div class="cwn-cp-img"><img src="<?php echo $mediaUrl.'catalog/category/'.$left_box_image; ?>" alt="" width="219" height="210"> </div>
+								<?php endif; ?>
+								<div class="cwn-cp-text">
+                               	 <?php echo $left_box_description; ?>
+								</div>
+							   </div>
+							</div>	
+							<?php endif; ?>
+							   
+						<?php if($right_box_image != '' || $right_box_description != ''): ?>
+                           <div class="col-md-6 col-md-12 col-xs-12">
+                            <div class="thumbnail">
+                              	<?php if($right_box_image != ''): ?>
+									<div class="cwn-cp-img"><img src="<?php echo $mediaUrl.'catalog/category/'.$right_box_image; ?>" alt="" width="219" height="210"> </div>
+								<?php endif; ?>					  
+								<div class="cwn-cp-text">
+                                	<?php echo $right_box_description; ?>
+                        	    </div>
+                            </div>
+            			</div>
+                       <?php endif; ?>  
+					
+		 </div>
+	</div>
+
+<?php endif; ?>
+<?php endif; ?>
+ 
+
+
+
+<?php if ($block->isContentMode() || $block->isMixedMode()): ?>
+    <div class="category-cms">
+		
+        <?php echo $block->getCmsBlockHtml(); ?>
+    </div>
+<?php endif; ?>

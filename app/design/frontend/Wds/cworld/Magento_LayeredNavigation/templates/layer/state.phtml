@@ -1,0 +1,103 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Category layered navigation state
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation\State
+ */
+
+//MG Rating customization start
+$starArrayValues2 = array(
+            '1'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="20%">
+                                            <span style="width:20%"><span>1</span></span>
+                                        </div>
+                                    </div>',
+            '2'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="40%">
+                                            <span style="width:40%"><span>2</span></span>
+                                        </div>
+                                    </div>',
+            '3'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="60%">
+                                            <span style="width:60%"><span>3</span></span>
+                                        </div>
+                                    </div>',
+            '4'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="80%">
+                                            <span style="width:80%"><span>4</span></span>
+                                        </div>
+                                    </div>',
+            '5'=>'<div class="rating-summary" style="display: inline-block;margin-top: -5px;">
+                                        <div class="rating-result" title="100%">
+                                            <span style="width:100%"><span>5</span></span>
+                                        </div>
+                                    </div>',
+        );
+
+//MG Rating customization end
+                            
+?>
+
+
+<?php $_filters = $block->getActiveFilters();
+ ?>
+<?php if (!empty($_filters)): ?>
+<div class="filter-current" data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false }}'>
+  <!--  <strong class="block-subtitle filter-current-subtitle"
+            role="heading"
+            aria-level="2"
+            data-role="title"
+            data-count="<?php echo count($_filters); ?>"><?php /* @escapeNotVerified */ echo __('Now Shopping by') ?></strong> -->
+    <ol class="items">
+        <?php foreach ($_filters as $_filter): ?>
+            <li class="item">
+                <span class="filter-label"><?php echo $block->escapeHtml(__($_filter->getName())); ?></span>
+                <?php if($_filter->getName()=='Rating') { ?>
+
+
+                     <?php
+                     $fitler_lable= $_filter->getLabel();
+
+                    if(is_numeric($fitler_lable)){
+                        if(isset($starArrayValues2[$fitler_lable]))
+                            $fitler_lable= $starArrayValues2[$fitler_lable];
+                    }?>
+                    
+                    <span class="filter-value"><?php /* @escapeNotVerified */ echo $fitler_lable; ?></span>
+
+                 <?php }else{ ?>
+                <span class="filter-value"><?php /* @escapeNotVerified */ echo $block->stripTags($_filter->getLabel()) ?></span>
+                <?php } ?>
+                <?php
+                $clearLinkUrl = $_filter->getClearLinkUrl();
+                $currentFilterName = $block->escapeHtml(__($_filter->getName())) . " " . $block->stripTags($_filter->getLabel());
+                if ($clearLinkUrl):
+                    ?>
+                    <a class="action previous" href="<?php /* @escapeNotVerified */ echo $_filter->getRemoveUrl() ?>"
+                       title="<?php /* @escapeNotVerified */ echo __('Previous') ?>">
+                        <span><?php /* @escapeNotVerified */ echo __('Previous') ?></span>
+                    </a>
+                    <a class="action remove"
+                       title="<?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?php /* @escapeNotVerified */ echo $clearLinkUrl ?>">
+                        <span><?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                    </a>
+                <?php else: ?>
+                    <a class="action remove" href="<?php /* @escapeNotVerified */ echo $_filter->getRemoveUrl() ?>"
+                       title="<?php /* @escapeNotVerified */ echo $block->escapeHtml(__('Remove')) . " " . $currentFilterName;?>">
+                        <span><?php /* @escapeNotVerified */ echo __('Remove This Item') ?></span>
+                    </a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?php endif; ?>

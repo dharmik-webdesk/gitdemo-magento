@@ -1,0 +1,104 @@
+<?php  if(!$block->isContentMode() && $this->getRequest()->getModuleName()!="mpbrand"):?>
+
+
+<?php
+		$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+        $_category  = $_masterHelper->getStoreCurrentCategory();
+        $getStoreMediaUrl=$_masterHelper->getStoreMediaUrl();
+        $catpath = $_category->getPath();
+        $cat = explode("/",$catpath);
+
+        $parentid = $cat[2];
+        $subcategory = $_masterHelper->getSubcategorySlider($parentid);
+        
+?>
+
+<?php if(isset($subcategory['child']) && count($subcategory['child'])>0) { ?>
+<div class="sharkskin-collapse" id="sliderSubcategories">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="title-box">
+                    <div class="title">
+                        <?php echo $subcategory['name']; ?>
+                    </div> 
+                </div>
+                <!--Carousel-->
+                <div class="subcategory-slider">
+                    <?php $carouselId = substr(md5(microtime()), 0, 6) ?>        
+                    <div id="owl-subcategories-<?php echo $carouselId ?>" class="owl-carousel owl-theme owl-navigation-left-right-angle-middle">
+						
+                    <?php foreach ($subcategory['child'] as $_child_category): ?>
+                         <div class="item">
+                                <div class="subcategories-box">
+                                    <div class="subcategories-list">
+                                        <a href="<?php echo $_child_category['url'] ?>">
+                                            <div class="image">
+                                    <img class="lazyOwl" data-src="<?php echo $_child_category['thumb']; ?>" alt="" width="75" height="75" />
+                                            </div>
+                                            <div class="title">
+                                                <?php echo $_child_category['name']; ?>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+						
+                        <?php endforeach; ?>
+                    </div>
+                    <script type="text/javascript" xml="space">
+                      require(['jquery','jquery/ui'], function($){ 
+                        //jQuery(document).ready(function () {
+
+                            var owl = $("#owl-subcategories-<?php echo $carouselId ?>");
+                            owl.owlCarousel({
+                                items: 6,
+                                lazyLoad:true,
+                                itemsDesktop: [1000, 5],
+                                itemsDesktopSmall: [900, 3],
+                                itemsTablet: [600, 1],
+                                itemsMobile: false,
+                                autoPlay: false,
+                                stopOnHover: true,
+                                pagination: false,
+                                navigation: true,
+                                navigationText: [
+                                    "<img src='<?php echo $getStoreMediaUrl?>arrow-left.png' >",
+                                    "<img src='<?php echo $getStoreMediaUrl?>arrow-right.png' >"
+                                ],
+                                afterAction: function () {
+                                    var prev_btn = $("#owl-subcategories-<?php echo $carouselId ?> .owl-prev");
+                                    var next_btn = $("#owl-subcategories-<?php echo $carouselId ?> .owl-next");
+
+                                    if (this.itemsAmount > this.visibleItems.length) {
+                                        next_btn.show();
+                                        prev_btn.show();
+
+                                        if (this.currentItem === 0) {
+                                            prev_btn.hide();
+                                        }
+                                        if (this.currentItem === this.maximumItem) {
+                                            next_btn.hide();
+                                        }
+
+                                    } else {
+                                        next_btn.hide();
+                                        prev_btn.hide();
+                                    }
+
+                                }
+                            //});
+                        }); 
+						 });
+                    </script>
+                </div>
+                <!--End Carousel-->
+            </div>
+
+        </div>
+    </div>
+</div>
+<?php }else{
+echo $this->getLayout()->createBlock("Wds\BannerAds\Block\Listbanner")->setTemplate("list_top_banner.phtml")->toHtml();
+} endif; ?>

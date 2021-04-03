@@ -1,0 +1,12 @@
+<?php 
+$expert_info=$block->getExpertInfo();
+if($expert_info){
+?>
+<div class="expert_detail">
+	<span class="expert_image"><img src="<?php echo $expert_info['imageurl'] ?>" alt="<?php echo $expert_info['name'] ?>" /></span>	
+	<span class="expert_name"><?php echo $expert_info['name'] ?></span>	
+</div>
+<?php 
+}
+
+?>

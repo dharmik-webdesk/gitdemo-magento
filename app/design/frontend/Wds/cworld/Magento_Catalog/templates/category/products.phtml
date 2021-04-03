@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+<?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
+		
+		<?php if($block->getCurrentCategory()->getCategoryHeading()!=""): ?>
+               <h1 style="font-size:27px"><?php echo $block->getCurrentCategory()->getCategoryHeading(); ?></h1>
+      <?php  else: ?>
+		       <h1 style="font-size:27px"><?php echo $block->getCurrentCategory()->getName(); ?></h1>
+       <?php endif; ?>
+        
+    <?php echo $block->getProductListHtml() ?>
+
+	<?php if ($_description = $block->getCurrentCategory()->getDescription()): ?>
+     <div class="category-description-mn category_description_mn_bot">
+				
+				<?php  $desc = $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory()->getDescription(), $_description, 'description'); ?>
+        
+         <?php $strArray = explode("abcd",$desc);
+$first    = reset($strArray);
+			   $first= html_entity_decode($first);
+$first = preg_replace('~(?:<br\b[^>]*>|\R){2,}~i', "\n", $first);
+echo $first;
+        ?>
+		<?php if(end($strArray)):?>
+			<div class="category-description std">
+				<?php  $last     = html_entity_decode(end($strArray));
+
+		   $last= html_entity_decode($last);
+$last = preg_replace('~(?:<br\b[^>]*>|\R){2,}~i', "\n", $last);
+echo $last;
+ ?>
+			</div>
+		<?php endif;?>
+        <div class="show-more-description-new">
+			<a class="show-more" id="more" href="#"><span class="minus1">+</span><span class="minus">-</span></a>
+		</div> 
+     </div>
+
+	<?php endif; ?>
+
+<script type="text/javascript">
+	require(['jquery','jquery/ui'], function($){ 
+
+	
+	$('.show-more-description-new a.show-more').on('click', function(e){
+		//e.preventDefault();
+		$(this).closest('.category-description-mn').find('.category-description').slideToggle();
+		$(this).toggleClass("minus");
+		return false;
+	});
+		});
+</script>
+<?php endif; ?>

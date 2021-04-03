@@ -1,0 +1,33 @@
+<?php 
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$baseUrl = $_masterHelper->getStoreBaseUrl();
+  
+$brand_id = "";
+$category_id ="";
+
+if($this->getRequest()->getModuleName()=="mpbrand"){
+     $current_brand = $_masterHelper->getStoreCurrentBrand();
+     if($current_brand)
+         $brand_id =  $current_brand->getId();
+}else{
+      $current_category = $_masterHelper->getStoreCurrentCategory();
+      if($current_category)
+          $category_id = $current_category->getId();
+}	
+?>
+<form class="form search" id="form-category-search" action="<?php echo $baseUrl ?>catalogsearch/result/" method="get">
+            <div class="field category-search">             
+                   <input id="category-search" type="text" name="q" value="" class="input-text">
+                  <?php if($category_id!=''): ?>
+                   <input type="hidden" name="cat" value="<?php echo $category_id; ?>" >
+                  <?php endif; ?>
+                  <?php if($brand_id!=''): ?>
+                   <input type="hidden" name="magebrand" value="<?php echo $brand_id; ?>" >
+                  <?php endif; ?>
+             </div>      
+            <div class="actions">
+                <button type="submit" title="Search" class="action search">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="MageArray_Core::core" title="MageArray Extensions" sortOrder="80">
+					<resource id="MageArray_ProductQuestions::productquestions" title="Product Q &amp; A" sortOrder="60">
+						<resource id="MageArray_ProductQuestions::questions" title="Manage Question" sortOrder="10" />
+						<resource id="MageArray_ProductQuestions::answers" title="Manage Answer" sortOrder="20" />
+					</resource>
+                </resource>
+				<resource id="Magento_Backend::stores">
+					<resource id="Magento_Backend::stores_settings">
+						<resource id="Magento_Config::config">
+						<!-- this resource id we can use in system.xml for section -->
+							<resource id="MageArray_ProductQuestions::config_productquestions" title="Product Q &amp; A" sortOrder="81" />
+						</resource>
+					</resource>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

@@ -1,0 +1,50 @@
+<div class="banner-form">
+    <div class="container">
+		<form action="<?php echo $this->getBaseUrl() ?>requestaquote/index/Send" method="post" class="form cwb_email_form" data-mage-init='{"validation":{}}' id="schedule_service_form">
+        	<div class="form-group">    
+					<h2>Schedule Your Air Compressor for Service</h2>
+					<input type="text" name="CompanyName" placeholder="Company Name" onblur="if (this.placeholder == '') {this.placeholder = 'Company Name';}" onfocus="if (this.placeholder == 'Company Name') {this.placeholder = '';}" value="">
+
+
+                    <input type="text" name="Name" placeholder="Name" onblur="if (this.placeholder == '') {this.placeholder = 'Name';}" onfocus="if (this.placeholder == 'Name') {this.placeholder = '';}" value="" class="input-text" data-validate="{required:true}"/>
+
+                    
+
+                    <input type="text" name="Email" placeholder="Email" onblur="if (this.placeholder == '') {this.placeholder = 'Email';}" onfocus="if (this.placeholder == 'Email') {this.placeholder = '';}" value="" class="input-text" data-validate="{required:true,'validate-email':true}">
+
+                    <input type="text" name="Phone" placeholder="Phone" onblur="if (this.placeholder == '') {this.placeholder = 'Phone';}" onfocus="if (this.placeholder == 'Phone') {this.placeholder = '';}" value="" class="input-text" data-validate="{required:true}">
+
+                    <input type="text" name="Address" placeholder="Address" onblur="if (this.placeholder == '') {this.placeholder = 'Address';}" onfocus="if (this.placeholder == 'Address') {this.placeholder = '';}" value="" class="input-text" data-validate="{required:true}">
+
+                    
+                    <textarea name="Comment" placeholder="Comment:" onblur="if (this.placeholder == '') {this.placeholder = 'Comment:';}" onfocus="if (this.placeholder == 'Comment:') {this.placeholder = '';}" class="input-text" data-validate="{required:true}"></textarea>
+                    <input type="submit" name="submit" value="Make an Appiontment" >
+					 
+					<div class="msg">
+					 </div>
+            </div>
+		</form>
+            <div class="banner-text">
+                <div class="txt">
+                <h3>24/7 Onsite Service, Installation &amp; Repairs</h3>
+                <p>We have factory-trained, highly skilled technicians staff in our Service Department.</p>
+                </div>
+            </div>
+    </div>
+    <div class="app-content">
+                <div class="app-left">
+                    <img src="<?php echo $block->getViewFileUrl('images/app-cw-logo.png'); ?>" height="68" width="68" alt="">
+                    <div class="app-text">
+                        <h4>Service Alert Manager</h4>
+                        <p>Powered by PUMP WORLD</p>
+                        <p>Pump World, LLC</p>
+                    </div>
+                </div>
+                <div class="app-right">
+                    <a target="_blank" href="https://play.google.com/store/apps/details?id=com.compressorworld.android"><img src="<?php echo $block->getViewFileUrl('images/android-app-img.png'); ?>" alt=""></a> 
+                    <a target="_blank" href="https://itunes.apple.com/gb/app/service-alert-manager/id1411878279?mt=8"><img src="<?php echo $block->getViewFileUrl('images/app-store-img.png'); ?>" alt=""></a>
+                </div>
+    </div>
+</div>
+
+       

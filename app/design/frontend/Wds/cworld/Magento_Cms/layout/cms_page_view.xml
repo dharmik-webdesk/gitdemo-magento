@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    	<move element="breadcrumbs" destination="columns.top" before="-"/>
+        <referenceContainer name="content">
+            <block class="Magento\Cms\Block\Page" name="cms_page"/>
+<block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" template="subscribe.phtml" after="catalog.compare.sidebar"/>
+        </referenceContainer>
+		 <referenceContainer name="sidebar.main">
+
+            <block class="Magento\Framework\View\Element\Template" name="catalog.compare.sidebar"
+                   template="Magento_Catalog::product/compare/sidebar.phtml" before="-" />
+            <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" template="subscribe.phtml" after="catalog.compare.sidebar"/>
+        </referenceContainer>
+	       
+	<move element="div.sidebar.main" destination="columns" before="main"/>  
+         <referenceBlock name="wishlist_sidebar" remove="true"/>
+          <referenceBlock name="sidebar.additional" remove="true"/>
+    </body>
+</page>

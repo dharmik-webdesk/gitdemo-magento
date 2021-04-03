@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\AbstractView */?>
+<?php $_product = $block->getProduct() ?>
+
+<?php /* if ($block->displayProductStockStatus()): ?>
+    <?php if ($_product->isAvailable()):
+    
+   
+	
+	$lable=null;
+		if($_product->getStockAvailabilityStatus()){
+			$lable=$_product->getAttributeText('stock_availability_status');
+			if(is_array($lable))
+				$lable=implode($lable,', ');
+		}
+if(empty($lable))
+	$lable='In stock';	
+	
+    
+    
+    ?>
+        <div class="stock available" title="<?php /* @escapeNotVerified  echo __('Availability') ?>">
+            <span class="wds_stock_label"><?php /* @escapeNotVerified  echo __($lable) ?></span>
+                <span class="wds_stock_image"><img src="<?php echo $this->getViewFileUrl('Magento_Catalog::images/p_icon4.png'); ?>" alt="" height="18" width="32"></span>
+        </div>
+       
+    <?php else: ?>
+        <div class="stock unavailable" title="<?php /* @escapeNotVerified  echo __('Availability') ?>">
+            <span><?php /* @escapeNotVerified  echo __('Out of stock') ?></span>
+        </div>
+    <?php endif; ?>
+<?php endif; */ ?>

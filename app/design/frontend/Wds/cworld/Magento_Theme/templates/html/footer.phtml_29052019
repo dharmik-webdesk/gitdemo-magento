@@ -1,0 +1,589 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+$siteurl='https://www.compressorworld.com/';
+?>
+	<div class="container">
+    	<div class="footer_top_mn">
+        	<ul>
+            	<li>
+                	<i class="fa fa-truck"></i>
+                    <div>
+                    	<h3>Free Shipping</h3>
+                        <p>Free shipping on all Rotary Screw Air Compressors.</p>
+                    </div>
+                </li>
+                <li>
+                	<i class="fa fa-usd"></i>
+                    <div>
+                    	<h3>Money Back Guarantee</h3>
+                        <p>Our experts guarantee satisfaction 100% money back guarantee</p>
+                    </div>
+                </li>
+                <li>
+                	<i class="fa fa-life-ring"></i>
+                    <div>
+                    	<h3>Local Factory Support</h3>
+                        <p>Local service and support on all machines, any location</p>
+                    </div>
+                </li>
+                <li>
+                	<i class="fa fa-thumbs-up"></i>
+                    <div>
+                    	<h3>Financing Available</h3>
+                        <p>0% Interest on various brands, ask for details</p>
+                    </div>
+                </li>
+                <li>
+                	<i class="fa fa-dashboard"></i>
+                    <div>
+                    	<h3>Express Delivery</h3>
+                        <p>Same day shipping available for In-stock Compressors</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer_mid_mn">
+        	<div class="footer_mid_lt">
+            	<ul>
+                	<li>
+        			  	<h2>Customer Support <div class="ribbon">24/7</div></h2>
+        				<a href="<?php echo $siteurl ?>contact">Contact Us</a>
+        			        <a href="https://www.compressorworld.com/blog/" target="_blank">Compressor Wiki</a>
+        				<a href="<?php echo $siteurl ?>meet-the-team">Meet the Team</a>
+        				<a href="<?php echo $siteurl ?>privacy-policy">Privacy Policy</a>
+        		        </li>
+                        <?php /* Old Address start 
+                    <li>
+                    	<h2>Our Shop</h2>                        
+                        <h3>Address:</h3>
+                        <p>Compressor World, LLC<br />32 Riverside Drive<br />Pembroke, MA 02359</p>
+                        <p><a href="tel:866.778.6572">866.778.6572</a></p>
+                        <p><a href="mailto:info@compressorworld.com">info@compressorworld.com</a></p>
+                        <h3>Working Days/Hours:</h3>
+                        <p>Mon - Fri / 8:00 AM - 5:00 PM EST</p>
+                    </li>
+                    /* Old Address end */  ?>
+
+                    <li>
+                        <h2>Our Shop</h2>                        
+                        <h3>Address:</h3>
+                        <p>Compressor World, LLC<br />3 Collins Ave<br />Plymouth, MA 02360</p>
+                        <p><a href="tel:866.778.6572">866.778.6572</a></p>
+                        <p><a href="mailto:info@compressorworld.com">info@compressorworld.com</a></p>
+                        <h3>Working Days/Hours:</h3>
+                        <p>Mon - Fri / 8:00 AM - 5:00 PM EST</p>
+                    </li>
+
+                    <li>
+                    	<h2>Information</h2>
+                        <a href="<?php echo $siteurl ?>about-us">About us</a>
+                        <a href="<?php echo $siteurl ?>our-stores">Our stores</a>
+            			<a href="<?php echo $siteurl ?>sitemap-category">Sitemap</a>
+            			<a href="<?php echo $siteurl ?>term-condition">Terms and Conditions</a>
+        		    </li>
+                    <li>
+                    	<h2>Orders</h2>
+                        <a href="<?php echo $block->getUrl('customer/account/login'); ?>">My Account</a>
+                        <a href="<?php echo $siteurl ?>shipping-policy">Shipping Policy</a>
+            			<a href="<?php echo $siteurl ?>returns-policy">Returns Policy</a>
+            			<a href="https://www.marlinnet.net/leaserep.php?apiKey=5082307118" target="_blank">Financing</a>
+                        <a href="<?php echo $siteurl ?>secure-payment">Secure Payment</a>
+                    </li>
+                </ul>
+            </div>
+			<div class="footer_mid_rt">
+				<?php echo $this->getLayout()->createBlock('Magento\Newsletter\Block\Subscribe')->setTemplate('Magento_Newsletter::subscribe_footer.phtml')->toHtml();  ?>
+				<div class="pay-box">
+					<p>
+                        <img src="<?php echo $block->getUrl("pub/media/payment/")?>allpayment.jpg" alt="payment"  width="343" height="72" />
+					</p>
+				</div>
+			</div>
+        </div>
+    </div>	
+	
+	
+	<div class="footer_bottom">
+		<div class="container">
+			<div class="footer_bottom_lt">                       
+				<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('sharkskin-footer-social-links')->toHtml(); ?>
+			</div>
+			<div class="footer_bottom_rt">                       
+				<span class="copyright-footer"><?php echo $this->getLayout()->createBlock("Magento\Theme\Block\Html\Footer")->setTemplate("Magento_Theme::html/copyright.phtml")->toHtml(); ?></span>
+            </div>            
+        </div>
+	</div>	
+    
+   
+</div>
+<?php 
+
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$routeName      = $_masterHelper->getRequestedRouteName();
+$ControllerName      = $_masterHelper->getRequestedControllerName();
+
+/*if($routeName!='onestepcheckout'){*/ ?>
+
+<?php if($routeName=='onestepcheckout'){ ?>
+<style>.field-error span{ color:#e80404; font-weight: 600}</style>
+
+<script>
+window['_fs_debug'] = false;
+window['_fs_host'] = 'fullstory.com';
+window['_fs_org'] = 'BSDQV';
+window['_fs_namespace'] = 'FS';
+(function(m,n,e,t,l,o,g,y){
+    if (e in m) {if(m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');} return;}
+    g=m[e]=function(a,b){g.q?g.q.push([a,b]):g._api(a,b);};g.q=[];
+    o=n.createElement(t);o.async=1;o.src='https://'+_fs_host+'/s/fs.js';
+    y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
+    g.identify=function(i,v){g(l,{uid:i});if(v)g(l,v)};g.setUserVars=function(v){g(l,v)};
+    y="rec";g.shutdown=function(i,v){g(y,!1)};g.restart=function(i,v){g(y,!0)};
+    y="consent";g[y]=function(a){g(y,!arguments.length||a)};
+    g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
+    g.clearUserCookie=function(){};
+})(window,document,window['_fs_namespace'],'script','user');
+</script>
+
+<?php } ?>
+
+
+<span id="_GUARANTEE_SealSpan"></span>
+<img style="display:none;" src="//nsg.symantec.com/Web/Seal/AltSealInfo.aspx?S=Large&T=M&Elem=ImgTagSeal&HASH=OlZTGBTVgUbG48%2FOG7jwea%2B2kgPzDY1Io90mzaEDly4sfoViTOVEA5SQQGJ3SKQlSeIWIFVrtur5%2B2pOhlWY2Q%3D%3D&CBF=AB&AB=1&DP=fn=;src=ImgTagSeal;grt=true" />
+<script type="text/javascript" src="//nsg.symantec.com/Web/Seal/gjs.aspx?SN=954386289"></script>
+
+<script type="text/javascript">
+if (window._GUARANTEE && _GUARANTEE.Loaded) {
+_GUARANTEE.Hash = "OlZTGBTVgUbG48%2FOG7jwea%2B2kgPzDY1Io90mzaEDly4sfoViTOVEA5SQQGJ3SKQlSeIWIFVrtur5%2B2pOhlWY2Q%3D%3D";
+_GUARANTEE.WriteSeal("_GUARANTEE_SealSpan", "GuaranteedSeal");
+}
+
+</script>
+<!-- begin  SnapEngage code -->
+
+<script type="text/javascript">
+require(['jquery','jquery/ui'], function($){ 
+            jQuery(function(){
+
+                $(".header_top_rt a").each(function(){
+            if($(this).attr('href') == window.location.href){
+                        $(this).addClass('active');
+            }
+        });
+                               
+                /**/
+		/*$('#search').blur(function(){
+                    $('.searchautocomplete__autocomplete').hide()
+                })*/
+
+        $(document).on('mouseleave','.searchautocomplete__autocomplete',function(){
+                    $(this).hide();
+                })
+
+                $('#search').click(function(){
+			if($(this).val()!=''){	
+                    		$('.searchautocomplete__autocomplete').show()
+			}
+                })
+		$( "#search" ).keypress(function() {
+			if($(this).val()!=''){	
+                    		$('.searchautocomplete__autocomplete').show()
+			}else{
+				$('.searchautocomplete__autocomplete').hide()
+			}
+		});
+
+		$('.limiter-text-dropdown').hover(function(){
+		  $(this).find('.limit_dropdown').show();	
+		},function(){
+		  $(this).find('.limit_dropdown').hide();
+		})
+
+		$('.limit_dropdown li').click(function(){
+		  $(this).parent().parent().parent().find('.custom_shorting').val( $(this).attr('data-value'));	
+		  $(this).parent().parent().parent().find('.custom_shorting').trigger('change');
+		});
+
+
+
+  var menuLeft = document.getElementById( 'push-menu' ),
+                showLeftPush = document.getElementById( 'showLeftPush' ),
+                body = document.body;
+
+         
+
+        showLeftPush.onclick = function() {
+            classie.toggle( this, 'active' );
+            classie.toggle( body, 'cbp-spmenu-push-toright' );
+            classie.toggle( menuLeft, 'cbp-spmenu-open' );
+            disableOther( 'showLeftPush' );
+        };
+         
+        function disableOther( button ) {
+            if( button !== 'showLeftPush' ) {
+                classie.toggle( showLeftPush, 'disabled' );
+            }
+        }
+        
+      
+      jQuery('#push-menu ul li ul li:first-child').parent().prev("a").addClass("sub_nav").after('<span class="subcat-expand"></span>');
+    jQuery('#push-menu ul li ul').hide();
+      jQuery('#push-menu .subcat-expand').click(function(){
+        jQuery(this).toggleClass('subcat-expanded');
+        jQuery(this).siblings("ul").slideToggle("slow").closest('ul').toggleClass('subcatActive');
+       
+      });
+
+              
+            });  
+
+
+});
+
+
+
+function async(u, c) {
+	var d = document, t = 'script',
+	o = d.createElement(t),
+	s = d.getElementsByTagName(t)[0];
+	o.type = 'text/javascript';
+	o.async = true;
+	o.defer = 'defer';
+
+	o.src = '//' + u;
+	if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+	s.parentNode.insertBefore(o, s);
+}
+
+async('commondatastorage.googleapis.com/code.snapengage.com/js/566863df-dcda-4bae-8a1a-862776593bc3.js', function() {
+});
+</script>
+
+<!-- end SnapEngage code -->
+
+<?php
+
+	
+if($routeName=='catalog' ||  $routeName=='catalogsearch'){
+?>
+<script type="text/javascript">
+require(['jquery'],function($){ 
+	var total_element=$('.custom_pricing').length;
+    var counter=0;
+	if(total_element>0){
+        $('.custom_pricing').each(function(){
+             if($(this).find('.price-final_price .special-price').hasClass('special-price'))
+                var final_price=$(this).find('.price-final_price .special-price .price').text();
+            else
+                var final_price=$(this).find('.price-final_price .price').text();
+                
+            final_price=final_price.replace('$','');
+            final_price=final_price.replace(',','');
+            final_price=eval(final_price);
+            counter++;
+            if( $('#categoryProducts .products.items').hasClass('grid')){
+               $( '<div class="custome_leasing_pricing" ><spna style="display:none">'+final_price+'</spna></div>' ).insertAfter(this); 
+            }else{
+                $( '<div class="custome_leasing_pricing" ><spna style="display:none">'+final_price+'</span></div>' ).insertBefore($(this).parent().parent().parent().find('.brand_logo'));
+            }
+            if(counter==total_element){
+                $('.products .item').first().addClass('start_finding_leasing');
+               call_leaser_api();
+            }
+        });
+    }else if($('.product-info-price').hasClass('product-info-price')){
+			
+            if($('.product-info-price').find('.price-final_price .special-price').hasClass('special-price'))
+                var final_price=$('.product-info-price').find('.price-final_price .special-price .price').text();
+            else
+                var final_price=$('.product-info-price').find('.price-final_price .price').text();
+                
+            final_price=final_price.replace('$','');
+            final_price=final_price.replace(',','');
+            final_price=eval(final_price);
+            var name=$('.page-title-wrapper.product span').html();
+            product_name=name;
+        $('.product-info-price').append('<div class="custome_leasing_pricing" ><spna style="display:none">'+final_price+'</span></div>');
+       callLEASEREPAPI(final_price,$('.product_left_mn'),product_name);
+    }
+
+    function call_leaser_api(){
+        if($('.products .item.start_finding_leasing').hasClass('start_finding_leasing')){
+           var obj=$('.products .item.start_finding_leasing')
+           $(obj).addClass('completed');
+           $(obj).removeClass('start_finding_leasing');
+           $(obj).next().addClass('start_finding_leasing');
+           var price=eval($(obj).find('.custome_leasing_pricing').text());
+           var product_name=encodeURI($(obj).find('.product-item-link').text().trim());
+           if(price>999){
+                callLEASEREPAPI(price,obj,product_name,true);
+           }else{
+                call_leaser_api();
+           }
+       }            
+    }
+
+
+    function callLEASEREPAPI(cost,obj,name,recursive){
+        var requri   = 'https://www.leaserep.com/public_api/v1/quotes2';
+        var datavalue = {totalCost:cost};
+        var api_key_leasing='2b383420-4c2b-4953-877c-fc20e49f320b';
+        var formkey='5082307118';
+		var data_in=JSON.stringify(datavalue)
+	    $.ajax({
+            type: 'POST',
+            url: requri,
+            headers: { 'Marlin-API-Key': api_key_leasing },
+            data: JSON.stringify(datavalue), 
+            contentType: "application/json",
+            success: function(json){
+                thtml = "";
+                if (json['meta']) {
+                    if(json['meta']['code'] == 200 && json['result']!=undefined){
+                       
+                        for (i = 0; i<json['result']['payments'].length; i++) {
+
+                                for (j = 0; j <json['result']['payments'][i]['options'].length; j++) {
+    if(json['result']['payments'][i]['options'][j]['rates'] != null &&json['result']['payments'][i]['options'][j]['rates'] != ""){
+    thtml+= json['result']['payments'][i]['options'][j]['rates'][0]['paymentDisplay'];
+
+        //$('#financeamount_1').html('' + thtml + ' / month');
+            
+    var href=json['result']['payments'][i]['options'][j]['rates'][0]['href'] + ' &eq_desc1='+name+'&apiKey='+formkey+'&eq_qty1=1&eq_cost1='+cost;
+
+
+    var html='<form action="" method="post" id="product_info"><input type="hidden" name="prices[]" value="100"><a href="'+href+'"  target="_blank" class="financelink btn btn-primary btn-sm"><span class="financetext" >Finance for as low as</span><span class="financeamount" >'+ thtml + ' / month'+'</span><span class="apply_leasing">Apply Now</span></a></form>';
+        
+        $(obj).find('.custome_leasing_pricing').html(html);
+
+        if(recursive!=true){
+            $('.iteam-eligible-text .apply_now a').attr('href',href);
+            $('.iteam-eligible-text .apply_now').show();
+        }
+
+                             }
+
+                        }
+                    }
+                }else{
+                //$('#financeamount_1').html('' + json['meta']['message']);
+                }
+            }
+        }
+       });
+        if(recursive==true)
+            call_leaser_api();
+
+    }
+});  
+</script>
+<?php } ?>
+<!-- Start: Bing UET Tag -->
+<script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"39000351"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>
+<!-- End: Bing UET Tag -->
+
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+    gtag('config', 'GTM-MW7NN48');
+</script>
+
+
+<!-- End Google Tag Manager -->
+<?php if($ControllerName=='product'){ ?>
+<script>
+require(['jquery'],function($){
+    
+        p_id = $.trim($('.custom_product_info .product.attribute.sku .value').text());
+        if($('.product-info-price .price-final_price .special-price').hasClass('special-price'))
+            p_price= $.trim($('.product-info-price .price-final_price .special-price span.price').text());
+        else
+            p_price= $.trim($('.product-info-price .price-final_price span.price').text());
+            p_price=p_price.replace('$','');
+            p_price=p_price.replace(',','');
+
+
+
+    var google_tag_params = {
+        ecomm_prodid: p_id,
+        ecomm_pagetype: 'product',
+        ecomm_totalvalue: p_price
+    }
+})
+</script>
+<?php } ?>
+
+ 
+<script type="text/javascript">
+function sendGtag(p_id,p_name,p_list_name,p_brand,p_category,p_qty,p_price){
+    /*alert('p_id='+p_id+','+'p_name='+p_name+','+'p_list_name='+p_list_name+','+'p_brand='+p_brand+','+'p_category='+p_category+','+'p_qty='+p_qty+','+'p_price='+p_price);*/
+
+     gtag('event', 'add_to_cart', {
+        "items": [
+                    {
+                        "id": p_id,
+                        "name": p_name,
+                        "list_name": p_list_name,
+                        "brand": p_brand,
+                        "category": p_category,
+                        "quantity": p_qty,
+                        "price": p_price
+                    }
+                ]
+        });
+}
+
+require(['jquery'],function($){
+
+    var cat_name= $('.breadcrumbs ul li').last().text();
+    $('.catalog-category-view .action.tocart.primary.btn').click(function(){
+       var parent_element=$(this).closest( "li" );
+    
+       p_id = $.trim($(parent_element).find('.extra-info-item').text().replace('Sku: ',''));
+       p_name = $.trim($(parent_element).find('.product-item-link').text());
+
+       <?php if($routeName=='catalog'){ ?>
+            p_list_name = 'Category';
+       <?php }else{ ?>
+            p_list_name = 'Search Results';
+       <?php }  ?>
+
+       if($('#categoryProducts .product-items').hasClass('grid')){
+            p_brand  = $.trim($(parent_element).find('.brand_img_mn img').attr('alt')); 
+       }else{
+            p_brand  = $.trim($(parent_element).find('.brand_logo img').attr('alt'));
+       }
+       
+       p_category = $.trim(cat_name);
+       p_qty=1;
+
+       if($(parent_element).find('.price-final_price .special-price').hasClass('special-price'))
+            p_price= $.trim($(parent_element).find('.price-final_price .special-price span.price').text());
+       else
+            p_price= $.trim($(parent_element).find('.price-final_price span.price').text());
+            p_price=p_price.replace('$','');
+            p_price=p_price.replace(',','');
+
+       sendGtag(p_id,p_name,p_list_name,p_brand,p_category,p_qty,p_price);
+    })
+
+    $('#product_addtocart_form').submit(function(){
+        var cat_name= $('.breadcrumbs ul li.item.product').prev().text();
+
+        p_id = $.trim($('.custom_product_info .product.attribute.sku .value').text());
+        p_name = $.trim($('.custom_product_info h1.page-title span').text());
+        p_list_name="Product View";
+        p_brand=$.trim($('.custom_product_info .product-brand-logo img').attr('alt'));
+        p_category=$.trim(cat_name);
+        p_qty=$.trim($('.custom_product_info .input-text.qty').val());
+
+        if($('.product-info-price .price-final_price .special-price').hasClass('special-price'))
+            p_price= $.trim($('.product-info-price .price-final_price .special-price span.price').text());
+        else
+            p_price= $.trim($('.product-info-price .price-final_price span.price').text());
+
+            p_price=p_price.replace('$','');
+            p_price=p_price.replace(',','');
+
+        sendGtag(p_id,p_name,p_list_name,p_brand,p_category,p_qty,p_price);
+    });
+});
+require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function($,modal){
+            var options = {
+                    type: 'popup',
+                    responsive: true,
+                    refresh: true,
+                    innerScroll: true,
+                    click: function () {
+                            this.clearModal();
+                },
+            };
+
+             $('.request_a_quote').click(function(event){
+                $('.loader').show();
+                $('#popup-modal2').html('');
+                event.preventDefault()
+                requestQuotePopupNew($(this).attr('href'));
+                var popup = modal(options, $('#popup-modal2'));
+                
+            });
+});            
+
+function requestQuotePopupNew(url){
+    var loader=jQuery('.loader');
+
+    jQuery.ajax({
+      method: "POST",
+      url: url
+    }).done(function(response){
+        formdata=jQuery(response).find('#container .column.main').html()
+        jQuery('#popup-modal2').html(formdata);
+        jQuery(loader).hide();  
+        jQuery('#popup-modal2').modal('openModal');
+    });
+}
+    function submitrequestaquote(){
+        if(jQuery('#quote-form-validate #name').val()==''){
+            alert('Please enter name');
+        }else if(jQuery('#quote-form-validate #email').val()==''){
+            alert('Please enter email');
+        }else if(jQuery('#quote-form-validate #state').val()<0){
+            alert('Please select state');
+        }else if(jQuery('#quote-form-validate #subject').val()==''){
+            alert('Please enter subject');
+        }else if(jQuery('#quote-form-validate .g-recaptcha-response').val()==''){
+            alert('Please veryfy captcha.');
+        }else{  
+            jQuery('#loader').css('display','block');
+            jQuery.ajax({
+              method: "POST",
+              url: "<?php echo $block->getUrl('requestaquote/index/saveQuote') ?>",
+              data: jQuery('#quote-form-validate').serialize()
+            }).done(function( response ) {
+                
+                if(response=="true"){
+                    jQuery("#request-success-msg").css({"color": "red", "font-size": "15px", "font-weight": "bold"});
+                    jQuery("#request-success-msg").html("Captcha is not valid, Please try again.");
+                    //grecaptcha.reset();
+                }else{  
+                    jQuery("#request-success-msg").css({"color": "green", "font-size": "15px", "font-weight": "bold"});
+                    jQuery("#request-success-msg").html(response);
+                    jQuery('#quote-form-validate').hide();
+                }
+                jQuery('#loader').css('display','none');
+            //alert( "Data Saved: " + response );
+             });
+            return false;
+        }
+        return false;
+    }
+
+</script>
+<div class="loader" style="display: none;">
+            <img src="<?php echo $this->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading...">
+        </div>
+<div id="popup-modal2" style="display:none;">
+    
+</div>
+<?php /*} */ ?>
+<style>
+html body .description_section_mn_title h2 {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    line-height: 40px;
+}
+</style>

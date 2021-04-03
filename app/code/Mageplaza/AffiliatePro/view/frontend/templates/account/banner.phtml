@@ -1,0 +1,75 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AffiliatePro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<div class="box-account box-info box-affiliate affiliate-banner-content affiliate-block form-edit-account">
+    <?php
+    $banners = $this->getAvailableBanners();
+    if (sizeof($banners)):?>
+        <?php foreach ($banners as $banner): ?>
+            <fieldset class="fieldset banner-<?php echo $banner->getId() ?>">
+                <legend>
+                    <span id="banner-title"><?php /* @escapeNotVerified */ echo 'Banner: ' . $banner->getTitle() ?></span>
+                </legend>
+                <br>
+                <div class="field preview">
+                    <div class="control">
+                        <?php echo $this->getContentText($banner); ?>
+                    </div>
+                </div>
+                <button class="btn" id="<?php echo $banner->getId() ?>"><?php echo __('Get banner link') ?></button>
+            </fieldset>
+            <div id="bn-link-refer" class="bnlink-refer-<?php echo $banner->getId() ?>">
+                <div class="bnlink-refer-content">
+                    <div id="link-bn">
+                        <div class="field link">
+                            <label class="label">
+                                <span><?php /* @escapeNotVerified */ echo __('Link') ?></span></label>
+                            <div class="control">
+                                <span><?php /* @escapeNotVerified */ echo $this->getBannerLink($banner, $this->getLink($banner)) ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="coderefer-bn">
+                        <div class="field content">
+                            <label class="label" for="banner-content-<?= $banner->getId() ?>">
+                                <span><?php /* @escapeNotVerified */ echo __('Copy and past this source code into your website or forum.') ?></span>
+                            </label>
+                            <div class="control">
+                            <textarea id="banner-content-<?= $banner->getId() ?>"
+                                      class="banner-content" rows="4" readonly="readonly"
+                                      onclick="this.select()"><?php echo $this->getContentText($banner) ?>
+                            </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/x-magento-init">
+            {
+                "*": {"requireBanner": {"bannerId": "<?php echo $banner->getId() ?>"}}
+            }
+            </script>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <?php echo __('No banner available'); ?>
+    <?php endif; ?>
+</div>

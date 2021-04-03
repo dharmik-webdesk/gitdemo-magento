@@ -1,0 +1,67 @@
+<?php 
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$_product = $block->getProduct();
+$_product_id = $_product->getId();
+$grouparray = array(
+                    'product_specification'=>'Product Specification', 
+                    'overview_and_technical_details'=>'Overview & Technical Details', 
+                    'additional_features' => 'Additional Features',
+                    'capacity_cfm' => 'Capacity',
+                    'compressor_specificatio' => 'Compressor Specification',
+                    'connection'=>'Connection', 
+                    'dimensions_and_weight'=>'Dimensions & Weight',
+                    'electrical_motor_data'=>'Motor Data',
+                    'electrical_requirements'=>'Electrical Requirements',
+                    'engine_data'=>'Engine Data',
+                    'filtration_grade'=>'Filtration Grade', 
+                    'power_requirements_motor_data'=>'Power Requirements', 
+                    'tank_size'=>'Tank Size', 
+                    'warranty'=>'Warranty'                 
+                    );
+$notdisplayfront = array("Manufacturer","Max Pressure","Model","Min Pressure (PSI)");
+echo '<div class="techical_info_desc"><ul>';
+foreach($grouparray as $key => $value){
+    $resultcol = $_masterHelper->getTechnicalData($_product_id, $key);
+    $techattribute = array();
+    if($resultcol):
+        $i=1;
+        foreach($resultcol as $rescol){ 
+            if(!in_array($rescol['attribute'], $notdisplayfront)){
+                if($rescol['attributevalue']!=""){
+                     $techattribute[$i]['attribute'] = $rescol['attribute'];
+                    $techattribute[$i]['attributevalue'] = $rescol['attributevalue'];
+                    $i++;
+                }
+               
+            }
+        }
+    endif;
+   
+    if(count($techattribute)>0):
+        echo "<li class='technicaldatamenu'>
+              <h2 class='techical_info_desc_heading'>".$value."</h2>
+
+            <ul class='child_tech_item'>";
+        foreach($techattribute as $tech){ 
+            echo    "<li ><div class='row'>
+                        <div class='col-md-8'>".$tech['attribute']."</div>
+                        <div class='col-md-4'>".$tech['attributevalue']."</div>
+                        </div>
+                    </li>";
+        }
+        if($value=='Dimensions & Weight'){
+            $weight = $_product->getWeight();
+            if($weight):
+            echo "<li><div class='row'>
+                        <div class='col-md-8'>Weight (lbs)</div>
+                        <div class='col-md-4'>".$weight."</div>
+                        </div>
+                </li>";
+            endif;
+
+        }
+        echo "</ul></li>";
+    endif;
+    
+}
+echo '</ul></div>';

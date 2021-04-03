@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+   <body>
+   		<attribute name="class" value="cbp-spmenu-push"/>	
+   		<referenceBlock name="header.panel" remove="true"/>
+		<referenceBlock name="header" remove="true"/>
+		<referenceBlock name="catalog.compare.link" remove="true"/>
+		<referenceBlock name="footer_links" remove="true" />
+		<referenceBlock name="copyright" remove="true" />	
+		<referenceContainer name="mini-menu">
+				<block class="Magento\Framework\View\Element\Template" name="mobile-menu" template="Magento_Theme::html/mobile-menu.phtml" />
+        </referenceContainer>
+		<referenceContainer name="header-wrapper">
+			<block class="Magento\Framework\View\Element\Template" name="header_section_phone" as="header_section_phone" after="top.search" template="Magento_Theme::html/header_phone_number_section.phtml"/>
+		</referenceContainer>
+		<referenceContainer name="page.top">
+            <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
+                <arguments>
+                    <argument name="group_name" xsi:type="string">navigation-sections</argument>
+                    <argument name="group_css" xsi:type="string">nav-sections</argument>
+                </arguments>
+                <block class="Magento\Framework\View\Element\Template" name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                    <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="Magento_Theme::html/topmenu.phtml"  before="-"/>
+                </block>
+            </block>
+      </referenceContainer>
+		<referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_file" xsi:type="string">images/logo.png</argument>
+                <argument name="logo_img_width" xsi:type="number">239</argument>
+                <argument name="logo_img_height" xsi:type="number">36</argument>
+            </arguments>
+        </referenceBlock>
+		<referenceContainer name="header.panel.wrapper">
+			<container name="headertext.container" htmlClass="container" htmlTag="div">
+			<block class="Magento\Cms\Block\Block" name="header.promotional.text">
+				<arguments>
+					<argument name="block_id" xsi:type="string">header_promotional_text</argument>
+				</arguments>
+			</block>
+			</container>
+			<!-- <block class="Magento\Framework\View\Element\Template" name="header_section" as="header_section" template="Magento_Theme::html/header_section.phtml"/> -->
+		</referenceContainer>
+        <referenceContainer name="footer">
+				<block class="Magento\Framework\View\Element\Template" name="footerpage" template="Magento_Theme::html/footer.phtml" />
+        </referenceContainer>
+		<referenceBlock name="store_language" remove="true" />
+		<!--<referenceBlock name="custom.minicart" remove="false" />   -->
+		
+		<move element="minicart" destination="header-wrapper" after="-"/>
+		<move element="mobile-menu" destination="after.body.start" before="-"/>    
+		
+    </body>
+</page>

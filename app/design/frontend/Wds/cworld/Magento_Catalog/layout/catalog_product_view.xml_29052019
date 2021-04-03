@@ -1,0 +1,120 @@
+﻿<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+		<head>
+			<!-- <remove src="css/system.css"/> -->
+			<css src="Magento_Catalog::css/basic.css"/>
+			<css src="Magento_Catalog::css/prettyphoto.css"/>
+			<script src="Magento_Catalog::js/jquery-1.11.1.min.js" />
+			<script src="Magento_Catalog::js/imagerotator.js" />
+			<script src="Magento_Catalog::js/jquery.prettyPhoto.js" />
+			<script src="Magento_Catalog::js/wr360hook.js" />  
+		</head>
+		<body>
+		<!--<referenceContainer name="product.info.productchange" htmlTag="div" htmlClass="productchange-link">
+			<block class="Magento\Catalog\Block\Product\View" name="prochangelink" as="prochangelink"  template="product/view/prochangelink.phtml" after="-"/>
+    	</referenceContainer> -->
+		<attribute name="itemtype" value=""/>
+        <attribute name="itemscope" value=""/>
+		<referenceBlock name="product.info.overview" remove="true"  />
+		<referenceBlock name="product.info.social" remove="true"  />
+		<referenceBlock name="product.attributes" remove="true"  />
+		
+		<container name="product.info.mediacustom" htmlTag="div" htmlClass="product-info-mediacustom" before="-">
+			
+		</container>	
+
+		<referenceContainer name="product.info.main">
+		<block class="Magento\Catalog\Block\Product\View" name="catalog.product.form" template="product/view/custom-form.phtml"/>
+		<container name="product.info.left.container" htmlTag="div" htmlClass="product_left_mn" />
+		<container name="product.info.right.container" htmlTag="div" htmlClass="product_right_mn" />
+		<block class="Magento\Catalog\Block\Product\View\Description" name="product.info.factory.model.number" template="product/view/attribute.phtml" after="product.info.type">
+                            <arguments>
+                                <argument name="at_call" xsi:type="string">getFactoryModelNumber</argument>
+                                <argument name="at_code" xsi:type="string">factory_model_number</argument>
+                                <argument name="css_class" xsi:type="string">sku</argument>
+                                <argument name="at_label" xsi:type="string">default</argument>
+                                <argument name="add_attribute" xsi:type="string">itemprop="factory_model_number"</argument>
+				
+                            </arguments>
+                        </block>
+
+            	<block class="Magento\Catalog\Block\Product\View" name="custom.product.right.col.01" template="product/view/product-right-col-01.phtml"/>
+		<block class="Magento\Catalog\Block\Product\View" name="custom.product.right.col.02" template="product/view/product-right-col-02.phtml"/>  
+	<!-- <block class="Magento\Catalog\Block\Product\View" name="custom.product.navigation" template="product/view/product-navigation.phtml"/> -->
+		 </referenceContainer>
+		
+		<referenceBlock name="product.info.description">
+			<action method="setTitle">
+				<argument name="title" xsi:type="string">DESCRIPTION</argument>
+				 <argument name="priority" xsi:type="string">1</argument>
+			</action>
+		</referenceBlock>
+		<referenceBlock name="reviews.tab">
+			<action method="setTitle">
+				<argument name="title" xsi:type="string">PRODUCT REVIEWS</argument>
+			</action>
+		</referenceBlock>
+		<referenceBlock name="product.info.details">
+			<block class="Magento\Catalog\Block\Product\View" name="technical.tab" as="technical" template="product/view/technical_data.phtml" group="detailed_info">
+			   <arguments>
+			      <argument translate="true" name="title" xsi:type="string">TECH DATA</argument>
+			   </arguments>
+			</block>
+		<block class="Magento\Catalog\Block\Product\View" name="threeDviewing.tab" as="threeDviewing" template="product/view/videos.phtml" group="detailed_info" >
+			   <arguments>
+			      <argument translate="true" name="title" xsi:type="string">3D VIEWING/VIDEOS</argument>
+			   </arguments>
+			</block>
+		    <block class="Magento\Catalog\Block\Product\View" name="expertreview.tab" as="expertreview" template="product/view/expert_review.phtml" group="detailed_info">
+			   <arguments>
+				   <argument translate="true" name="title" xsi:type="string">Expert Review</argument>
+			   </arguments>
+			</block>
+		</referenceBlock>
+	
+		<referenceContainer name="content.aside">
+			<block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons.additional"/>
+			
+		</referenceContainer>
+		<block class="Magento\Cms\Block\Block" name="why-online">
+				<arguments>
+					<argument name="block_id" xsi:type="string">why-online</argument>
+				</arguments>
+		</block>
+		
+		<move element="product.info.media" destination="content" before="-"/>
+		
+	<move element="catalog.product.form" destination="product.info.main" before="-"/>	
+	<!-- Product Info Left -->	
+	<move element="product.info.left.container" destination="product.info.main" after="catalog.product.form"/>
+	<move element="product.info.sku" destination="product.info.left.container" before="-"/>
+	<move element="product.info.factory.model.number" destination="product.info.left.container" after="product.info.sku"/>
+	<move element="page.main.title" destination="product.info.left.container" before="-"/>
+	<move element="product.info.price" destination="product.info.left.container" after="page.main.title"/>
+	<move element="product.info.stock.sku" destination="product.info.left.container" after="product.info.price"/>
+	<move element="product.info.review" destination="product.info.left.container" after="product.info.stock.sku"/>
+	<move element="product.info" destination="product.info.left.container" after="product.info.review"/>
+	
+	<!-- Product Info Right -->
+	<move element="product.info.right.container" destination="product.info.main" after="product.info.left.container"/>
+	<move element="custom.product.right.col.01" destination="product.info.right.container" before="-"/>
+	<move element="shippinginfo" destination="product.info.right.container" after="custom.custom.product.right.col.01"/>
+	<move element="custom.product.right.col.02" destination="product.info.right.container" after="-"/>
+	
+	
+	
+	
+	<move element="reviews.tab" destination="product.info.details" after="container.content" />
+	<move element="why-online" destination="main.content" after="-"/>
+	
+	
+	<move element="breadcrumbs" destination="container.content" before="-"/>
+	<move element="custom.product.navigation" destination="main.content" before="product.info.details"/>
+    </body>
+</page>

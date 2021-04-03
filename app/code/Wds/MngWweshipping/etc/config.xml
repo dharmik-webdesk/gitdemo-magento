@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+	
+            <wdsmngwweshipping>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>Wds\MngWweshipping\Model\Carrier\Wdsmngwweshipping</model>
+                <name>WdsMngwweShipping</name>
+                <price>00.00</price>
+                <title>Worldwide Express</title>
+                <type>I</type>
+                <sort_order>0</sort_order>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+            </wdsmngwweshipping>
+			
+        </carriers>
+    </default>
+</config>

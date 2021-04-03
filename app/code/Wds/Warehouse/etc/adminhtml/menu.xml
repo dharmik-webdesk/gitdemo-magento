@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Wds. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+        <add id="Wds_Warehouse::wds_index_index" title="Manage Warehouse" module="Wds_Warehouse"  sortOrder="20" dependsOnModule="Wds_Warehouse" action="warehouse/index/index" resource="Wds_Warehouse::wds_index_index"/>
+<!--AddMenu-->
+    </menu>
+</config>

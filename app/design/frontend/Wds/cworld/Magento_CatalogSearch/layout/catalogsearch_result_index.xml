@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>  
+			<remove src="css/system.css"/>
+			<css src="Magento_Catalog::css/owl.carousel.css"/>
+			<script src="Magento_Catalog::js/jquery-1.11.1.min.js" />
+			<script src="Magento_Catalog::js/owl.carousel.js" /> 
+			
+	</head>
+    <body>
+		<referenceContainer name="sidebar.additional">
+         <referenceBlock name="sale.reorder.sidebar" remove="true"/>
+     </referenceContainer>
+		<move element="breadcrumbs" destination="columns.top" before="-"/>
+        <referenceBlock name="page.main.title" remove="true"  />
+		
+    
+		<referenceContainer name="div.sidebar.main">
+            <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" after="wishlist_sidebar" template="subscribe.phtml"/>
+		 </referenceContainer>
+		<move element="div.sidebar.main" destination="columns" before="main"/>
+		<move element="catalog.compare.sidebar" destination="div.sidebar.main" before="form.subscribe"/>
+		<move element="wishlist_sidebar" destination="div.sidebar.main" before="form.subscribe"/>
+		
+    </body>
+</page>

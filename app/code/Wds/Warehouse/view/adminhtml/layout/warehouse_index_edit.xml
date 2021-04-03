@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+     <update handle="editor"/>
+	 <head>
+	 <title>Manage Warehouse</title>
+	 </head>
+    <body>
+	   <referenceContainer name="content">
+            <block class="Wds\Warehouse\Block\Adminhtml\Warehouse\Edit" name="warehouse_warehouse_edit"/>
+        </referenceContainer>
+		 <referenceContainer name="left">
+            <block class="Wds\Warehouse\Block\Adminhtml\Warehouse\Edit\Tabs" name="warehouse_warehouse_edit_tabs">
+				<block class="Wds\Warehouse\Block\Adminhtml\Warehouse\Edit\Tab\WarehouseInformation" name="warehouse_warehouse_edit_tab_warehouseinformation"/>
+				 <action method="addTab">
+                    <argument name="name" xsi:type="string">warehouseinformation_section</argument>
+                    <argument name="block" xsi:type="string">warehouse_warehouse_edit_tab_warehouseinformation</argument>
+                </action>
+				<!--CedAddTab-->
+			</block>
+        </referenceContainer>
+    </body>
+</page>

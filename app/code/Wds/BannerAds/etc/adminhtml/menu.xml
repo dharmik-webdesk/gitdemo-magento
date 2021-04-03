@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+       		<add id="Wds_BannerAds::parent" title="Banner Ads" module="Wds_BannerAds" sortOrder="100"  action="bannerads/bannerad" resource="Wds_BannerAds::bannerad"/>
+		
+
+    </menu>
+</config>

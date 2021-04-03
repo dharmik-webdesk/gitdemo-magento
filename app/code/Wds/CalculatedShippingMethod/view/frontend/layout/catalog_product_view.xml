@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View" name="product.shipping.option" 
+                template="Wds_CalculatedShippingMethod::catalog/product/view/shipping-option.phtml"/>
+        </referenceContainer>    
+        <move element="product.shipping.option" destination="product.info.left.container_inner" after="product.info.price"/>
+    </body>
+</page>

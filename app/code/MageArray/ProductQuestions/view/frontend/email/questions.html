@@ -1,0 +1,10 @@
+<!--@subject New Question @-->
+{{template config_path="design/email/header_template"}}
+<p>
+    
+{{trans "Product: %product" product=$data.product}} <br/>
+{{trans "Name: %name" name=$data.name}} <br/>
+{{trans "Email: %email" email=$data.email}}<br/>
+{{trans "Question: %question" question=$data.question}}<br/>
+{{trans "Status: %status" status=$data.status}}<br/>
+</p>

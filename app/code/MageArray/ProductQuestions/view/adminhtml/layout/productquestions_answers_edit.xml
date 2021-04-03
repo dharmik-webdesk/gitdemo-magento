@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Answers</title>
+    </head>
+	<update handle="editor"/>
+    <body>
+        <referenceBlock name="menu">
+            <action method="setActive">
+                <argument name="itemId" xsi:type="string">MageArray_ProductQuestions::answers</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+        <block class="MageArray\ProductQuestions\Block\Adminhtml\Answers\Edit" name="answers_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+			<block class="MageArray\ProductQuestions\Block\Adminhtml\Answers\Edit\Tabs" name="answers_edit_tabs">
+				<block class="MageArray\ProductQuestions\Block\Adminhtml\Answers\Edit\Tab\Main" name="answers_edit_tab_main"/>
+				
+				<action method="addTab">
+					<argument name="name" xsi:type="string">main_section</argument>
+					<argument name="block" xsi:type="string">answers_edit_tab_main</argument>
+				</action>
+				
+			</block>
+        </referenceContainer>
+    </body>
+</page>

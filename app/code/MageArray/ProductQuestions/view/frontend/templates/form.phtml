@@ -1,0 +1,557 @@
+<?php $questions = $this->getQuestions();?>
+<?php $askQuestion = $this->whoAskQue();?>
+<?php $addAnswer = $this->whoGiveAns();?>
+<?php $queVisibility = $this->queVisibility();?>
+<?php $users = $this->getcustomerSession();?>
+<?php $firstname = $users['firstname'];?>
+<?php $lastname = $users['lastname'];?>
+<?php $email = $users['email'];?>
+<?php $cid = $users['entity_id'];?>
+<?php $productDetail = $this->_coreRegistry->registry('current_product');?>
+<?php $que = 'question';?>
+<?php $type = 'answer';?>
+<?php $sort = $this->getRequest()->getParam('sort');?>
+<?php $search = $this->getRequest()->getParam('search');?>
+<?php if ($sort == 'old') {
+    $questions = $questions->setOrder('product_questions_id', 'ASC');
+} else {
+    $sort = 'new';
+    $questions = $questions->setOrder('product_questions_id', 'DESC');
+}
+
+$name = '';
+$cemail = '';
+if (isset($firstname) && $firstname != '') {
+    $name = $firstname.' '.$lastname;
+}
+
+if (isset($email) && $email != '') {
+    $cemail = $email;
+}
+?>
+<?php $loader = 'MageArray_ProductQuestions::images/loader.gif';
+$img = $this->getViewFileUrl($loader);?>
+<?php $rimg = 'MageArray_ProductQuestions::images/arrow_right.png';
+$right = $this->getViewFileUrl($rimg);?>
+<?php $dimg = 'MageArray_ProductQuestions::images/arrow_down.png';
+$down = $this->getViewFileUrl($dimg);?>
+<?php $lImg = 'MageArray_ProductQuestions::images/like_thumb.png';
+$like = $this->getViewFileUrl($lImg);?>
+<?php $thumb = 'MageArray_ProductQuestions::images/dislike_thumb.png';
+$dislike = $this->getViewFileUrl($thumb);?>
+<?php $saveUrl = $this->getUrl('productquestions/save/questions');?>
+<?php $saveAnsUrl = $this->getUrl('productquestions/save/answers');?>
+<?php $setlikeUrl = $this->getUrl('productquestions/qalikedislike/setlike');?>
+<?php $dlpath = 'productquestions/qalikedislike/setdislike';
+$setDislikeUrl = $this->getUrl($dlpath);?>
+
+<div id="productqa">
+    <img src="<?php echo $img; ?>"
+                 alt="<?php  echo __('Loading...'); ?>" class="load-image" />
+    <div>
+        <?php if ($askQuestion == 1) :?>
+            <button type="button" class="action primary ask-que btn"
+                    title="<?php echo __('Ask Question') ?>">
+                <span><?php echo __('Ask Question') ?></span>
+            </button>
+        <?php else :?>
+            <?php if (isset($cid) && $cid != '') :?>
+                <button type="button" class="action primary ask-que btn"
+                        title="<?php echo __('Ask Question') ?>">
+                    <span><?php echo __('Ask Question') ?></span>
+                </button>
+            <?php endif;?>
+        <?php endif;?>
+        <p class="sory-by"><strong><?php echo __('Sort By:')?></strong>&nbsp;
+            <select class="sort-select" name="sort_questions" id="sortque">
+
+                <?php if ($sort == 'new') :?>
+                    <option value="new" selected="selected">
+                        <?php echo __('Newest First')?>
+                    </option>
+                <?php else :?>
+                    <option value="new"><?php echo __('Newest First')?></option>
+                <?php endif;?>
+                <?php if ($sort == 'old') :?>
+                    <option value="old" selected="selected">
+                        <?php echo __('Oldest First')?>
+                    </option>
+                <?php else :?>
+                    <option value="old"><?php echo __('Oldest First')?></option>
+                <?php endif;?>
+            </select>
+        </p>
+        <p class="search-bar">
+            <input type="text"
+                   value="<?php echo $search; ?>"
+                   placeholder="Search within this product's Question"
+                   class="search-box input-text"
+                   id="searchtext" name="keywords">
+            <button type="button" class="action primary btn"
+                    value="search" title="<?php echo __('Search') ?>"
+                    id="searchque"><span><?php echo __('Search') ?></span>
+            </button>
+            <?php if ($search) :?>
+                <button type="button" class="action primary btn"
+                        value="reset" title="<?php echo __('Reset') ?>"
+                        id="resetsearch">
+                    <span><?php echo __('Reset') ?></span>
+                </button>
+            <?php endif;?>
+        </p>
+    </div>
+    <form  method="post"
+           action="<?php echo $saveUrl; ?>"
+           data-hasrequired="<?php echo __('* Required Fields') ?>"
+           data-mage-init='{"validation":{}}'
+           onsubmit="return checkForRecaptcha();"
+           id="product_question_form">
+        <div class="question_form">
+            <?php if (isset($cid) && $cid != '') :?>
+                <input type="hidden" name="asked_from"
+                       value="<?php echo __('Customer') ?>">
+            <?php else :?>
+                <input type="hidden" name="asked_from"
+                       value="<?php echo __('Guest') ?>">
+            <?php endif;?>
+            <input type="hidden" name="product_id"
+                   value="<?php echo $productDetail->getId();?>">
+            <h2 class="legend"><?php echo __('Ask Question') ?></h2>
+
+            <fieldset class="fieldset">
+                <div class="field author_name required">
+                    <label class="label" for="author_name">
+                        <span><?php echo __('Name') ?></span>
+                    </label>
+                    <div class="control">
+                        <input class="input-text" id="author_name"
+                               type="text" name="author_name"
+                               value="<?php echo $name; ?>"
+                               data-validate="{required:true}" maxlength="255">
+                    </div>
+                </div>
+                <div class="field author_email required">
+                    <label class="label" for="author_email">
+                        <span><?php echo __('Email') ?></span>
+                    </label>
+                    <div class="control">
+                        <input class=" input-text"
+                               value="<?php  echo $cemail;?>"
+                               id="author_email" type="text" name="author_email"
+                               data-validate="{required:true,'validate-email':true}"
+                               maxlength="255">
+                    </div>
+                </div>
+                <div class="field questions required">
+                    <label class="label" for="question_content">
+                        <span><?php echo __('Question') ?></span>
+                    </label>
+                    <div class="control">
+                        <textarea class=" input-text" name="questions"
+                                  rows="4" cols="50"
+                                  data-validate="{required:true}"
+                                  id="questions"
+                                  title="<?php echo __('Question Content') ?>"
+                                  ></textarea>
+                    </div>
+                </div>
+                <?php if ($this->queVisibility() == 1) :?>
+                    <div class="control">
+                        <input type="checkbox" title="Visibility"
+                               name="visibility"
+                               class="checkbox" id="visibility"/>
+                        <b>
+                            <label for="question_visibility">
+                                <?php echo __('Is Question Private?') ?>
+                            </label>
+                        </b>
+                    </div>
+                <?php endif;?>
+                <br/>
+                <div class="field author_email required">
+                    <label class="label" for="author_email">
+                        <span><?php echo __('Apologies, We need to make sure you\'re not a robot.') ?></span>
+                    </label>
+                    <div class="control">
+                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <div class="g-recaptcha" data-sitekey="6LcG7EoUAAAAANAHx4fh_LmshfY6gYHUptm--XNM"></div> 
+                    <div id="comment-error-captcha" style="display:none;">This is a required field.</div> 
+                    </div>
+                </div>
+                <div class="actions-toolbar">
+                    <div class=" primary submit-que">
+                        <?php if ($this->approveQue() == 0) :?>
+                            <p>
+                                <?php echo __('All questions will be displayed after moderation.') ?>
+                            </p>
+                        <?php endif;?>
+                        <button type="submit" class="action submit primary btn"
+                                title="<?php echo __('Submit Question') ?>">
+                            <span><?php echo __('Submit Question') ?></span>
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+    <?php if (count($questions) > 0) :?>
+        <?php foreach ($questions as $question) :?>
+            <?php $queId = $question->getProductQuestionsId();?>
+            <?php $answers = $this->getAnswers($queId); ?>
+            <div class="queans">
+                <div>
+                    <img
+                        src='<?php echo $right;?>'
+                         width ='20' height='20' class='img'
+                        id="que_but_<?php echo $queId;?>"/>
+                    <b><?php echo __('Questions: ')?> </b>
+                    <?php echo nl2br($question->getQuestions()); ?>
+
+                    <?php if (isset($cid) && $cid != '') :?>
+                        <div class="q-a">
+                            <a class="tooltips setlike"
+                               data-id="<?php echo $queId;?>"
+                               data-detail="<?php echo $que ?>"
+                               data-customer="<?php echo $cid ?>"
+                               data-url="<?php echo $setlikeUrl;?>"
+                               id="like_question_<?php echo $queId;?>" >
+                                <img src="<?php echo $like; ?>"
+                                     alt="<?php  echo __('Like'); ?>"  />
+                            </a>
+                            <span class="likecount"
+                                  id="likecount_question_<?php echo $queId;?>">
+                                <?php echo $this->getQALikes($queId, $que); ?>
+                            </span>
+                            <a class="tooltips setdislike"
+                               data-id="<?php echo $queId;?>"
+                               data-detail="<?php echo $que ?>"
+                               data-customer="<?php echo $cid ?>"
+                               data-url="<?php echo $setDislikeUrl;?>"
+                               id="dislike_question_<?php echo $queId;?>" >
+                                <img src="<?php echo $dislike; ?>"
+                                     alt="<?php  echo __('Dislike'); ?>"  />
+                            </a>
+                            <span class="likecount"
+                              id="dislikecount_question_<?php echo $queId;?>">
+                            <?php echo $this->getQADisLikes($queId, $que);?>
+                        </span>
+                        </div>
+                    <?php endif;?>
+                    <b class="counter">
+                        <?php echo count($answers)?> <?php echo __('Answers')?>
+                    </b>
+                </div>
+                <script>
+                    require(['jquery'], function($){
+                        jQuery( "#que_but_<?php echo $queId?>" ).click(
+                            function() {
+                                var isrc = document.getElementById('que_but_<?php echo $queId?>').src;
+                                if(isrc == '<?php echo $down;?>') {
+                                    jQuery('#que_but_<?php echo $queId?>').attr(
+                                        'src',
+                                        '<?php echo $right;?>'
+                                    );
+                                } else {
+                                    jQuery('#que_but_<?php echo $queId?>').attr(
+                                        'src',
+                                        '<?php echo $down;?>'
+                                    );
+
+                                 }
+                                jQuery( "#ans_<?php echo $queId?>" ).toggle( "slow" );
+                            }
+                        );
+                    });
+                </script>
+                <div id="ans_<?php echo $queId?>" style="display: none;">
+                    <div class="que-by">
+                        <?php $date = date('M j Y g:i A', strtotime($question->getCreatedAt()));?>
+                        <?php $aname = $question->getAuthorName();?>
+                        <?php echo __('Question By:')?> <?php echo $aname; ?> <?php echo __('on') ?> <?php echo $date;?>
+                    </div>
+                    <div class="ans-list">
+                        <?php if (count($answers) > 0) :?>
+                            <?php foreach ($answers as $answer) :?>
+                                <?php $ansId = $answer->getAnswersId();?>
+                                <div class="allanswers">
+                                    <?php echo $this->makeClickableLinks(nl2br($answer->getAnswers()));?>
+                                    <?php if (isset($cid) && $cid != '') :?>
+                                        <div class="q-a">
+                                            <a class="tooltips setlike"
+                                               id="like_answer_<?php echo $ansId?>"
+                                               data-id="<?php echo $ansId?>"
+                                               data-detail="<?php echo $type ?>"
+                                               data-customer="<?php echo $cid ?>"
+                                               data-url="<?php echo $setlikeUrl;?>">
+                                                <img src="<?php echo $like; ?>"
+                                                     alt="<?php  echo __('Like'); ?>"  />
+                                            </a>
+                                            <span class="likecount"
+                                                  id="likecount_answer_<?php echo $ansId?>">
+                                                <?php echo $this->getQALikes($ansId, $type)?>
+                                            </span>
+                                            <a class="tooltips setdislike"
+                                               id="dislike_answer_<?php echo $ansId?>"
+                                               data-id="<?php echo $ansId?>"
+                                               data-detail="<?php echo $type ?>"
+                                               data-customer="<?php echo $cid ?>"
+                                               data-url="<?php echo $setDislikeUrl;?>">
+                                                <img
+                                                    src="<?php echo $dislike;?>"
+                                                     alt="<?php  echo __('Dislike'); ?>"
+                                                />
+                                            </a>
+                                            <span class="likecount"
+                                                  id="dislikecount_answer_<?php echo $ansId?>">
+                                                <?php echo $this->getQADisLikes($ansId, $type)?>
+                                            </span>
+                                        </div>
+                                    <?php endif;?>
+                                    <div class="ans-by">
+                                        <?php $ansDate = date('M j Y g:i A', strtotime($answer->getCreatedAt()));?>
+                                        <?php $ansAuthor = $answer->getAuthorName();?>
+                                        <?php if ($answer->getAnswersFrom() == 'Admin') :?>
+                                            <?php echo __('Answer By: Admin on') ?> <?php echo $ansDate;?>
+                                        <?php else :?>
+                                            <?php echo __('Answer By:') ?> <?php echo $ansAuthor;?> <?php echo __('on') ?> <?php echo $ansDate;?>
+                                        <?php endif;?>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+
+                        <?php else :?>
+                            <?php if ($addAnswer == 1) :?>
+                                <div class="allanswers">
+                                    <?php echo __('No answers yet. Be the first to answers the question!') ?>
+                                </div>
+                            <?php elseif ($addAnswer == 2 && isset($cid) && $cid != '') :?>
+                                <div class="allanswers">
+                                    <?php echo __('No answers yet. Be the first to answers the question!') ?>
+                                </div>
+                            <?php else :?>
+                                <div class="allanswers">
+                                    <?php echo __('No answers yet.') ?>
+                                </div>
+                            <?php endif;?>
+                        <?php endif;?>
+
+                        <?php if ($addAnswer == 1) :?>
+                            <div class="add-answers">
+                                <button type="button"
+                                        class="action primary answer_<?php echo $queId?> btn"
+                                        title="<?php echo __('Add Answer') ?>">
+                                    <span><?php echo __('Add Answer') ?></span>
+                                </button>
+                            </div>
+                        <?php endif;?>
+
+                        <?php if ($addAnswer == 2 && isset($cid) && $cid != '') :?>
+                            <div class="add-answers">
+                                <button type="button"
+                                        class="action primary answer_<?php echo $queId?> btn"
+                                        title="<?php echo __('Add Answer') ?>">
+                                    <span><?php echo __('Add Answer') ?></span>
+                                </button>
+                            </div>
+                        <?php endif;?>
+                        <form  method="post"
+                               action="<?php echo $saveAnsUrl; ?>"
+                               data-hasrequired="<?php echo __('* Required Fields') ?>"
+                               data-mage-init='{"validation":{}}'>
+                            <div id="ans_form_<?php echo $queId;?>"
+                                 class="ans_form">
+                                <?php if (isset($cid) && $cid != '') :?>
+                                    <input type="hidden" name="answers_from"
+                                           value="<?php echo __('Customer') ?>">
+                                <?php else :?>
+                                    <input type="hidden" name="answers_from"
+                                           value="<?php echo __('Guest') ?>">
+                                <?php endif;?>
+                                <input type="hidden" name="product_questions_id"
+                                   value="<?php echo $queId;?>">
+
+                                <fieldset class="fieldset">
+                                    <div class="field author_name required">
+                                        <label class="label" for="author_name">
+                                            <span>
+                                                <?php echo __('Name') ?>
+                                            </span>
+                                        </label>
+                                        <div class="control">
+                                            <input class="input-text"
+                                               id="author_name_<?php echo $queId;?>"
+                                               type="text" name="author_name"
+                                               value="<?php echo $name ?>"
+                                               data-validate="{required:true}"
+                                               maxlength="255" />
+                                        </div>
+                                    </div>
+                                    <div class="field author_email required">
+                                        <label class="label" for="author_email">
+                                            <span>
+                                                <?php echo __('Email') ?>
+                                            </span>
+                                        </label>
+                                        <div class="control">
+                                            <input class=" input-text"
+                                                   value="<?php echo $cemail;?>"
+                                                   id="author_email_<?php echo $queId;?>"
+                                                   type="text"
+                                                   name="author_email"
+                                                   data-validate="{required:true,'validate-email':true}"
+                                                   maxlength="255">
+                                        </div>
+                                    </div>
+                                    <div class="field answers required">
+                                        <label class="label" for="answers">
+                                            <span>
+                                                <?php echo __('Answer') ?>
+                                            </span>
+                                        </label>
+                                        <div class="control">
+                                            <textarea class=" input-text"
+                                                      name="answers" rows="4"
+                                                      cols="50" 
+                                                      data-validate="{required:true}"
+                                                      id="answers_<?php echo $queId;?>"
+                                                      title="<?php echo __('Answer Content')?>"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="actions-toolbar">
+                                        <div class=" primary">
+                                            <?php if ($this->approveAns() == 0) :?>
+                                                <p>
+                                                    <?php echo __('All answers will be displayed after moderation.') ?>
+                                                </p>
+                                            <?php endif;?>
+                                            <button type="submit"
+                                                    class="action submit primary btn"
+                                                    title="<?php echo __('Submit Answer') ?>">
+                                                <span>
+                                                    <?php echo __('Submit Answer') ?>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </form>
+                        <script>
+                            require([
+                                'jquery'
+                            ], function($){
+                                var aClass = ".answer_<?php echo $queId;?>";
+                                jQuery(aClass).click(function(){
+                                    var fId = "#ans_form_<?php echo $queId;?>";
+                                    if(jQuery(fId).is(':visible')){
+                                        jQuery(fId).hide();
+                                        jQuery(aClass).html('Add Answer');
+                                    }
+                                    else{
+                                        jQuery(fId).show();
+                                        jQuery(aClass).html('Close');
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach;?>
+    <?php else :?>
+        <?php $msg = 'No questions yet. Be the first to ask the question!';?>
+        <?php if ($askQuestion == 1) :?>
+            <div class="que-note">
+                <?php echo __($msg) ?>
+            </div>
+        <?php else :?>
+            <?php if (isset($cid) && $cid != ''):?>
+                <div class="que-note">
+                    <?php echo __($msg) ?>
+                </div>
+            <?php else :?>
+                <div class="que-note">
+                    <?php echo __('No questions yet.') ?>
+                </div>
+            <?php endif;?>
+        <?php endif;?>
+    <?php endif;?>
+</div>
+<script>
+require([
+    'jquery'
+], function($){
+    jQuery(".ask-que").click(function(){
+        if (jQuery(".question_form").is(':visible')) {
+            jQuery(".question_form").hide();
+            jQuery('.ask-que').html('Ask Question');
+        } else {
+            jQuery(".question_form").show();
+            jQuery(".ask-que").html('Close');
+        }
+    });
+
+    jQuery(".setlike").click(function(){
+        var proId = jQuery(this).attr('data-id');
+        var detail = jQuery(this).attr('data-detail');
+        var custId = jQuery(this).attr('data-customer');
+        var url = jQuery(this).attr('data-url');
+        jQuery('.load-image').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: url,
+            data: {qaId: proId,customerId: custId,typeId: detail },
+            dataType: 'json',
+            success: function(data) {
+                var likeId = '#likecount_'+data.type+'_'+proId;
+                var dislikeId = '#dislikecount_'+data.type+'_'+proId;
+                jQuery('.load-image').hide();
+                jQuery(likeId).html(data.like);
+                jQuery(dislikeId).html(data.dislike);
+            }
+        });
+    });
+    jQuery(".setdislike").click(function(){
+        var proId = jQuery(this).attr('data-id');
+        var detail = jQuery(this).attr('data-detail');
+        var custId = jQuery(this).attr('data-customer');
+        var url = jQuery(this).attr('data-url');
+        jQuery('.load-image').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: url,
+            data: {qaId: proId,customerId: custId,typeId: detail},
+            dataType: 'json',
+            success: function(data) {
+                var likeId = '#likecount_'+data.type+'_'+proId;
+                var dislikeId = '#dislikecount_'+data.type+'_'+proId;
+                jQuery('.load-image').hide();
+                jQuery(likeId).html(data.like);
+                jQuery(dislikeId).html(data.dislike);
+            }
+        });
+    });
+    var currentUrl = '<?php echo $productDetail->getProductUrl()?>';
+    jQuery("#searchque").click(function(){
+        var search = jQuery('#searchtext').val();
+        window.location = currentUrl +"?search=" + search;
+    });
+
+    jQuery("#resetsearch").click(function(){
+        window.location = currentUrl;
+    });
+
+    jQuery("#sortque").change(function(){
+        var sort = jQuery('#sortque').val();
+        window.location = currentUrl + "?sort=" + sort;
+    });
+});
+function checkForRecaptcha(){
+        if(jQuery('#product_question_form .g-recaptcha-response').val()==''){
+            jQuery('#comment-error-captcha').css({"color":"#e80404","font-weight":"600"});
+            jQuery('#comment-error-captcha').show();
+            return false;
+        }
+}
+</script>

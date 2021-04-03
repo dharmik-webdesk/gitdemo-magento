@@ -1,0 +1,71 @@
+<?php $qid = $this->getRequest()->getParam('id');?>
+<?php $question = $this->getQuestions();
+
+$product = $this->getProduct();
+$answer = $this->getAnswer();
+$que = $question->getQuestions();
+$cid = $this->getcustomerId()
+?>
+<div class="note">
+    <?php echo __('<b>Note:</b> Highlighted Answer is given by you')?>
+</div>
+<div class="que-view ans-view">
+    <table>
+        <tr class="queview">
+            <td class="firstrow">
+                <?php echo __('<b>'.'Product'.'</b>')?>
+            </td>
+            <td>
+                <a href="<?php echo $product->getProductUrl(); ?>">
+                    <?php echo $product->getName();?>
+                </a>
+            </td>
+        </tr>
+        <tr class="queview">
+            <td class="firstrow">
+                <?php echo __('<b>'.'Question'.'</b>')?>
+            </td>
+            <td>
+                <div class='que-view-ans'>
+                    <?php echo $this->makeClickableLinks($que);?>
+                </div>
+            </td>
+        </tr>
+        <tr class="queview">
+            <td class="firstrow"><?php echo __('<b>'.'Answer'.'</b>')?></td>
+            <td>
+                <?php foreach($answer as $ans):?>
+                    <?php $answ = $ans->getAnswers()?>
+                    <?php if ($cid == $ans->getCustomerId()) : ?>
+                        <?php $addClass = 'make-highlight';?>
+                    <?php endif;?>
+                    <p class='que-view-ans <?php echo $addClass;?>'>
+                        <?php echo $this->makeClickableLinks($answ);?>
+                    </p>
+                    <hr class="view">
+                <?php endforeach;?>
+            </td>
+        </tr>
+        <tr class="queview">
+            <td class="firstrow">
+                <?php echo __('<b>'.'Question Status'.'</b>')?>
+            </td>
+            <td>
+                <div>
+                    <?php if ($question->getStatus() == 2) :?>
+                        <?php echo __('Approved');?>
+                    <?php else :?>
+                        <?php echo __('Pending'); ?>
+                    <?php endif;?>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="buttons-set">
+    <p class="back-link">
+        <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>">
+            <small>&laquo; </small><?php echo __('Back to Product Q & A') ?>
+        </a>
+    </p>
+</div>

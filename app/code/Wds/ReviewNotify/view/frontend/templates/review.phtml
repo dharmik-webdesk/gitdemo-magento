@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Review\Block\Product\Review $block */
+
+
+?>
+
+<div class="custom_review_block">
+    
+<?= $block->getChildHtml() ?>
+    
+</div>
+
+
+
+
+<script>
+require(['jquery','jquery/ui'], function($){ 
+    function processReviews(url, fromPages) {
+        $.ajax({
+            url: url,
+            cache: true,
+            dataType: 'html',
+            showLoader: false,
+            loaderContext: $('.items.review-items')
+        }).done(function (data) {
+
+            $('#product-review-container').html(data);
+            $('#product-review-container').show();
+            $('#product-review-container .toolbar.review-toolbar .limiter').hide();
+            $('#product-review-container .pager #paging-label').hide();
+            $('#product-review-container .pager .item.current .label').hide();
+            
+            
+            $('[data-role="product-review"] .pages a').each(function (index, element) {
+                $(element).click(function (event) { //eslint-disable-line max-nested-callbacks
+                    processReviews($(element).attr('href'), true);
+                    event.preventDefault();
+                });
+            });
+        }).complete(function () {
+            if (fromPages == true) { //eslint-disable-line eqeqeq
+                $('html, body').animate({
+                    scrollTop: $('#product-review-container').offset().top - 50
+                }, 300);
+            }
+        });
+    }
+    processReviews("<?php echo $block->escapeUrl($block->getProductReviewUrl()) ?>");
+});    
+</script>

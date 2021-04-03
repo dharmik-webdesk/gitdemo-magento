@@ -1,0 +1,142 @@
+<!-- KM customize for category sitemap -->
+<?php
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$baseurl = $_masterHelper->getStoreBaseUrl();
+$categoryhelper = $this->helper('Magento\Catalog\Helper\Category');
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+
+<div class="sitempan">
+<div class="row">
+  <main class="col-sm-12">
+<div class="page-box-header" style="margin:20px 0px 30px 0px;">
+  <div class="row row-same-height">
+<div class="col-sm-6 col-sm-height">
+  <div class="left-side">
+<div class="page-title">
+  <h1>Category & Sub category Tree</h1>
+</div>
+<div id="sitemap_top_links">
+  <ul class="sharkskin-links" style="padding-left:3px;">
+<li class="first last"><a href="<?php echo $baseurl; ?>catalog/seo_sitemap/product/" title="Products Sitemap">Products Sitemap</a></li>
+  </ul>
+</div>
+  </div>
+</div>
+<div class="col-sm-6 col-sm-height col-bottom">
+  <div class="right-side">
+<div class="box">
+  <p><img src="<?php echo $baseurl ?>pub/media/wysiwyg/sitemap.png" alt=""></p>
+</div>
+  </div>
+</div>
+  </div>
+</div>
+  </main>
+</div>
+
+<?php
+$_categories = $categoryhelper->getStoreCategories()
+?>
+
+
+<?php if (count($_categories) > 0): ?>
+<div class="row">
+<div class="col-sm-12">
+<div style="margin-bottom: 60px">
+<button type="buttom" title="toggle" id="togglebtn" class="btn btn-primary pull-right">Expand All</button>
+</div>
+</div>
+</div>
+
+
+<ul class="sitecatul treesitemap">
+<?php foreach($_categories as $_category): ?>
+        <?php //echo $_category->isEnabled(); ?>
+<li class="cat">
+<?php $_category =  $objectManager->create('Magento\Catalog\Model\Category')->load($_category->getId()); ?>
+<?php $_subcategories = $_category->getChildrenCategories() ?>
+<?php if (count($_subcategories) > 0): ?><span></span><?php endif; ?>
+<a href="<?php echo $categoryhelper->getCategoryUrl($_category) ?>" title="<?php echo $_category->getName() ?>"><strong class="strongsm"><?php echo $_category->getName() ?></strong></a>
+
+<?php if (count($_subcategories) > 0): ?>
+<ul>
+<?php foreach($_subcategories as $_subcategory): ?>
+<?php $_nextcategory = $objectManager->create('Magento\Catalog\Model\Category')->load($_subcategory->getId()) ?>
+<?php $_nextsubcategories = $_nextcategory->getChildrenCategories() ?>
+<li><?php if (count($_nextsubcategories) > 0): ?><span></span><?php endif; ?>
+
+<a href="<?php echo $categoryhelper->getCategoryUrl($_subcategory) ?>" title="<?php echo $_subcategory->getName() ?>">
+<?php echo $_subcategory->getName() ?>
+</a>
+<?php if (count($_nextsubcategories) > 0): ?>
+<ul>
+<?php foreach($_nextsubcategories as $_nextsubcat): ?>
+<li>
+<a href="<?php echo $categoryhelper->getCategoryUrl($_nextsubcat) ?>" title="<?php echo $_subcategory->getName() ?> - <?php echo $_nextsubcat->getName() ?>">
+<?php echo $_nextsubcat->getName() ?>
+</a>
+</li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+</li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+</li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+</div>
+<script type="text/javascript">
+
+require(['jquery'], function(jQuery){
+
+var aj=jQuery;	
+aj( document ).ready( function( ) {
+	aj( 'ul.treesitemap li' ).each( function() {
+	if( aj( this ).children( 'ul' ).length > 0 ) {
+	aj( this ).addClass( 'parent' );     
+	}
+	});
+
+	aj( 'ul.treesitemap li span' ).click( function( ) {
+	aj( this ).toggleClass( 'active' );
+	aj( this ).parent().children( 'ul' ).stop().slideToggle( 'fast' );
+	});
+
+	aj( 'ul.treesitemap li ul li span' ).addClass('active');
+
+	var ajX = false;
+	aj('#togglebtn').on('click', function(){
+	if (!ajX){
+	aj(this).text("Collapse All");
+	aj( '.treesitemap' ).find('span').each( function() {
+	aj( this ).removeClass( 'active' );
+	});
+	aj( '.treesitemap' ).find('ul').each( function() {
+	aj( this ).show();
+	});
+	ajX = true;
+	}
+	else {
+	aj(this).text("Expand All");
+	aj( '.treesitemap' ).find('span').each( function() {
+	aj( this ).addClass( 'active' );		
+	});
+	aj( '.treesitemap' ).find('ul').each( function() {
+	aj( this ).hide();
+	});
+	ajX = false;
+	}
+	});
+
+});   
+
+});   
+</script>
+
+
+
+

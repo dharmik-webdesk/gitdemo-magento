@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="block newsletter">
+    <h3>Newsletter</h3>
+	<span>Sign Up for Our Newsletter:</span>
+        <form class="form subscribe"
+            novalidate
+            action="<?php /* @escapeNotVerified */ echo $block->getFormActionUrl() ?>"
+            method="post"
+            onsubmit="return NewsLattercheckForRecaptcha();"
+            data-mage-init='{"validation": {"errorClass": "mage-error"}}'
+            id="newsletter-validate-detail">
+            <div class="field newsletter">
+								<button class="action subscribe primary" title="<?php /* @escapeNotVerified */ echo __('Subscribe') ?>" type="submit">
+                    <span><?php /* @escapeNotVerified */ echo __('Subscribe') ?></span>
+                </button>
+                <div class="control">
+                    <input name="email" type="email" id="newsletter"
+                                placeholder="<?php /* @escapeNotVerified */ echo __('Email') ?>"
+                                data-validate="{required:true, 'validate-email':true}"/>
+                </div>
+            </div>
+            <div class="control"  style="overflow-x: inherit">
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="g-recaptcha" data-sitekey="6LcMgNAZAAAAAMF4tsbsHFbjnDsxi8dYujhHona7"></div>
+                <div id="comment-error-captcha-new" style="display: none;">This is a required field.</div> 
+           </div>
+        </form>
+</div>
+
+<?php
+$tmp = $block->getRequest()->getFullActionName();
+if($tmp == 'contact_index_index'){?>
+<script>
+function NewsLattercheckForRecaptcha(){
+    if(jQuery('#g-recaptcha-response-1').val()==''){
+        jQuery('#comment-error-captcha-new').css({"color":"red","font-weight":"600"});
+        jQuery('#comment-error-captcha-new').show();
+        return false;
+    }
+}
+</script>
+<?php }else{ ?>
+<script>
+function NewsLattercheckForRecaptcha(){
+        if(jQuery('#g-recaptcha-response').val()==''){
+            jQuery('#comment-error-captcha-new').css({"color":"red","font-weight":"600"});
+            jQuery('#comment-error-captcha-new').show();
+            return false;
+        }
+}
+</script>
+<?php  } ?>

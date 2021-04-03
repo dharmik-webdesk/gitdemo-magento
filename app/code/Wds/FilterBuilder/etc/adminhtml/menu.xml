@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+       		<add id="Wds_FilterBuilder::parent" title="Attribute Image" module="Wds_FilterBuilder" sortOrder="100"  action="attrimages/attrimage" resource="Wds_FilterBuilder::attrimage"/>
+	</menu>
+</config>

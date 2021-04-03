@@ -1,0 +1,96 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
+<div class="checkout-success">
+    <?php if ($block->getOrderId()):?>
+        <?php if ($block->getCanViewOrder()) :?>
+            <p><?php echo __('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeHtml($block->getViewOrderUrl()), $block->escapeHtml($block->getOrderId()))) ?></p>
+        <?php  else :?>
+            <p><?php echo __('Your order # is: <span>%1</span>.', $block->escapeHtml($block->getOrderId())) ?></p>
+        <?php endif;?>
+            <p><?php /* @escapeNotVerified */ echo __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
+    <?php endif;?>
+
+    <?php echo $block->getAdditionalInfoHtml() ?>
+
+    <div class="actions-toolbar">
+        <div class="primary">
+            <a class="action primary continue btn" href="<?php /* @escapeNotVerified */ echo $block->getUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Continue Shopping') ?></span></a>
+        </div>
+    </div>
+</div>
+
+<?php
+
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$currencyHelper = $objectManager->get('Magento\Framework\Pricing\Helper\Data');
+$_GUARANTEE_orderNum = $block->getOrderId();
+$order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($_GUARANTEE_orderNum);
+//$_GUARANTEE_amount = $currencyHelper->currency($order->getGrandTotal(), true, false);
+$_GUARANTEE_amount = $order->getGrandTotal();
+/*
+echo $_GUARANTEE_orderNum;
+echo $_GUARANTEE_amount;
+*/
+$_GUARANTEE_email = $order->getCustomerEmail();
+$_GUARANTEE_currency = $order->getOrderCurrencyCode();
+
+?>
+
+<!-- BEGIN: Norton Shopping Guarantee -->
+
+<span id="_GUARANTEE_GuaranteeSpan"></span>
+
+<script type="text/javascript" src="//nsg.symantec.com/Web/Seal/gjs.aspx?SN=954386289"></script>
+
+<script type="text/javascript">
+
+if (window._GUARANTEE && _GUARANTEE.Loaded) {
+
+_GUARANTEE.Hash = "OlZTGBTVgUbG48%2FOG7jwea%2B2kgPzDY1Io90mzaEDly4sfoViTOVEA5SQQGJ3SKQlSeIWIFVrtur5%2B2pOhlWY2Q%3D%3D";
+
+_GUARANTEE.Guarantee.order = "<?php echo $_GUARANTEE_orderNum; ?>"; //Order number
+
+_GUARANTEE.Guarantee.total = "<?php echo number_format($_GUARANTEE_amount,2); ?>"; // Order amount
+
+_GUARANTEE.Guarantee.currency  = "<?php echo $_GUARANTEE_currency; ?>"; // Order currency
+
+_GUARANTEE.Guarantee.email = "<?php echo $_GUARANTEE_email; ?>"; // Email
+
+_GUARANTEE.WriteGuarantee("JavaScript", "_GUARANTEE_GuaranteeSpan");
+
+}
+
+</script>
+
+<!-- END: Norton Shopping Guarantee Guarantee -->
+
+
+<!-- Google Code for Conversions Conversion Page -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1072397609;
+var google_conversion_language = "en";
+var google_conversion_format = "3";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "LCdnCLD3lXUQqfqt_wM";
+var google_conversion_value = "<?php echo number_format($_GUARANTEE_amount,2); ?>";
+var google_conversion_currency = "USD";
+var google_remarketing_only = false;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1072397609/?value=<?php echo number_format($_GUARANTEE_amount,2); ?>&amp;currency_code=USD&amp;label=LCdnCLD3lXUQqfqt_wM&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>

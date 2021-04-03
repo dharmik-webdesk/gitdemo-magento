@@ -1,0 +1,449 @@
+<?php 
+// Gather the configured attribute from the block file. which is Bloc/loadtool.php
+$get_filter_list=$block->getFilterList(); 
+
+
+// Get Preview element index start
+function getPrevKey($key, $hash = array()){
+    $keys = array_keys($hash);
+    $found_index = array_search($key, $keys);
+    if ($found_index === false || $found_index === 0)
+        return false;
+    return $keys[$found_index-1];
+}
+// Get Preview element index end
+
+?>
+<link href="<?php echo $block->getAssetUrl('Wds_FilterBuilder::css/filter.css'); ?>" type="text/css" rel="stylesheet" />
+
+	<div class="build-box">
+		<div class="filter_box_left">
+			<ul>
+
+				<?php // load category left panel static   ?>
+					<li attr-action="category" class="active" data-loaded='true'><a href="#"><i class="ic-category"></i><?php echo $block->escapeHtml(__('Category')) ?></span></a></li>
+
+				<?php // load left panel from the block file array   ?>	
+				<?php foreach ($get_filter_list as $key => $value) { ?>
+
+					<li attr-action="<?php echo $key ?>" style="<?php echo ($key=='compability_size')?'display: none':''; ?>">
+						<a href="#"><i class="ic-<?php echo $key ?>"></i><?php echo $block->escapeHtml(__($value)) ?></a>
+					</li>
+				<?php } ?>
+		</ul>
+	</div>
+
+	<div class="filter_box_right">
+		<?php // load First setup category from the block file start  ?>	
+			<div class="contentarea" id="category_box">
+	        	<h2>Choose Your Category</h2>
+				<div class="filter_box category_box hasfilter">
+				<?php
+				$categories=$block->getCategory();
+				if($categories){
+					echo '<ul class="item_filters">';
+					foreach ($categories as $_category){ ?>
+						<li  data-id="<?php echo $_category['id']; ?>" data-action="category" data-action-next="brand">
+							<a href="#" >
+								<span class="label"><?php echo $_category['name']; ?> </span>
+								<div class="img"><img src="<?php echo $_category['thumb'] ?>" alt="<?php echo $_category['name']; ?>" width="225" height="225"/></div>
+							</a>
+						</li>
+				<?php }
+					echo '</ul>';
+				}?>
+					
+				</div>	
+				<div class="action_box" >
+						<a href="#" class="next" data-action-next="brand" data-action-current="category" data-action-prev="0">NEXT</a>
+				</div>
+			</div>
+		<?php // load First setup category from the block file end  ?>		
+
+
+		<?php // Generate the static html block to load the data for the Ajax response - start  ?>		
+		<?php foreach ($get_filter_list as $key => $value) { ?>
+				<div class="contentarea hide_box" id="<?php echo $key ?>_box" attr-box-name="<?php echo $value ?>">
+					<h2> 
+						<?php 
+						if($value=='Brand')
+							echo 'Pick Your Brand';
+						else 
+							echo $value ?>
+					</h2>
+
+					<div class="filter_box hasfilter filldata multipe_data_filter">
+						
+					</div>
+
+						<?php
+						
+						
+						$PrevStepKey = getPrevKey($key,$get_filter_list);
+						if($PrevStepKey==false)
+							$PrevStepKey='category';
+
+
+
+
+						$NextStepVale = next($get_filter_list);
+						$NextStepKey=(string)array_search ((string)$NextStepVale, $get_filter_list);
+						?>
+					<div class="action_box">
+						<a href="#"  data-action="<?php echo $key  ?>" data-action-next="<?php echo $NextStepKey ?>" data-action-current="<?php echo $key  ?>" data-action-selected-label="" data-action-prev="<?php echo $PrevStepKey ?>"  class="previous">PREVIOUS</a>
+
+						
+
+						<?php  if(!empty($NextStepKey)){  ?>
+
+							<?php if($key=='brand'){  ?>
+							<a href="#"  class="all_btn" data-action-current="<?php echo $key  ?>" >ALL</a>
+						<?php }else{ ?>
+							<a href="#"  class="skip_btn" data-action="<?php echo $key  ?>" data-action-next="<?php echo $NextStepKey ?>" data-action-current="<?php echo $key  ?>" data-action-selected-label=""  data-action-prev="<?php echo $PrevStepKey ?>">SKIP >></a>
+						<?php } ?>
+
+							
+							<a href="#" data-action="<?php echo $key  ?>" data-action-next="<?php echo $NextStepKey ?>" data-action-current="<?php echo $key  ?>" data-action-selected-label=""  data-action-prev="<?php echo $PrevStepKey ?>"  class="next">NEXT</a>
+						<?php } ?>
+					</div>
+				</div>							
+		<?php } ?>
+		<?php // Generate the static html block to load the data for the Ajax response - end  ?>		
+	</div>
+
+	
+</div>
+<div class="filter_loader" id="filter_loader"></div>
+
+<?php // Buind the category attray with the block array to use in javascript - start  ?>		
+<?php 
+$new_array_filter_list=array();
+$new_array_filter_list['category']='Category';
+foreach ($get_filter_list as $key => $value) {
+	$new_array_filter_list[$key]=$value;
+}
+?>
+<?php // Buind the category attray with the block array to use in javascript - end  ?>		
+
+<script type="text/javascript">
+
+<?php // Defind the global javascript array - start ?>		
+var currentSelectedData 
+currentSelectedData = new Object();
+currentSelectedData.filter={};
+var configured_filter=<?php echo json_encode($new_array_filter_list) ?>;
+<?php // Defind the global javascript array - end ?>		
+
+<?php // Ajax Function - start  ?>		
+function callAjax(data){
+	jQuery('#filter_loader').show();
+ jQuery.ajax({
+        url : '<?php echo $this->getUrl('filterbuilder/index/');?>',
+        type : 'GET',
+        data: data,
+        dataType:'json',
+        success : function(data) {              
+            HandleData(data);
+            
+        },
+        error : function(request,error){
+            alert("Please try after some time....");
+            jQuery('#filter_loader').hide();
+        }
+    });
+}
+<?php // Ajax Function - end  ?>		
+
+<?php // generate html based on ajax response - start  ?>		
+function HandleData(data){
+	jQuery('#filter_loader').hide();
+	//console.log(data);
+	jQuery('.custom_error').remove();
+	if(data.status){
+		var category_id=data.actions.category_id
+		var current_step=data.actions.current_step
+		var filter_id=data.actions.fitler_id
+		var next_step=data.actions.next_step
+		jQuery('.filter_box_right #'+current_step+'_box').addClass('hide_box')
+		jQuery('.filter_box_right #'+next_step+'_box').removeClass('hide_box')
+
+		if(next_step=='view_product'){
+
+			var response_data=data.product_list.total_products;
+			if(response_data!=undefined && response_data >0){
+				response_data = data.product_list.info;
+				var pagination_data= data.product_list.pagination_data;
+				
+				var html='<div class="pagination_right">'+pagination_data+'</div><div class="products wrapper grid products-grid"><ol class="products list items product-items grid">';
+				for (var key in response_data) {
+	        		html = html+response_data[key];
+	    		}
+	    		html = html+'</ol></div>';
+    		}else{
+    			boxname= jQuery('.filter_box_right #'+next_step+'_box').attr('attr-box-name');
+    			var html='<div class="message">Sorry, No '+boxname+' avlialbe. please proceed to the next setup by click on "Next" button.</div>';
+    		}	
+
+		}else{
+			var response_data=data.data.availablefilter;
+			boxname= jQuery('.filter_box_right #'+next_step+'_box').attr('attr-box-name');
+			if(response_data!=undefined){
+				response_data = response_data[next_step].items;
+
+
+
+				//var html='<ul class="item_filters">';
+
+				var html='<em> <i class="fa fa-exclamation-circle" aria-hidden="true"></i> You can pick more than one <b>'+boxname+'</b></em><ul class="item_filters">';
+
+				for (var key in response_data) {
+					if(next_step=='brand'){
+						if(response_data[key].image)
+							html = html+'<li data-id="'+response_data[key].value+'" ><a href="#" ><img src="'+response_data[key].image+'" /></a></li>';
+						else
+							html = html+'<li data-id="'+response_data[key].value+'" ><a href="#" ><span>'+response_data[key].label+'</span></a></li>';							
+					}else if(next_step=='configuration'){
+						if(response_data[key].image)
+							html = html+'<li data-id="'+response_data[key].value+'" ><a href="#" ><img src="'+response_data[key].image+'" /></a></li>';
+						else
+							html = html+'<li data-id="'+response_data[key].value+'" ><a href="#" ><span>'+response_data[key].label+'</span></a></li>';							
+					}else{
+
+						html = html+'<li data-id="'+response_data[key].value+'" ><a href="#" ><span>'+response_data[key].label+'</span></a></li>';	
+					}
+
+	        		
+	    		}
+	    		html = html+'</ul>';
+	    		jQuery('.filter_box_right #'+next_step+'_box .action_box .all_btn').show()
+    			jQuery('.filter_box_right #'+next_step+'_box .action_box .skip_btn').show()
+    		}else{
+    			
+    			var html='<div class="page messages"><div class="message-error error message">Sorry, No '+boxname+' available. please proceed to the next step by click on the "Next" button</div></div>';
+
+    			jQuery('.filter_box_right #'+next_step+'_box .action_box .all_btn').hide()
+    			jQuery('.filter_box_right #'+next_step+'_box .action_box .skip_btn').hide()
+    		}
+		}
+
+
+    	if(next_step=='compability_size'){
+			jQuery('.filter_box_right #cfm_box .filter_box').html('');
+			jQuery('.filter_box_left ul li[attr-action="cfm"]').hide();
+			jQuery('.filter_box_left ul li[attr-action="compability_size"]').show();
+    	}else if(next_step=='cfm'){
+    		jQuery('.filter_box_right #compability_size .filter_box').html('');
+    		jQuery('.filter_box_left ul li[attr-action="compability_size"]').hide();
+    		jQuery('.filter_box_left ul li[attr-action="cfm"]').show();
+    	}
+
+
+    	jQuery('.filter_box_right #'+next_step+'_box .filter_box').html(html);
+    	jQuery('.filter_box_left ul li.active').removeClass('active');
+    	jQuery('.filter_box_left ul li[attr-action="'+next_step+'"]').addClass('active');
+    	jQuery('.filter_box_left ul li[attr-action="'+next_step+'"]').attr('data-loaded',true);
+	}else{
+		if(data.actions!=undefined){
+			jQuery('.'+data.actions.current_step+'_box').prepend( "<div class='page messages custom_error'><div class='message-error error message'>"+data.message+"</div></div>");
+		}
+	}
+}
+
+<?php // generate html based on ajax response - end  ?>		
+require([
+      'jquery',
+      "jquery/ui"
+      ], function($){
+
+      	<?php // Define Clieck event - start  ?>	
+
+jQuery('.filter_box_left ul li a').hover(function(){
+	if(jQuery(this).parent().attr('data-loaded')!='true')
+		jQuery(this).css('cursor','not-allowed')
+},function(){
+	    jQuery(this).css('cursor','pointer')
+})
+
+jQuery('.filter_box_left ul li a').live('click',function(event){
+	if(jQuery(this).parent().attr('data-loaded')=='true'){
+		if(!jQuery(this).parent().hasClass('active')){
+			jQuery(this).parent().parent().find('.active').removeClass('active');
+			jQuery(this).parent().addClass('active');
+			var action_label = jQuery(this).parent().attr('attr-action');
+			jQuery('.filter_box_right .contentarea').addClass('hide_box');
+			jQuery('.filter_box_right #'+action_label+'_box').removeClass('hide_box');
+		}
+	}
+	event.preventDefault();
+});
+
+
+
+
+jQuery('.filter_box .item_filters a').live('click',function(event){event.preventDefault();});
+jQuery('.category_box li').live('click',function(event){
+	if(!jQuery(this).hasClass('active')){
+		jQuery(this).parent().find('.active').removeClass('active');jQuery(this).addClass('active');
+		var p = jQuery('#category_box .action_box a[data-action-current="category"]');
+		var position = p.position();
+		jQuery("html, body").animate({ scrollTop: position.top }, 600);
+	}else
+		jQuery(this).removeClass('active');
+
+	
+});
+
+jQuery('#view_product_box .pagination_right .pages li a').live('click',function(event){
+	var href=$(this).attr('href');
+	jQuery('#filter_loader').show();
+ 	jQuery.ajax({
+        url : href,
+        type : 'GET',
+        dataType:'json',
+        success : function(data) {              
+            HandleData(data);
+            jQuery('#filter_loader').hide();
+        },
+        error : function(request,error){
+            alert("Please try after some time....");
+            jQuery('#filter_loader').hide();
+        }
+    });	
+	event.preventDefault();
+});
+
+
+
+jQuery('.multipe_data_filter .item_filters li').live('click',function(event){
+
+	if(!jQuery(this).hasClass('active')){
+		jQuery(this).addClass('active');
+	}else
+		jQuery(this).removeClass('active');
+
+	//Skip Volage screen based on Power selection start //
+	var selected_labels='';
+	if(jQuery(this).parent().parent().parent().attr('id')=='power_box'){
+		var hide_the_power=0;
+		var other_selected=0;
+		
+		jQuery(this).parent().find('.active').each(function(){
+			selected_labels=jQuery(this).text()+":::"+selected_labels;
+
+			if(jQuery(this).text()=='Diesel' || jQuery(this).text()=='Gas')
+				hide_the_power=1
+			else
+				other_selected=1
+	});
+
+	if(jQuery(this).parent().parent().parent().find('.previous').hasClass('previous')){
+		jQuery(this).parent().parent().parent().find('.previous').attr('data-action-selected-label',selected_labels)
+	}
+
+	if(jQuery(this).parent().parent().parent().find('.next').hasClass('next')){
+		jQuery(this).parent().parent().parent().find('.next').attr('data-action-selected-label',selected_labels)
+	}
+	
+		
+
+	if(other_selected==1)
+		hide_the_power=0;
+
+	if(hide_the_power==0)
+		jQuery('.filter_box_left ul li[attr-action="rpm"]').show();
+	else
+		jQuery('.filter_box_left ul li[attr-action="rpm"]').hide();
+		
+	}	
+	//Skip Volage screen based on Power selection end //
+});
+<?php // Define Clieck event - end  ?>		
+
+	jQuery('.action_box a').live('click',function(event){
+		event.preventDefault();
+
+		
+
+		var request_id=$(this).attr('data-id');
+		var data_action_next=$(this).attr('data-action-next');
+		var data_action_current=$(this).attr('data-action-current');
+		var data_action_prev=$(this).attr('data-action-prev');
+
+		<?php //Whe customer click on previous button this code will rule and show/hide block based on step - start  ?>	
+		if(jQuery(this).hasClass('all_btn')){
+			
+			jQuery('.filter_box_right #'+data_action_current+'_box .item_filters li').each(function(){
+				$(this).addClass('active');
+			});
+			
+			var p = jQuery('#'+data_action_current+'_box .action_box a[data-action-current="'+data_action_current+'"]');
+			var position = p.position();
+			jQuery("html, body").animate({ scrollTop: position.top }, 600);
+			return true;
+		}else if(jQuery(this).hasClass('previous')){
+			var p = $( ".breadcrumbs" );
+			var position = p.position();
+	    	jQuery("html, body").animate({ scrollTop: position.top }, 600);
+
+			if(data_action_prev=='cfm'){
+				if(jQuery('.filter_box_left ul li[attr-action="cfm"]').css('display')=='none')
+					data_action_prev = 'horsepower';
+			}if(data_action_prev=='rpm'){
+				if(jQuery('.filter_box_left ul li[attr-action="rpm"]').css('display')=='none')
+					data_action_prev = 'power';
+			}else if(data_action_prev=='compability_size'){
+				if(jQuery('.filter_box_left ul li[attr-action="compability_size"]').css('display')=='none')
+					data_action_prev = 'cfm';
+			}
+
+			jQuery('.filter_box_right #'+data_action_current+'_box').addClass('hide_box')
+			jQuery('.filter_box_right #'+data_action_prev+'_box').removeClass('hide_box')
+
+			jQuery('.filter_box_left ul li.active').removeClass('active');
+			jQuery('.filter_box_left ul li[attr-action="'+data_action_prev+'"]').addClass('active');
+			return true;
+		}else{
+			var p = $( ".breadcrumbs" );
+			var position = p.position();
+	    	jQuery("html, body").animate({ scrollTop: position.top }, 600);
+		}
+		<?php //Whe customer click on previous button this code will rule and show/hide block based on step - end  ?>	
+
+
+
+		currentSelectedData.current_step=data_action_current;
+		currentSelectedData.next_step=data_action_next;
+		currentSelectedData.data_action_prev=data_action_prev;
+
+		var found_block=false;
+		for (k in configured_filter) {
+			//alert(k +' = '+data_action_current +', '+found_block);
+				if(k==data_action_current){
+					found_block=true;
+				}
+				if(found_block==true){
+					currentSelectedData.filter[k]='';	
+				}
+		}
+
+
+		
+		jQuery(this).parent().parent().find('.active').each(function(){
+			if(currentSelectedData.filter[data_action_current]){
+				currentSelectedData.filter[data_action_current].id=currentSelectedData.filter[data_action_current].id+","+$(this).attr('data-id');
+				currentSelectedData.filter[data_action_current].label=currentSelectedData.filter[data_action_current].label+","+$(this).text().trim();
+			}else{
+			currentSelectedData.filter[data_action_current]={'id':$(this).attr('data-id'),'label':$(this).text().trim()};
+			}
+		});
+		console.log(currentSelectedData);
+		callAjax(currentSelectedData);
+		
+	});
+});
+
+</script>
+<style>
+.page.messages .message-error.error, .column.main .message.info.empty{background: #FFE9EA;border:1px solid #ff0000;color: #ff0000;-webkit-border-radius: 0px;-moz-border-radius: 0px;border-radius: 0px;clear: both;font-weight: bold;font-size: 15px;border-radius: 0px;font-family: sans-serif;}
+.filter_box_right .products li .product-item-info{min-height: 520px;}
+</style>

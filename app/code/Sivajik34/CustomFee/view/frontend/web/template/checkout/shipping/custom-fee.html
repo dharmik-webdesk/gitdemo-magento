@@ -1,0 +1,42 @@
+<div data-bind="visible: canVisibleCustomFeeBlock">
+
+<div class="extra_fee_catpion">Additional Shipping Options</div>
+
+	<!-- ko if: canVisibleCustomFeeBlockForPrice(0) -->
+	<div class="custom_feelist">
+    	<input type="radio" name="custom-fee" value="" data-bind="value: getFeeId(0),click: $parents[1].selectExtraFees, style: {cursor: 'pointer'},checked:isChecked(0)" />
+    	<span data-bind="text: getFormattedPrice(0)" class="price" style="font-weight: 600"></span>
+    	<span data-bind="text: getFeeLabel(0)"></span>
+	</div>
+	    <!-- /ko -->
+
+	<!-- ko if: canVisibleCustomFeeBlockForPrice(1) -->
+	<div class="custom_feelist">
+    	<input type="radio" name="custom-fee" value="" data-bind="value: getFeeId(1),click: $parents[1].selectExtraFees, style: {cursor: 'pointer'},checked:isChecked(1)"/>
+    	<span data-bind="text: getFormattedPrice(1)" class="price" style="font-weight: 600"></span>
+    	<span data-bind="text: getFeeLabel(1)"></span>
+	</div>
+	<!-- /ko -->
+	<!-- ko if: canVisibleCustomFeeBlockForPrice(2) -->
+	<div class="custom_feelist">
+    	<input type="radio" name="custom-fee" value="" data-bind="value: getFeeId(2),click: $parents[1].selectExtraFees, style: {cursor: 'pointer'},checked:isChecked(2)"/>
+    	<span data-bind="text: getFormattedPrice(2)" class="price" style="font-weight: 600"></span>
+    	<span data-bind="text: getFeeLabel(2)"></span>
+	</div>
+	<!-- /ko -->
+	
+	<!-- ko if: canVisibleCustomFeeBlockForPrice(3) -->
+	<div class="custom_feelist">
+    	<input type="radio" name="custom-fee" value="" data-bind="value: getFeeId(3),click: $parents[1].selectExtraFees, style: {cursor: 'pointer'},checked:isChecked(3)"/>
+    	<span data-bind="text: getFormattedPrice(3)" class="price" style="font-weight: 600"></span>
+    	<span data-bind="text: getFeeLabel(3)"></span>
+	</div>
+	<!-- /ko -->
+	<!-- ko if: canVisibleCustomFeeBlockForPrice(4) -->
+	<div class="custom_feelist" >
+    	<input type="radio" name="custom-fee" value="" data-bind="value: getFeeId(4),click: $parents[1].selectExtraFees, style: {cursor: 'pointer'},checked:isChecked(4)"/>
+    	<span data-bind="text: getFormattedPrice(4)" class="price" style="font-weight: 600"></span>
+    	<span data-bind="text: getFeeLabel(4)"></span>
+	</div>
+	 <!-- /ko -->
+</div>

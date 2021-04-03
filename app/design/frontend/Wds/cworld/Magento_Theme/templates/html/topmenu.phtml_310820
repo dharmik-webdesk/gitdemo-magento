@@ -1,0 +1,128 @@
+<?php
+/**
+ * Top menu for store
+ *
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
+?>
+<?php $helper = $this->helper('Mageplaza\Shopbybrand\Helper\Data');
+$brandCollection = $helper->getBrandList();
+foreach ($brandCollection as $brand):  
+	if($brand->getIsFeatured()):
+		$brandCollection2[$helper->getFilterClass($brand)][] = array( 'brandname'=> $brand->getValue(),
+														'brandurl'=> $helper->getBrandUrl($brand),
+														'alpha'=> $helper->getFilterClass($brand),
+														'page_title'=> $brand->getPageTitle());
+    endif;
+endforeach;  
+	ksort($brandCollection2); 
+?>
+<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
+<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
+
+<nav class="navigation" id="SideCategoryList">
+
+    <ul class="sf-menu sf-horizontal sf-js-enabled">
+        
+        <?php /* @escapeNotVerified */ echo $block->getChildHtml(); ?>
+        <li class="level0 nav-9 last level-top parent ui-menu-item mpbrand-top-link" role="presentation">
+        	<a class="level-top ui-corner-all" href="#" tabindex="-1" role="menuitem"><span>Brands</span></a>
+        	<div class="custom_sub_menu">
+        		<div class="custom_sub_menu_wi parent">
+        	<ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" >
+        	<?php $i=0;foreach ($brandCollection2 as $kay=>$brand_list):	?> 
+					<li class="level1 nav-1-<?php echo ++$i; ?> grand_child megamenu"><span data-alpha="<?php echo $kay; ?>"><?php echo $kay; ?></span>
+						<ul class="level1 submenu">
+							<?php $j=0; foreach ($brand_list as $k=>$brand): ?>
+								<li class="level2 nav-1-2-<?php echo ++$j; ?>">
+									<a href="<?php  echo $brand['brandurl'] ?>">
+										<span><?php echo $brand['page_title'] ?></span>
+									</a>
+								</li>
+							<?php endforeach; ?>
+						</ul>	
+					</li>
+				<?php endforeach; ?>
+			</ul>
+			</div></div>		
+        </li>
+        <?php /* @escapeNotVerified */ echo $_menu; ?>
+    </ul>
+
+</nav>
+
+
+<script type="text/javascript">
+require([ 'jquery','domReady','js/masonry'],function($, domReady, Masonry){ 
+
+$('#SideCategoryList ul li ul').each(function(){
+	$(this).parent().addClass('parent');
+	$('.parent ul li ul').parent().removeClass('parent');
+	$('.parent ul li ul').parent().addClass('grand_child');
+});
+
+/*$('#SideCategoryList  ul:nth-child(3) > li:nth-of-type(1) .custom_sub_menu .custom_sub_menu_wi > ul:nth-child(2) > li:nth-of-type(1)').addClass('FirstAR');
+$('#SideCategoryList  ul:nth-child(3) > li:nth-of-type(1) .custom_sub_menu .custom_sub_menu_wi > ul:nth-child(2) > li.FirstAR').empty();
+$('#SideCategoryList  ul:nth-child(3) > li:nth-of-type(1) .custom_sub_menu .custom_sub_menu_wi > ul:nth-child(2) > li.FirstAR').css({"margin": "0px", "padding": "0px"});
+*/
+$('.custom_sub_menu_wi > ul > li').addClass('megamenu');
+
+$('#SideCategoryList > ul.sf-horizontal > li').each(function(){
+	if($(this).find("ul").length>4){
+		$(this).addClass('multi_ul_list');
+	}else if ($(this).find("ul").length>=2){
+		$(this).addClass('multi_ul_list');
+		$(this).addClass('multi_ul_list_with_two_row');
+	}
+});
+
+var totwidth=$('#SideCategoryList ul.sf-horizontal').css('width');
+var timer;
+var delay = 350;
+$('#SideCategoryList > ul.sf-horizontal > li').hover(function(){
+	var p = $(this);
+    timer = setTimeout(function() {
+        
+	var total_menu_width= eval($('#SideCategoryList > ul.sf-horizontal').width());
+	var dubug;
+	
+	var position = p.position()
+	var dubmenu= eval(p.find('.custom_sub_menu').width());
+	var menu_left_pos=eval(position.left);
+	var current_menu_width=(eval(p.width()))/2;
+	menu_left= menu_left_pos;
+	if(p.find('.custom_sub_menu ul').hasClass('submenu')){
+		p.find('.custom_sub_menu').show();
+		p.addClass('hover');		
+	}
+	var middle_pos=dubmenu/2;
+	menu_left=middle_pos;
+	var outerlimit=menu_left-menu_left_pos;
+	
+	if(outerlimit>0){
+		 menu_left=menu_left-outerlimit;
+	}else{
+		dubug='Get Poistion'+((middle_pos+menu_left_pos)+'-Poistion-'+total_menu_width+'-current_menu_width-'+current_menu_width);	
+		if((middle_pos+menu_left_pos+current_menu_width)>total_menu_width){
+			var outerlimit=total_menu_width-(middle_pos+menu_left_pos+current_menu_width);
+			menu_left=menu_left-(outerlimit);
+		}
+		
+	}
+	p.find('.custom_sub_menu').css('left','-'+menu_left+'px');
+	
+	if(p.hasClass('multi_ul_list')){
+		var elem = document.querySelector('li.hover.multi_ul_list .custom_sub_menu .custom_sub_menu_wi > ul');
+		var msnry = new Masonry( elem, {
+        itemSelector: '.megamenu'
+ 		});
+ 	}
+
+    }, delay);
+},function(){
+    clearTimeout(timer);
+	$(this).find('.custom_sub_menu').hide();
+	$(this).removeClass('hover');
+});
+});
+</script>

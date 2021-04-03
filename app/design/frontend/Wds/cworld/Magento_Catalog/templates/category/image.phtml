@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+<style id="jsbin-css">
+.category-description {
+  display: none;
+}
+</style>
+<div class="category_top_desc_mn">
+<?php
+    $_helper    = $this->helper('Magento\Catalog\Helper\Output');
+    $_category  = $block->getCurrentCategory();
+    $_imgHtml   = '';
+    if ($_imgUrl = $_category->getImageUrl()) {
+        $_imgHtml = '<div class="category-image"><img src="' . $_imgUrl . '" alt="' . $block->escapeHtml($_category->getName()) . '" title="' . $block->escapeHtml($_category->getName()) . '" class="image" /></div>';
+        $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+		if($block->isContentMode()): 
+			echo $_imgHtml; 
+		endif;
+    }
+	?>
+        	<?php  if($block->isContentMode()):?>
+            <?php if($_category->getCategoryHeading()!=""): ?>
+                   <h2><?php echo $_category->getCategoryHeading(); ?></h2>
+            <?php  else: ?>
+                   <h2><?php echo $_category->getName(); ?></h2>
+           <?php endif; ?>
+
+
+
+            <?php if ($_description = $_category->getDescription()): ?>
+            <div class="category-description-mn">
+				
+				<?php  $desc = $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($_category->getDescription(), $_description, 'description'); ?>
+        
+         <?php $strArray = explode("abcd",$desc);
+			   echo $first    = reset($strArray);
+        ?>
+		<?php if(end($strArray)):?>
+			<div class="category-description std">
+				<?php echo $last     = end($strArray); ?>
+			</div>
+		<?php endif;?>
+        <div class="show-more-description-new">
+			<a class="show-more" id="more" href="#"><span class="minus1">+</span><span class="minus">-</span></a>
+		</div>
+				
+				
+                 
+            </div>
+	        <?php endif; ?>
+        <?php endif; ?>
+    </div>
+	<script type="text/javascript">// <![CDATA[
+	//define(["jquery"], function(jq) {
+	jQuery('.show-more-description-new a.show-more').on('click', function(){
+		//e.preventDefault();
+		jQuery(this).closest('.category-description-mn').find('.category-description').slideToggle();
+		if(jQuery('.minus1').css('display')=='none'){
+		  jQuery('html, body').animate({scrollTop:eval(jQuery('#container .breadcrumbs').position().top)+200}, 'slow');
+		}		
+jQuery(this).toggleClass("minus");
+		
+		return false;
+	});
+	
+		//});
+// ]]></script>

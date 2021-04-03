@@ -1,0 +1,85 @@
+<?php 
+$_masterHelper = $this->helper('Wds\Coreoverride\Helper\Master');
+$baseUrl = $_masterHelper->getStoreBaseUrl();
+$_product = $block->getProduct();
+$buttonTitle = __('Buy Now'); 
+
+ // MG - Enable call for price start 
+$call_price = $_product->getCallForPrice();
+$show_request_quote_button=0;
+if($call_price!=1){ $show_request_quote_button=1; ?>
+    <div class="actions">
+        <button type="submit"
+        title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+        class="action primary tocart"
+        id="product-addtocart-button">
+            <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+        </button>
+    </div>
+<?php }else{  ?>        
+    <div class="product-shop get_a_quote larget_button">
+       <a class='cboxElement' id="iframe3" href="<?php echo $baseUrl ?>requestaquote/index/index?prodId=<?php echo $_product->getId().'&sku='.$_product->getSku(); ?>" onclick="return false;" >Request a Quote</a>
+    </div>         
+<?php } ?>
+
+<div class="product-shop">
+    <div class="make_an_offer">
+        <div class="m-left <?php echo ($show_request_quote_button!=1)?'cetner-align':'' ?>">
+<?php if ($block->displayProductStockStatus()): ?>
+            <?php if ($_product->isAvailable()):
+                $lable=null;
+                if($_product->getStockAvailabilityStatus()){
+                    $lable=$_product->getAttributeText('stock_availability_status');
+                    if(is_array($lable))
+                        $lable=implode($lable,', ');
+                }
+                if(empty($lable))
+                    $lable='In stock';  
+                ?>
+                <div class="stock available" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                    <span class="wds_stock_label ss"><?php /* @escapeNotVerified */ echo __($lable) ?></span>
+                </div>
+            
+                <?php 
+                else: 
+                ?>
+                <div class="stock unavailable" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                    <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+                </div>
+                <?php endif; ?>
+                
+            <?php endif;  ?>
+        </div>
+        <div class="m-right">
+            <div class="load_leading_option">
+
+            </div>
+        </div>
+    </div>
+</div>
+ <?php echo $block->getChildHtml('', true);
+ // MG - Enable call for price end ?>  
+
+	<div class="product-shop">
+        <div class="make_an_offer">
+            <?php  if($show_request_quote_button){ ?>
+            <div class="m-left">
+                <div class="product-shop get_a_quote reguler_button">
+                    <a class='cboxElement' id="iframe3" href="<?php echo $baseUrl ?>requestaquote/index/index?prodId=<?php echo $_product->getId().'&sku='.$_product->getSku(); ?>" onclick="return false;" >Request a Quote</a> 
+                </div>
+            </div>
+        <?php  } ?>
+            <div class="m-right <?php echo ($show_request_quote_button!=1)?'cetner-align':'' ?>">
+                <a href="#" onclick='window.open("https://bargain.haggleit.com/buyer/offer/new?seller=8OFIKYBFQ7V&product=<?php echo $_product->getId() ?>","sizedWindow","toolbar=no,location=yes,directories=no,status=no,menubar=no,resizable=yes,width=600,height=750,top=100,left=100")'>
+                    <img src="https://bargain.haggleit.com/assets/button-1.png">
+                </a>
+                <?php /*
+                <div class="haggleit_button">
+                    <span href="" alt="" onclick='window.open("http://haggleit.com/buyer/offer/new?seller=8OFIKYBFQ7V&product=<?php echo $_product->getId() ?>","sizedWindow","toolbar=no,location=yes,directories=no,status=no,menubar=no,resizable=yes,width=600,height=750,top=100,left=100")'>Make an Offer</span>
+				    
+			     </div>
+                 */ ?>
+            </div>
+        </div>
+    </div>
+	
